@@ -1,0 +1,28 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-size: 18px;
+
+  body {
+    background-color: #f3f2ed;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #525252;
+    border-radius: 20px;
+  }
+}
