@@ -7,3 +7,4 @@ module.exports = withNextIntl({
     appDir: true
   }
 });
+

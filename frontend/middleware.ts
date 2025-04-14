@@ -6,6 +6,8 @@ export default createMiddleware({
   defaultLocale
 })
 
+
 export const config = {
   matcher: ['/((?!_next|favicon.ico).*)']
 }
+
