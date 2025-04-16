@@ -4,7 +4,7 @@ options:
 steps:
   # Etapa 1: Build da imagem Docker do backend
   - name: 'gcr.io/cloud-builders/docker'
-    dir: '.'  # já estamos na pasta backend
+    dir: 'backend'  # já estamos na pasta backend
     args: [
       'build', '-t',
       'gcr.io/$PROJECT_ID/backend-cdc', '.'
