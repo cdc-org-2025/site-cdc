@@ -64,9 +64,9 @@ export default function ButtonSearch() {
             display="flex"
             justifyContent="space-between"
             alignItems="center"
-            gap="48px"
+            gap={{ xs: '8px', md: "48px" }}
             width="100%"
-            mx="80px"
+            mx={{ xs: '26px', md: "80px" }}
           >
             <input
               value={inputText}

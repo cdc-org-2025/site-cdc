@@ -23,23 +23,27 @@ export default function NavbarMobile({ setOpen }: INavbarMobile) {
 
   return (
     <Box
-      position={'fixed'}
+      position="fixed"
+      top="94px"
       left={0}
-      top={0}
-      width={'100vw'}
-      height={'100vh'}
-      mt="94px"
+      width="100vw"
+      height="calc(100vh - 94px)"
       sx={{
         backgroundColor: '#f3f2ed',
-        zIndex: 1,
+        zIndex: 20,
+        overflowY: 'auto',
+        WebkitOverflowScrolling: 'touch',
       }}
-      pl={'16px'}
+      pl="16px"
+      pb='20px'
     >
       <Box my={'48px'}>
         <ButtonSearch />
       </Box>
-      {MenuOptions.map((item) => (
-        <Box key={item.id}>
+      {MenuOptions.slice(1).map((item) => (
+        <Box
+          key={item.id}
+        >
           {!item.subMenus ? (
             <Button
               sx={{
@@ -49,7 +53,11 @@ export default function NavbarMobile({ setOpen }: INavbarMobile) {
               }}
               onClick={() => handleNavigate(item.link)}
             >
-              <Typography variant="overline" fontWeight={700}>
+              <Typography
+
+                variant="overline"
+                fontWeight={700}
+              >
                 {item.label}
               </Typography>
             </Button>
@@ -62,7 +70,7 @@ export default function NavbarMobile({ setOpen }: INavbarMobile) {
             <Box
               display={'flex'}
               flexDirection="column"
-              gap="14px"
+              gap="2px"
               mb="40px"
               mt="10px"
             >
@@ -73,13 +81,12 @@ export default function NavbarMobile({ setOpen }: INavbarMobile) {
                     color: secondary.dark,
                     pl: '24px',
                     mr: '24px',
-                    height: '28px',
                     display: 'flex',
                     justifyContent: 'flex-start',
                   }}
                   onClick={() => handleSubMenu(subMenu, item.label)}
                 >
-                  <Typography variant="overline" textTransform="capitalize">
+                  <Typography textAlign={'left'} lineHeight='150%' variant="overline" textTransform="capitalize">
                     {subMenu.label}
                   </Typography>
                 </Button>
