@@ -13,11 +13,13 @@ app.use(express.json());
 app.use("/api", routes);
 
 // Testa a conexão com o banco
-try {
-  await db.sequelize.authenticate();
-  console.log("✅ Conexão com o banco de dados estabelecida com sucesso!");
-} catch (error) {
-  console.error("❌ Erro ao conectar com o banco de dados:", error);
-}
+(async () => {
+  try {
+    await db.sequelize.authenticate();
+    console.log("✅ Conexão com o banco de dados estabelecida com sucesso!");
+  } catch (error) {
+    console.error("❌ Erro ao conectar com o banco de dados:", error);
+  }
+})();
 
 export default app;
