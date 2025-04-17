@@ -1,0 +1,35 @@
+swagger: '2.0'
+info:
+  title: CDC Public Gateway
+  description: Gateway público para expor rotas do Cloud Run
+  version: 1.0.0
+
+x-google-backend:
+  address: https://backend-cdc-427143287446.southamerica-east1.run.app
+  protocol: h2
+  jwt_audience: https://backend-cdc-427143287446.southamerica-east1.run.app
+
+paths:
+  /{path=**}:
+    get:
+      summary: Proxy GET para qualquer rota
+      operationId: proxyGET
+      parameters:
+        - name: path
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: Proxy POST para qualquer rota
+      operationId: proxyPOST
+      parameters:
+        - name: path
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK

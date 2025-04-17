@@ -17,7 +17,7 @@ steps:
       'gcr.io/$PROJECT_ID/backend-cdc'
     ]
 
-  # Etapa 3: Deploy para o Cloud Run com variáveis de ambiente
+  # Etapa 3: Deploy para o Cloud Run com variáveis de ambiente e Cloud SQL Proxy
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args: [
@@ -26,7 +26,8 @@ steps:
       '--region', 'southamerica-east1',
       '--platform', 'managed',
       '--allow-unauthenticated',
+      '--add-cloudsql-instances',
+      'cdc-org:southamerica-east1:postgres-cdc',
       '--set-env-vars',
-      'DB=postgres,DB_HOST=$_DB_HOST,DB_PORT=$_DB_PORT,DB_USER=$_DB_USER,DB_PASSWORD=$_DB_PASSWORD,DB_NAME=$_DB_NAME'
+      'DB=postgres,DB_USER=$_DB_USER,DB_PASSWORD=$_DB_PASSWORD,DB_NAME=$_DB_NAME'
     ]
-
