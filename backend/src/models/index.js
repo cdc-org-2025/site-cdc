@@ -21,10 +21,6 @@ const sequelize = new Sequelize({
   pool: dbConfig.pool,
   retry: dbConfig.retry,
   define: dbConfig.define,
-  ...(isProduction ? {} : {
-    host: dbConfig.host,
-    port: dbConfig.port
-  })
 });
 
 // Carrega todos os arquivos de model exceto o index.js
