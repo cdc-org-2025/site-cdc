@@ -24,7 +24,7 @@ steps:
     args:
       - -c
       - |
-        SAFE_PASSWORD=$(echo "${_DB_PASSWORD}" | sed 's/,/\\,/g; s/\[/\\[/g; s/\]/\\]/g; s/#/\\#/g; s/`/\\`/g')
+        SAFE_PASSWORD=$(printf '%s' "${_DB_PASSWORD}" | sed 's/,/\\,/g; s/\[/\\[/g; s/\]/\\]/g; s/#/\\#/g; s/`/\\`/g')
         gcloud run deploy backend-cdc \
           --image gcr.io/$PROJECT_ID/backend-cdc \
           --region southamerica-east1 \
