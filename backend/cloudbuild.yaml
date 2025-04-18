@@ -1,35 +1,30 @@
 options:
   logging: CLOUD_LOGGING_ONLY
-  substitution_option: ALLOW_LOOSE  # Para permitir variáveis opcionais
 
 steps:
-  # Etapa 1: Build da imagem Docker do backend
+  # Etapa 1: Build da imagem
   - name: 'gcr.io/cloud-builders/docker'
     dir: 'backend'
-    args: [
-      'build', '-t',
-      'gcr.io/$PROJECT_ID/backend-cdc', '.'
-    ]
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/backend-cdc', '.']
 
-  # Etapa 2: Push da imagem para o Container Registry
+  # Etapa 2: Push da imagem
   - name: 'gcr.io/cloud-builders/docker'
-    args: [
-      'push',
-      'gcr.io/$PROJECT_ID/backend-cdc'
-    ]
+    args: ['push', 'gcr.io/$PROJECT_ID/backend-cdc']
 
-  # Etapa 3: Deploy para o Cloud Run
+  # Etapa 3: Deploy com tratamento seguro da senha
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: bash
     args:
       - -c
       - |
-        SAFE_PASSWORD=$(printf '%s' "${_DB_PASSWORD}" | sed 's/,/\\,/g; s/\[/\\[/g; s/\]/\\]/g; s/#/\\#/g; s/`/\\`/g')
+        # Escapa a senha corretamente para o gcloud
+        ESCAPED_PASSWORD=$(printf '%q' "${_DB_PASSWORD}")
+        
         gcloud run deploy backend-cdc \
           --image gcr.io/$PROJECT_ID/backend-cdc \
           --region southamerica-east1 \
           --platform managed \
           --allow-unauthenticated \
           --add-cloudsql-instances ${_INSTANCE_CONNECTION_NAME} \
-          --set-env-vars=NODE_ENV=${_NODE_ENV},DB_USER=${_DB_USER},DB_PASSWORD=$$SAFE_PASSWORD,DB_NAME=${_DB_NAME},DB_HOST=${_DB_HOST} \
+          --set-env-vars="NODE_ENV=${_NODE_ENV},DB_USER=${_DB_USER},DB_PASSWORD=${ESCAPED_PASSWORD},DB_NAME=${_DB_NAME},DB_HOST=${_DB_HOST}" \
           --timeout=900s
