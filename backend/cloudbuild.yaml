@@ -29,5 +29,5 @@ steps:
       '--add-cloudsql-instances',
       'cdc-org:southamerica-east1:postgres-cdc',
       '--set-env-vars',
-      'DB=postgres,DB_USER=$_DB_USER,DB_PASSWORD=$_DB_PASSWORD,DB_NAME=$_DB_NAME'
+      'NODE_ENV=production,DB_USER=appuser,DB_PASSWORD=NovaSenhaForte2025,DB_NAME=postgres'
     ]

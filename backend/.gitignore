@@ -57,3 +57,8 @@ playwright-report/
 .env.development.local
 .env.test.local
 .env.production.local
+# Ignorar arquivos de ambiente
+.env
+.env.production
+.env.develop
+

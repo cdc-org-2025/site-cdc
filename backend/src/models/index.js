@@ -8,7 +8,19 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const db = {};
-const sequelize = new Sequelize(dbConfig);
+const sequelize = new Sequelize({
+  username: dbConfig.username,
+  password: dbConfig.password,
+  database: dbConfig.database,
+  dialect: dbConfig.dialect,
+  dialectOptions: dbConfig.dialectOptions,
+  logging: dbConfig.logging,
+  pool: dbConfig.pool,
+  retry: dbConfig.retry,
+  define: dbConfig.define,
+  host: dbConfig.host, // só se existir
+  port: dbConfig.port, // só se existir
+});
 
 // Carrega todos os arquivos de model exceto o index.js
 const modelFiles = fs
