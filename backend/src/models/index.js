@@ -9,14 +9,7 @@ const __dirname = path.dirname(__filename);
 
 const db = {};
 const sequelize = new Sequelize({
-  ...dbConfig,
-  // Força a exibição da configuração final nos logs
-  logging: (msg) => {
-    console.log(msg);
-    if (msg.includes('options:')) {
-      console.log('CONFIGURAÇÃO FINAL DO BANCO:', JSON.stringify(dbConfig, null, 2));
-    }
-  }
+  ...dbConfig
 });
 
 // Carrega todos os arquivos de model exceto o index.js

@@ -2,7 +2,7 @@ import "dotenv/config";
 
 import "dotenv/config";
 
-const isProduction = process.env.NODE_ENV === 'production';
+const isProduction = process.env.NODE_ENV;
 
 const dbConfig = {
   dialect: 'postgres',
@@ -10,7 +10,7 @@ const dbConfig = {
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   // REMOVA completamente o bloco condicional - use sempre socket no Cloud Run
-  host: process.env.DB_HOST || '/cloudsql/cdc-org:southamerica-east1:postgres-cdc',
+  host: !isProduction ? process.env.DB_HOST : '/cloudsql/cdc-org:southamerica-east1:postgres-cdc',
   dialectOptions: {
     // Mantenha essas opções sempre
     ssl: false,
