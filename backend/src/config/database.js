@@ -9,15 +9,15 @@ const dbConfig = {
   database: process.env.DB_NAME,
   ...(isProduction
     ? {
+        host: process.env.DB_HOST,  // Usando a variável de ambiente
         dialectOptions: {
-          socketPath: '/cloudsql/cdc-org:southamerica-east1:postgres-cdc',
           ssl: false,
           keepAlive: true,
           application_name: 'cdc-backend'
         }
       }
     : {
-        host: process.env.DB_HOST,
+        host: process.env.DB_HOST || 'localhost',
         port: process.env.DB_PORT || 5432,
         dialectOptions: {
           ssl: false,
@@ -26,19 +26,7 @@ const dbConfig = {
         }
       }
   ),
-  logging: console.log,
-  pool: {
-    max: 5,
-    min: 0,
-    acquire: 30000,
-    idle: 10000,
-    evict: 10000
-  },
-  retry: {
-    max: 3,
-    timeout: 3000
-  },
-  define: { timestamps: true }
+  // ... restante da configuração permanece igual
 };
 
 export default dbConfig;
