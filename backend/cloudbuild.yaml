@@ -1,24 +1,23 @@
 options:
   logging: CLOUD_LOGGING_ONLY
-  substitution_option: ALLOW_LOOSE  # Para permitir variáveis opcionais
 
 steps:
-  # Etapa 1: Build da imagem Docker do backend
+  # Etapa 1: Build da imagem
   - name: 'gcr.io/cloud-builders/docker'
-    dir: 'backend'  # já estamos na pasta backend
+    dir: 'backend'
     args: [
       'build', '-t',
       'gcr.io/$PROJECT_ID/backend-cdc', '.'
     ]
 
-  # Etapa 2: Push da imagem para o Container Registry
+  # Etapa 2: Push da imagem
   - name: 'gcr.io/cloud-builders/docker'
     args: [
       'push',
       'gcr.io/$PROJECT_ID/backend-cdc'
     ]
 
-  # Etapa 3: Deploy para o Cloud Run com variáveis de ambiente e Cloud SQL Proxy
+  # Etapa 3: Deploy para o Cloud Run (CORRIGIDA)
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args: [
@@ -27,7 +26,7 @@ steps:
       '--region', 'southamerica-east1',
       '--platform', 'managed',
       '--allow-unauthenticated',
-      '--add-cloudsql-instances', '$_INSTANCE_CONNECTION_NAME',
-      '--set-env-vars=NODE_ENV=$_NODE_ENV,DB_USER=$_DB_USER,DB_PASSWORD=$_DB_PASSWORD,DB_NAME=$_DB_NAME,DB_HOST=$_DB_HOST',
+      '--add-cloudsql-instances', 'cdc-org:southamerica-east1:postgres-cdc',
+      '--set-env-vars', 'NODE_ENV=production,DB_USER=appuser,DB_PASSWORD=NovaSenhaForte2025,DB_NAME=postgres,DB_HOST=/cloudsql/cdc-org:southamerica-east1:postgres-cdc',
       '--timeout', '900s'
     ]
