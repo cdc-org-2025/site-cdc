@@ -28,6 +28,6 @@ steps:
       '--platform', 'managed',
       '--allow-unauthenticated',
       '--add-cloudsql-instances', '${_INSTANCE_CONNECTION_NAME}',
-      '--set-env-vars', 'NODE_ENV=${_NODE_ENV},DB_USER=${_DB_USER},DB_PASSWORD=${_DB_PASSWORD},DB_NAME=${_DB_NAME},DB_HOST=${_DB_HOST}',
+      '--set-env-vars=NODE_ENV=${_NODE_ENV},DB_USER=${_DB_USER},DB_PASSWORD=${_DB_PASSWORD},DB_NAME=${_DB_NAME},DB_HOST=${_DB_HOST}',
       '--timeout', '900s'
     ]
