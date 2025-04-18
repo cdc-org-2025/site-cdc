@@ -8,23 +8,15 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const db = {};
-
-const isProduction = process.env.NODE_ENV === 'production';
-
 const sequelize = new Sequelize({
-  username: dbConfig.username,
-  password: dbConfig.password,
-  database: dbConfig.database,
-  dialect: dbConfig.dialect,
-  dialectOptions: dbConfig.dialectOptions,
-  logging: dbConfig.logging,
-  pool: dbConfig.pool,
-  retry: dbConfig.retry,
-  define: dbConfig.define,
-  ...(isProduction ? {} : {
-    host: dbConfig.host,
-    port: dbConfig.port
-  })
+  ...dbConfig,
+  // Força a exibição da configuração final nos logs
+  logging: (msg) => {
+    console.log(msg);
+    if (msg.includes('options:')) {
+      console.log('CONFIGURAÇÃO FINAL DO BANCO:', JSON.stringify(dbConfig, null, 2));
+    }
+  }
 });
 
 // Carrega todos os arquivos de model exceto o index.js

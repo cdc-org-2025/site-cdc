@@ -1,5 +1,7 @@
 import "dotenv/config";
 
+import "dotenv/config";
+
 const isProduction = process.env.NODE_ENV === 'production';
 
 const dbConfig = {
@@ -7,26 +9,23 @@ const dbConfig = {
   username: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  ...(isProduction
-    ? {
-        host: process.env.DB_HOST,  // Usando a variável de ambiente
-        dialectOptions: {
-          ssl: false,
-          keepAlive: true,
-          application_name: 'cdc-backend'
-        }
-      }
-    : {
-        host: process.env.DB_HOST || 'localhost',
-        port: process.env.DB_PORT || 5432,
-        dialectOptions: {
-          ssl: false,
-          keepAlive: true,
-          application_name: 'cdc-backend'
-        }
-      }
-  ),
-  // ... restante da configuração permanece igual
+  // REMOVA completamente o bloco condicional - use sempre socket no Cloud Run
+  host: process.env.DB_HOST || '/cloudsql/cdc-org:southamerica-east1:postgres-cdc',
+  dialectOptions: {
+    // Mantenha essas opções sempre
+    ssl: false,
+    keepAlive: true,
+    application_name: 'cdc-backend'
+  },
+  logging: console.log,
+  pool: {
+    max: 5,
+    min: 0,
+    acquire: 30000,
+    idle: 10000,
+    evict: 10000
+  },
+  define: { timestamps: true }
 };
 
 export default dbConfig;
