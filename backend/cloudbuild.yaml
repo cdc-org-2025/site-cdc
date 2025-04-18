@@ -19,15 +19,17 @@ steps:
     ]
 
   # Etapa 3: Deploy para o Cloud Run com variáveis de ambiente e Cloud SQL Proxy
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: gcloud
-    args: [
-      'run', 'deploy', 'backend-cdc',
-      '--image', 'gcr.io/$PROJECT_ID/backend-cdc',
-      '--region', 'southamerica-east1',
-      '--platform', 'managed',
-      '--allow-unauthenticated',
-      '--add-cloudsql-instances', '${_INSTANCE_CONNECTION_NAME}',
-      '--set-env-vars=NODE_ENV=${_NODE_ENV},DB_USER=${_DB_USER},DB_PASSWORD=${_DB_PASSWORD},DB_NAME=${_DB_NAME},DB_HOST=${_DB_HOST}',
-      '--timeout', '900s'
-    ]
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: bash
+    args:
+    - -c
+    - |
+      SAFE_PASSWORD=$(echo "${_DB_PASSWORD}" | sed 's/,/\\,/g; s/\[/\\[/g; s/\]/\\]/g; s/#/\\#/g; s/`/\\`/g')
+      gcloud run deploy backend-cdc \
+        --image gcr.io/$PROJECT_ID/backend-cdc \
+        --region southamerica-east1 \
+        --platform managed \
+        --allow-unauthenticated \
+        --add-cloudsql-instances ${_INSTANCE_CONNECTION_NAME} \
+        --set-env-vars=NODE_ENV=${_NODE_ENV},DB_USER=${_DB_USER},DB_PASSWORD=$SAFE_PASSWORD,DB_NAME=${_DB_NAME},DB_HOST=${_DB_HOST} \
+        --timeout=900s
