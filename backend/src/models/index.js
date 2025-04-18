@@ -8,6 +8,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const db = {};
+
+const isProduction = process.env.NODE_ENV === 'production';
+
 const sequelize = new Sequelize({
   username: dbConfig.username,
   password: dbConfig.password,
@@ -18,8 +21,10 @@ const sequelize = new Sequelize({
   pool: dbConfig.pool,
   retry: dbConfig.retry,
   define: dbConfig.define,
-  host: dbConfig.host, // só se existir
-  port: dbConfig.port, // só se existir
+  ...(isProduction ? {} : {
+    host: dbConfig.host,
+    port: dbConfig.port
+  })
 });
 
 // Carrega todos os arquivos de model exceto o index.js
