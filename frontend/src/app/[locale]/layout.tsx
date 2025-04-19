@@ -25,7 +25,6 @@ export default async function LocalePageLayout({
 }) {
   const messages = await fetchMessages(locale)
 
-
   return (
     <RootLayout locale={locale} messages={messages}>
       {children}
