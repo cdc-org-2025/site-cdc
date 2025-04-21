@@ -4,7 +4,7 @@ export class Noticia extends Model {
   static init(sequelize) {
     return super.init({
       titulo: DataTypes.STRING,
-      conteudo: DataTypes.TEXT,
+      conteudo: DataTypes.JSON,
       data_publicacao: DataTypes.DATE,
       area_id: DataTypes.INTEGER,
     }, { sequelize, tableName: 'noticias', timestamps: false });
