@@ -1,7 +1,7 @@
 import express from 'express'
 import session from 'express-session'
 import passport from './config/passport.js'
-import { adminJs } from './config/admin.js'
+import { adminJs, adminRouter } from './config/admin.js'
 import { sequelize } from './config/database.js'
 import authRoutes from './routes/auth.js'
 import AdminJSExpress from '@adminjs/express'
@@ -23,7 +23,7 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 
-const adminRouter = AdminJSExpress.buildRouter(adminJs)
+// const adminRouter = AdminJSExpress.buildRouter(adminJs)
 
 app.use(adminJs.options.rootPath, (req, res, next) => {
     if (req.path.startsWith('/auth/google') || req.path.startsWith('/auth/google/callback')) {
@@ -36,7 +36,6 @@ app.use(adminJs.options.rootPath, (req, res, next) => {
 })
 
 app.use("/assets", express.static(path.join(__dirname, './assets')));
-app.use("/components", express.static(path.join(__dirname, './.adminjs/components')));
 app.use(authRoutes)
 app.use(adminJs.options.rootPath, adminRouter)
 

@@ -1,8 +1,9 @@
 import AdminJS from 'adminjs'
+import AdminJSExpress from '@adminjs/express'
 import { Database, Resource } from '@adminjs/sequelize'
 import { initializeModels } from '../models/index.js'
 import { sequelize } from './database.js'
-
+import { Components, componentLoader } from '../.adminjs/components.js'
 
 AdminJS.registerAdapter({ Database, Resource })
 
@@ -31,7 +32,15 @@ export const adminJs = new AdminJS({
                         label: 'Área',
                         isVisible: { list: true, edit: true, filter: true, show: true },
                     },
+                    conteudo: {
+                        type: 'mixed',
+                        components: {
+                            edit: Components.ConteudoEditor
+                        },
+                        isVisible: { list: false, edit: true, filter: false, show: true },
+                    },
                 },
+
             }
         },
         { resource: models.LinhaDoTempo, options: { navigation: 'Conteúdo' } },
@@ -177,4 +186,13 @@ export const adminJs = new AdminJS({
             },
         },
     },
+    componentLoader
 });
+
+// No final do seu arquivo admin.js, adicione:
+// if (process.env.NODE_ENV === 'development') {
+adminJs.watch()
+//   }
+
+
+export const adminRouter = AdminJSExpress.buildRouter(adminJs)
