@@ -9,24 +9,21 @@ import Faq from './Faq'
 import VectorRoundedLines from '@/components/atoms/VectorRoundedLines'
 import { useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
+import { useScrollToId } from '@/hooks/useScroll'
 
 export default function InstitucionalPage() {
   const searchParams = useSearchParams()
   const scrollView = searchParams.get('scrollView')
+  const scrollToId = useScrollToId()
 
   useEffect(() => {
     if (scrollView) {
-      const element = document.getElementById(scrollView)
-      if (element) {
-        element.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
-        })
-
-        window.scrollBy(0, -100)
-      }
+      const timeout = setTimeout(() => {
+        scrollToId(scrollView)
+      }, 100)
+      return () => clearTimeout(timeout)
     }
-  }, [scrollView])
+  }, [scrollView, scrollToId])
 
   return (
     <Box
