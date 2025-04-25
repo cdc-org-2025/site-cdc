@@ -9,6 +9,7 @@ import MenuAreas from './MenuAreas'
 import LastNewsDefault from '../../../assets/pages/home-page/last-news-default.svg'
 import AnimationSplitText from '@/components/animations/splitText'
 import AnimetedSlide from '@/components/animations/slide'
+import { IArea, useAreasQuery } from '@/clients/api/areas'
 
 const lastNewsList = [
   {
@@ -45,23 +46,21 @@ const lastNewsList = [
   },
 ]
 
-const areasDisponiveis = [
-  ['PPCAM', 'Diretoria Institucional'],
-  ['Conselho Fiscal', 'PROVITA'],
-  ['MAIS VIDA', 'PPVIDA', 'PPDPI'],
-  ['ATM', 'Programa ATITUDE'],
-]
-
 export default function Leadership() {
-  const [areaSelect, setAreaSelect] = useState<string[]>([])
+  const { data: dataAreas } = useAreasQuery()
+  const [areaSelect, setAreaSelect] = useState<IArea[]>([])
 
-  const handleAreaSelect = useCallback((newAreaList: string[]) => {
+  const handleAreaSelect = useCallback((newAreaList: IArea[]) => {
     setAreaSelect(newAreaList)
   }, [])
 
   const filteredList = useMemo(() => {
-    return lastNewsList
-  }, [areaSelect])
+    if (!areaSelect.length) return lastNewsList;
+
+    return lastNewsList.filter((item) =>
+      areaSelect.some((area) => item.tag.includes(area.nome))
+    );
+  }, [areaSelect]);
 
   return (
     <>
@@ -88,7 +87,7 @@ export default function Leadership() {
       <MenuAreas
         areaSelect={areaSelect}
         setAreaSelect={handleAreaSelect}
-        listAreasAvailable={areasDisponiveis}
+        listAreasAvailable={dataAreas}
       />
 
       <Grid container spacing={4} pb="64px">

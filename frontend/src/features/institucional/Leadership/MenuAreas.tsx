@@ -11,11 +11,12 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import CloseIcon from '@mui/icons-material/Close'
 import ButtonTag from '@/components/atoms/ButtonTag'
 import ButtonAction from '@/components/atoms/ButtonAction'
+import { IArea } from '@/clients/api/areas'
 
 interface IMenuAreas {
-  areaSelect: string[]
-  setAreaSelect: (value: string[]) => void // <- corrigido aqui
-  listAreasAvailable: string[][]
+  areaSelect: IArea[]
+  setAreaSelect: (_: IArea[]) => void
+  listAreasAvailable?: IArea[]
 }
 
 export default function MenuAreas({
@@ -32,13 +33,15 @@ export default function MenuAreas({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
 
-  const handleAreasSelect = useCallback((area: string) => {
-    const updated = areaSelect.includes(area)
-      ? areaSelect.filter((a) => a !== area)
-      : [...areaSelect, area]
-    setAreaSelect(updated)
-  }, [areaSelect, setAreaSelect])
+  const handleAreasSelect = useCallback((area: IArea) => {
+    const alreadySelected = areaSelect.some((a) => a.id === area.id);
 
+    const updated = alreadySelected
+      ? areaSelect.filter((a) => a.id !== area.id)
+      : [...areaSelect, area];
+
+    setAreaSelect(updated);
+  }, [areaSelect, setAreaSelect]);
 
   const handleClickMenu = useCallback(
     (event?: React.MouseEvent<HTMLButtonElement>) => {
@@ -73,14 +76,14 @@ export default function MenuAreas({
         </Box>
 
         <Box display="flex" flexWrap="wrap" gap="16px">
-          {areaSelect.map((area) => (
+          {areaSelect?.map((area) => (
             <ButtonAction
-              key={area}
+              key={area.id}
               onClick={() => handleAreasSelect(area)}
               fullWidth={false}
               startIcon={<CloseIcon fontSize="small" />}
             >
-              {area}
+              {area.nome}
             </ButtonAction>
           ))}
         </Box>
@@ -111,31 +114,22 @@ export default function MenuAreas({
             </IconButton>
           </Box>
 
-          <Box display="flex" flexDirection="column" gap="12px">
-            {listAreasAvailable?.map((linha) => (
-              <Box
-                key={linha.join('-')}
-                display="grid"
-                gridTemplateColumns={`repeat(${linha.length}, auto)`}
-                gap="12px"
+          <Box display="flex" gap="12px" maxWidth={'310px'} flexWrap={'wrap'}>
+            {listAreasAvailable?.map((area) => (
+              <ButtonTag
+                key={area.id}
+                backgroundColor={
+                  areaSelect?.includes(area) ? light : '#fff5e6'
+                }
+                startIcon={
+                  areaSelect?.includes(area) && (
+                    <CloseIcon sx={{ width: 20, height: 20, color: '#222' }} />
+                  )
+                }
+                onClick={() => handleAreasSelect(area)}
               >
-                {linha.map((area) => (
-                  <ButtonTag
-                    key={area}
-                    backgroundColor={
-                      areaSelect.includes(area) ? light : '#fff5e6'
-                    }
-                    startIcon={
-                      areaSelect.includes(area) && (
-                        <CloseIcon sx={{ width: 20, height: 20, color: '#222' }} />
-                      )
-                    }
-                    onClick={() => handleAreasSelect(area)}
-                  >
-                    {area}
-                  </ButtonTag>
-                ))}
-              </Box>
+                {area?.nome}
+              </ButtonTag>
             ))}
           </Box>
         </Box>

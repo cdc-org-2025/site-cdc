@@ -9,4 +9,3 @@ export const useDadosBancariosQuery = (options?: UseQueryOptions<IDadosBancarios
     ...options,
   });
 };
-

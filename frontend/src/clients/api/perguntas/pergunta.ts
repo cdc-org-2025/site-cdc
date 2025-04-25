@@ -7,4 +7,3 @@ export const getListPerguntas = async (): Promise<IPerguntas[]> => {
   const { data } = await api.get('/perguntas');
   return data;
 };
-

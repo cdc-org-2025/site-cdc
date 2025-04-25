@@ -9,4 +9,3 @@ export const useInscricoesQuery = (options?: UseQueryOptions<ILinhaTempo[], Erro
     ...options,
   });
 };
-

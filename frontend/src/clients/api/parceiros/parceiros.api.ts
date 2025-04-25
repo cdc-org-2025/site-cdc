@@ -7,4 +7,3 @@ export const getListParceiros = async (): Promise<IParceiro[]> => {
   const { data } = await api.get('/parceiros');
   return data;
 };
-

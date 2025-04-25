@@ -7,4 +7,3 @@ export const getLinhaTempo = async (): Promise<ILinhaTempo[]> => {
   const { data } = await api.get('/linha-tempo');
   return data;
 };
-

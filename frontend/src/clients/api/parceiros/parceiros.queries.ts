@@ -9,4 +9,3 @@ export const useInscricoesQuery = (options?: UseQueryOptions<IParceiro[], Error>
     ...options,
   });
 };
-

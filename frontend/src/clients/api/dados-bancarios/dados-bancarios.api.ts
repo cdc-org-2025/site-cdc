@@ -7,4 +7,3 @@ export const getDadosBancarios = async (): Promise<IDadosBancarios> => {
   const { data } = await api.get('/dados-bancarios');
   return data;
 };
-
