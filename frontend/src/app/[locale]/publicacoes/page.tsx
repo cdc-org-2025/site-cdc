@@ -20,6 +20,7 @@ export default function PublicacoesPage() {
     title: 'Publicações',
     image: PPDI,
   }
+
   return (
     <>
       <HeaderBannerUnique noneMobile Banner={Banner} />

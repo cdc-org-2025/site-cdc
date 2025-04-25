@@ -1,5 +1,6 @@
 'use client'
-import React from 'react'
+
+import React, { useCallback } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { useTheme } from '@mui/material'
@@ -9,11 +10,14 @@ import { useNavigation } from '../../../hooks/useNavigation'
 
 export default function Faq() {
   const {
-    palette: {
-      primary: { main },
-    },
+    palette: { primary },
   } = useTheme()
+
   const { handleNavigate } = useNavigation()
+
+  const navigateToContato = useCallback(() => {
+    handleNavigate('/contato')
+  }, [handleNavigate])
 
   return (
     <>
@@ -22,14 +26,15 @@ export default function Faq() {
           <Typography
             variant="h3"
             color="primary"
+            textAlign="center"
             width="100%"
-            textAlign={'center'}
           >
             Perguntas frequentes
           </Typography>
         </AnimationSplitText>
+
         <Typography
-          textAlign={'center'}
+          textAlign="center"
           variant="overline"
           textTransform="none"
           color="text.primary"
@@ -37,7 +42,7 @@ export default function Faq() {
           width="100%"
           sx={{
             '& span': {
-              color: main,
+              color: primary.main,
               textDecoration: 'underline',
               textTransform: 'none',
               cursor: 'pointer',
@@ -45,7 +50,7 @@ export default function Faq() {
           }}
         >
           Não encontrou o que queria? Entre em{' '}
-          <Box component="span" onClick={() => handleNavigate('/contato')}>
+          <Box component="span" onClick={navigateToContato}>
             contato
           </Box>{' '}
           com o CDC

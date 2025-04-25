@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+'use client'
+
+import React, { useCallback, useState } from 'react'
 import { useTheme } from '@mui/material'
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
@@ -12,7 +14,7 @@ import ButtonAction from '@/components/atoms/ButtonAction'
 
 interface IMenuAreas {
   areaSelect: string[]
-  setAreaSelect: (_: any) => void
+  setAreaSelect: (value: string[]) => void // <- corrigido aqui
   listAreasAvailable: string[][]
 }
 
@@ -26,26 +28,28 @@ export default function MenuAreas({
       secondary: { light },
     },
   } = useTheme()
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
 
-  const handleAreasSelect = (area: string) => {
-    setAreaSelect((prev: string[]) =>
-      prev.includes(area) ? prev.filter((a) => a !== area) : [...prev, area]
-    )
-  }
+  const handleAreasSelect = useCallback((area: string) => {
+    const updated = areaSelect.includes(area)
+      ? areaSelect.filter((a) => a !== area)
+      : [...areaSelect, area]
+    setAreaSelect(updated)
+  }, [areaSelect, setAreaSelect])
 
-  const handleClickMenu = (
-    event?: React.MouseEvent<HTMLButtonElement, MouseEvent> | undefined
-  ) => {
-    if (event) {
-      setAnchorEl(event.currentTarget)
-    }
-  }
 
-  const handleCloseMenu = () => {
+  const handleClickMenu = useCallback(
+    (event?: React.MouseEvent<HTMLButtonElement>) => {
+      if (event) setAnchorEl(event.currentTarget)
+    },
+    []
+  )
+
+  const handleCloseMenu = useCallback(() => {
     setAnchorEl(null)
-  }
+  }, [])
 
   return (
     <>
@@ -55,11 +59,7 @@ export default function MenuAreas({
             aria-controls={open ? 'basic-menu' : undefined}
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
-            onClick={(
-              event?:
-                | React.MouseEvent<HTMLButtonElement, MouseEvent>
-                | undefined
-            ) => handleClickMenu(event)}
+            onClick={handleClickMenu}
             endIcon={
               open ? (
                 <ExpandLessIcon htmlColor="#222" fontSize="small" />
@@ -71,6 +71,7 @@ export default function MenuAreas({
             Áreas
           </ButtonTag>
         </Box>
+
         <Box display="flex" flexWrap="wrap" gap="16px">
           {areaSelect.map((area) => (
             <ButtonAction
@@ -84,6 +85,7 @@ export default function MenuAreas({
           ))}
         </Box>
       </Box>
+
       <Menu
         sx={{ marginTop: '14px' }}
         id="basic-menu"
@@ -100,21 +102,24 @@ export default function MenuAreas({
             mb="16px"
           >
             <Typography variant="subtitle1">Áreas</Typography>
-            <IconButton size="small" onClick={handleCloseMenu}>
-              <CloseIcon
-                sx={{ width: '16px', height: '16px', color: '#333' }}
-              />
+            <IconButton
+              size="small"
+              onClick={handleCloseMenu}
+              aria-label="Fechar menu de áreas"
+            >
+              <CloseIcon sx={{ width: 16, height: 16, color: '#333' }} />
             </IconButton>
           </Box>
+
           <Box display="flex" flexDirection="column" gap="12px">
-            {listAreasAvailable?.map((linha, index) => (
+            {listAreasAvailable?.map((linha) => (
               <Box
-                key={index}
+                key={linha.join('-')}
                 display="grid"
                 gridTemplateColumns={`repeat(${linha.length}, auto)`}
                 gap="12px"
               >
-                {linha?.map((area) => (
+                {linha.map((area) => (
                   <ButtonTag
                     key={area}
                     backgroundColor={
@@ -122,9 +127,7 @@ export default function MenuAreas({
                     }
                     startIcon={
                       areaSelect.includes(area) && (
-                        <CloseIcon
-                          sx={{ width: '20px', height: '20px', color: '#222' }}
-                        />
+                        <CloseIcon sx={{ width: 20, height: 20, color: '#222' }} />
                       )
                     }
                     onClick={() => handleAreasSelect(area)}

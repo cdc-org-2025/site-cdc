@@ -1,5 +1,6 @@
 'use client'
-import React, { useState } from 'react'
+
+import React, { useState, useMemo, useCallback } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Grid'
@@ -54,6 +55,14 @@ const areasDisponiveis = [
 export default function Leadership() {
   const [areaSelect, setAreaSelect] = useState<string[]>([])
 
+  const handleAreaSelect = useCallback((newAreaList: string[]) => {
+    setAreaSelect(newAreaList)
+  }, [])
+
+  const filteredList = useMemo(() => {
+    return lastNewsList
+  }, [areaSelect])
+
   return (
     <>
       <Box display="flex" flexDirection="column" gap="16px" id="leadership">
@@ -75,13 +84,15 @@ export default function Leadership() {
           </Typography>
         </AnimationSplitText>
       </Box>
+
       <MenuAreas
         areaSelect={areaSelect}
-        setAreaSelect={setAreaSelect}
+        setAreaSelect={handleAreaSelect}
         listAreasAvailable={areasDisponiveis}
       />
-      <Grid container spacing={4} pb={'64px'}>
-        {lastNewsList.map((item) => (
+
+      <Grid container spacing={4} pb="64px">
+        {filteredList.map((item) => (
           <Grid item key={item.id} xs={12} sm={6} md={4} lg={3}>
             <AnimetedSlide>
               <CardTagDesc

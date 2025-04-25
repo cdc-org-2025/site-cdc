@@ -1,4 +1,6 @@
-import React from 'react'
+'use client'
+
+import React, { useMemo } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Grid'
@@ -7,37 +9,37 @@ import LastNewsDefault from '../../../assets/pages/home-page/last-news-default.s
 import AnimetedSlide from '@/components/animations/slide'
 import AnimationSplitText from '@/components/animations/splitText'
 
-const lastNewsList = [
-  {
-    id: 1,
-    tag: 'Direito da Pessoa Idosa',
-    description: 'Estatuto do Centro de Desenvolvimento e Cidadania (CDC)',
-    image: LastNewsDefault,
-  },
-  {
-    id: 2,
-    tag: 'Direito da Pessoa Idosa',
-    description: 'Estatuto do Centro de Desenvolvimento e Cidadania (CDC)',
-    image: LastNewsDefault,
-  },
-  {
-    id: 3,
-    tag: 'Direito da Pessoa Idosa',
-    description: 'Estatuto do Centro de Desenvolvimento e Cidadania (CDC)',
-    image: LastNewsDefault,
-  },
-  {
-    id: 4,
-    tag: 'Direito da Pessoa Idosa',
-    description: 'Estatuto do Centro de Desenvolvimento e Cidadania (CDC)',
-    image: LastNewsDefault,
-  },
-]
-
 export default function Transparency() {
+  const lastNewsList = useMemo(() => [
+    {
+      id: 1,
+      tag: 'Direito da Pessoa Idosa',
+      description: 'Estatuto do Centro de Desenvolvimento e Cidadania (CDC)',
+      image: LastNewsDefault,
+    },
+    {
+      id: 2,
+      tag: 'Direito da Pessoa Idosa',
+      description: 'Estatuto do Centro de Desenvolvimento e Cidadania (CDC)',
+      image: LastNewsDefault,
+    },
+    {
+      id: 3,
+      tag: 'Direito da Pessoa Idosa',
+      description: 'Estatuto do Centro de Desenvolvimento e Cidadania (CDC)',
+      image: LastNewsDefault,
+    },
+    {
+      id: 4,
+      tag: 'Direito da Pessoa Idosa',
+      description: 'Estatuto do Centro de Desenvolvimento e Cidadania (CDC)',
+      image: LastNewsDefault,
+    },
+  ], [])
+
   return (
     <>
-      <Box display="flex" flexDirection="column" gap="16px" pb="24px" id='transparent'>
+      <Box display="flex" flexDirection="column" gap="16px" pb="24px" id="transparent">
         <AnimationSplitText>
           <Typography variant="h3" color="primary" width="100%">
             Transparência
@@ -56,13 +58,14 @@ export default function Transparency() {
           </Typography>
         </AnimationSplitText>
       </Box>
-      <Grid container spacing={4} pb={'64px'}>
+
+      <Grid container spacing={4} pb="64px">
         {lastNewsList.map((item) => (
           <Grid item key={item.id} xs={12} sm={6} md={4} lg={3}>
             <AnimetedSlide>
               <CardTagDesc
                 info={{
-                  id: 0,
+                  id: item.id,
                   tag: item.tag,
                   description: item.description,
                   image: item.image,

@@ -3,6 +3,8 @@ import React, { useState } from 'react'
 import { Box, Typography } from '@mui/material'
 import MenuAreasWithSearchInput from '@/components/molecules/MenuAreaWithSearchInput'
 import ListCards from '@/components/molecules/ListCards'
+import { useScrollToTop } from '@/hooks/useScroll'
+import { useAreasQuery } from '@/clients/api/areas'
 
 const areasDisponiveis = [
   ['PPCAM', 'Diretoria Institucional'],
@@ -12,8 +14,12 @@ const areasDisponiveis = [
 ]
 
 export default function Publicacoes() {
+  useScrollToTop()
   const [fieldSearch, setFieldSearch] = useState('')
   const [areaSelect, setAreaSelect] = useState<string[]>([])
+  const areasList = useAreasQuery()
+
+  console.log(areasList)
 
   return (
     <Box
