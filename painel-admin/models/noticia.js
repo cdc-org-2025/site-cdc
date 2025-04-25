@@ -3,10 +3,23 @@ import { Model, DataTypes } from 'sequelize';
 export class Noticia extends Model {
   static init(sequelize) {
     return super.init({
-      titulo: DataTypes.STRING,
-      conteudo: DataTypes.JSON,
+      titulo: DataTypes.STRING(255),
+      tempo_leitura: DataTypes.STRING, // tempo em minutos
+      tipo: DataTypes.ENUM("noticias", "publicacoes"),
+      conteudo: DataTypes.JSON,         // lista de elementos com type/content/html
+      html_original: DataTypes.TEXT,    // campo extra para versão renderizada
+      imagem_capa: DataTypes.STRING,    // URL
+      autor: DataTypes.STRING(255),
       data_publicacao: DataTypes.DATE,
-      area_id: DataTypes.INTEGER,
+      areaDeAtuacao: {
+        type: DataTypes.VIRTUAL,
+        get() {
+          return this.getDataValue('area_id');
+        },
+        set(value) {
+          this.setDataValue('area_id', value);
+        }
+      },
     }, { sequelize, tableName: 'noticias', timestamps: false });
   }
 

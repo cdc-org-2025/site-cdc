@@ -14,6 +14,8 @@ const __dirname = path.dirname(__filename);
 
 const app = express()
 
+app.use(express.static('public'))
+
 app.use(session({
     secret: process.env.COOKIE_SECRET,
     resave: false,

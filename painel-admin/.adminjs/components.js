@@ -1,10 +1,17 @@
-// /.adminjs/components.js
-import { ComponentLoader } from 'adminjs'
+import { ComponentLoader } from 'adminjs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-const componentLoader = new ComponentLoader()
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// ⚠️ Caminho relativo para o bundler funcionar
+const relativePath = './components/ConteudoEditor.jsx';
+
+const componentLoader = new ComponentLoader();
 
 const Components = {
-  ConteudoEditor: componentLoader.add('ConteudoEditor', './components/ConteudoEditor.jsx')
-}
+  ConteudoEditor: componentLoader.add('ConteudoEditor', relativePath)
+};
 
-export { componentLoader, Components }
+export { componentLoader, Components };

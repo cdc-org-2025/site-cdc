@@ -2,7 +2,7 @@ import "dotenv/config";
 
 import "dotenv/config";
 
-const isProduction = process.env.NODE_ENV;
+const isProduction = process.env.NODE_ENV === "development" ? false : true;
 
 const dbConfig = {
   dialect: 'postgres',

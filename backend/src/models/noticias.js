@@ -1,13 +1,15 @@
-
 import { DataTypes, Model } from "sequelize";
 
 class Noticia extends Model {
   static init(sequelize) {
     return super.init({
       titulo: DataTypes.STRING(255),
-      tempo_leitura: DataTypes.STRING,
+      tempo_leitura: DataTypes.STRING, // tempo em minutos
       tipo: DataTypes.ENUM("noticias", "publicacoes"),
-      conteudo: DataTypes.JSON,
+      conteudo: DataTypes.JSON,         // lista de elementos com type/content/html
+      html_original: DataTypes.TEXT,    // campo extra para versão renderizada
+      imagem_capa: DataTypes.STRING,    // URL
+      autor: DataTypes.STRING(255),
       data_publicacao: DataTypes.DATE,
     }, {
       sequelize,

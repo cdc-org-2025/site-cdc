@@ -10,6 +10,12 @@ AdminJS.registerAdapter({ Database, Resource })
 const models = initializeModels(sequelize)
 
 export const adminJs = new AdminJS({
+    assets: {
+        styles: [
+            '/css/suneditor.min.css',
+            '/css/editor-custom.css'
+        ], // 👈 adiciona aqui
+    },
     resources: [
         {
             resource: models.Area, options: {
@@ -27,19 +33,28 @@ export const adminJs = new AdminJS({
             options: {
                 navigation: 'Conteúdo',
                 properties: {
-                    area_id: {
-                        reference: 'areas',
-                        label: 'Área',
-                        isVisible: { list: true, edit: true, filter: true, show: true },
-                    },
+                    // area_id: {
+                    //     reference: 'areas',
+                    //     label: 'Área',
+                    //     isVisible: { list: true, edit: true, filter: true, show: true },
+                    // },
                     conteudo: {
                         type: 'mixed',
                         components: {
                             edit: Components.ConteudoEditor
                         },
-                        isVisible: { list: false, edit: true, filter: false, show: true },
+                        isVisible: { list: true, edit: true, filter: false, show: true },
+                    },
+                    areaDeAtuacao: {
+                        reference: 'areas',
+                        isVisible: { list: true, edit: true, filter: true, show: true },
+                        label: 'Área de Atuação',
+                    },
+                    area_id: {
+                        isVisible: false, // Esconde o area_id bruto
                     },
                 },
+                editProperties: ['conteudo', 'areaDeAtuacao', 'tempo_leitura', 'imagem_capa','autor'],
 
             }
         },
@@ -192,7 +207,7 @@ export const adminJs = new AdminJS({
 // No final do seu arquivo admin.js, adicione:
 // if (process.env.NODE_ENV === 'development') {
 adminJs.watch()
-//   }
+// }
 
 
 export const adminRouter = AdminJSExpress.buildRouter(adminJs)

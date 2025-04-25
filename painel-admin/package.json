@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
+  "_moduleAliases": {
+    "components": "painel-admin/.adminjs/components"
+  },
   "scripts": {
     "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -19,11 +22,16 @@
     "express": "^5.1.0",
     "express-formidable": "^1.2.0",
     "express-session": "^1.18.1",
+    "module-alias": "^2.2.3",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "pg": "^8.14.1",
     "pg-hstore": "^2.3.4",
-    "sequelize": "^6.37.7"
+    "sequelize": "^6.37.7",
+    "slate": "^0.112.0",
+    "slate-history": "^0.113.1",
+    "slate-react": "^0.112.1",
+    "suneditor-react": "^3.6.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"
