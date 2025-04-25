@@ -10,7 +10,7 @@ export function useNavigation() {
     if (link) {
       const newRoute = `/${currentLocale}${link}`
       if (pathname !== newRoute) {
-        router.push(newRoute)
+        router.push(newRoute, { scroll: false })
       }
     }
   }
