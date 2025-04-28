@@ -1,4 +1,3 @@
-import { fetchMessages } from '@/utils/getMessages'
 import RootLayout from './RootLayout'
 import ButtonAccessible from '@/components/atoms/ButtonAccessible'
 import { Metadata } from 'next'
@@ -23,10 +22,9 @@ export default async function LocalePageLayout({
   children: React.ReactNode
   params: { locale: string }
 }) {
-  const messages = await fetchMessages(locale)
 
   return (
-    <RootLayout locale={locale} messages={messages}>
+    <RootLayout locale={locale} >
       {children}
       <ButtonAccessible />
     </RootLayout>
