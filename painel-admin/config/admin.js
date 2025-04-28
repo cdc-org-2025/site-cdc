@@ -33,17 +33,16 @@ export const adminJs = new AdminJS({
             options: {
                 navigation: 'Conteúdo',
                 properties: {
-                    // area_id: {
-                    //     reference: 'areas',
-                    //     label: 'Área',
-                    //     isVisible: { list: true, edit: true, filter: true, show: true },
-                    // },
                     conteudo: {
-                        type: 'mixed',
                         components: {
                             edit: Components.ConteudoEditor
                         },
                         isVisible: { list: true, edit: true, filter: false, show: true },
+                        isValid: (value) => {
+                            if (!value) return true;
+                            return Array.isArray(value) &&
+                                value.every(item => item.type && item.content && item.html);
+                        }
                     },
                     areaDeAtuacao: {
                         reference: 'areas',
@@ -54,7 +53,7 @@ export const adminJs = new AdminJS({
                         isVisible: false, // Esconde o area_id bruto
                     },
                 },
-                editProperties: ['conteudo', 'areaDeAtuacao', 'tempo_leitura', 'imagem_capa','autor'],
+                editProperties: ['conteudo', 'areaDeAtuacao', 'tempo_leitura', 'imagem_capa', 'autor'],
 
             }
         },

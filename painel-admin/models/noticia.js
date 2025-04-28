@@ -5,12 +5,21 @@ export class Noticia extends Model {
     return super.init({
       titulo: DataTypes.STRING(255),
       tempo_leitura: DataTypes.STRING, // tempo em minutos
-      tipo: DataTypes.ENUM("noticias", "publicacoes"),
-      conteudo: DataTypes.JSON,         // lista de elementos com type/content/html
+      tipo: {
+        type: DataTypes.ENUM("noticias", "publicacoes"),
+        defaultValue: "noticias",
+      },
+      conteudo: {
+        type: DataTypes.JSON,
+        defaultValue: [],
+      },              // lista de elementos com type/content/html
       html_original: DataTypes.TEXT,    // campo extra para versão renderizada
       imagem_capa: DataTypes.STRING,    // URL
       autor: DataTypes.STRING(255),
-      data_publicacao: DataTypes.DATE,
+      data_publicacao: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW, // seta data atual ao criar
+      },
       areaDeAtuacao: {
         type: DataTypes.VIRTUAL,
         get() {

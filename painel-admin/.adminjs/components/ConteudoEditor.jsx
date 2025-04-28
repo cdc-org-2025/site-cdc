@@ -19,18 +19,18 @@ const formats = [
 //   autor: "",
 //   minutoLeitura: 3,
 //   dataCreate: "",
-//   "elements": [
-//     {
-//       "type": "Titulo",
-//       "content": "teste",
-//       "html": "<h1>teste</h1>"
-//     },
-//     {
-//       "type": "Citacao",
-//       "content": "teste",
-//       "html": "<blockquote><div>teste<br></div></blockquote>"
-//     }
-//   ],
+  // "elements": [
+  //   {
+  //     "type": "Titulo",
+  //     "content": "teste",
+  //     "html": "<h1>teste</h1>"
+  //   },
+  //   {
+  //     "type": "Citacao",
+  //     "content": "teste",
+  //     "html": "<blockquote><div>teste<br></div></blockquote>"
+  //   }
+  // ],
 //   "htmlOriginal": "<h1>teste</h1><blockquote><div>teste<br></div></blockquote><h1><br></h1>"
 // }
 
@@ -243,16 +243,15 @@ const ConteudoEditor = (props) => {
 
   const handleEditorChange = (newHtml) => {
     setHtmlContent(newHtml);
-
-    // Extrai conteúdo mantendo a ordem
+  
     const extracted = extractOrderedContent(newHtml);
-    console.log('extracted')
-    console.log(extracted)
     setStructuredContent(extracted);
-
-    // Envia para o AdminJS
-    onChange(property.path, extracted);
+  
+    // 🔥 Envia separadamente para os campos corretos
+    onChange('conteudo', extracted.elements);
+    onChange('html_original', extracted.htmlOriginal);
   };
+  
 
   return (
     <Box>

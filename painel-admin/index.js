@@ -1,7 +1,7 @@
 import express from 'express'
 import session from 'express-session'
 import passport from './config/passport.js'
-import { adminJs, adminRouter } from './config/admin.js'
+import { adminJs } from './config/admin.js'
 import { sequelize } from './config/database.js'
 import authRoutes from './routes/auth.js'
 import AdminJSExpress from '@adminjs/express'
@@ -22,20 +22,42 @@ app.use(session({
     saveUninitialized: true,
 }))
 
-app.use(passport.initialize())
-app.use(passport.session())
+// app.use(passport.initialize())
+// app.use(passport.session())
 
-// const adminRouter = AdminJSExpress.buildRouter(adminJs)
+// // const adminRouter = AdminJSExpress.buildRouter(adminJs)
 
-app.use(adminJs.options.rootPath, (req, res, next) => {
-    if (req.path.startsWith('/auth/google') || req.path.startsWith('/auth/google/callback')) {
-        next()
-    } else if (req.session.passport && req.session.passport.user) {
-        next()
-    } else {
-        res.redirect(`${adminJs.options.rootPath}/auth/google`)
+// app.use(adminJs.options.rootPath, (req, res, next) => {
+//     if (req.path.startsWith('/auth/google') || req.path.startsWith('/auth/google/callback')) {
+//         next()
+//     } else if (req.session.passport && req.session.passport.user) {
+//         next()
+//     } else {
+//         res.redirect(`${adminJs.options.rootPath}/auth/google`)
+//     }
+// })
+
+const adminRouter = AdminJSExpress.buildAuthenticatedRouter(
+    adminJs,
+    {
+      authenticate: async (email, password) => {
+        if (
+          email === "teste@teste.com" &&
+          password === "123456"
+        ) {
+          return { email };
+        }
+        return null;
+      },
+      cookiePassword: process.env.SECRET_SESSION_KEY,
+    },
+    null,
+    {
+      resave: false,
+      saveUninitialized: true,
+      secret: process.env.SECRET_SESSION_KEY,
     }
-})
+  );
 
 app.use("/assets", express.static(path.join(__dirname, './assets')));
 app.use(authRoutes)
