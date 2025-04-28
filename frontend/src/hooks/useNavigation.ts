@@ -4,11 +4,10 @@ import { useRouter, usePathname } from 'next/navigation'
 export function useNavigation() {
   const router = useRouter()
   const pathname = usePathname()
-  const currentLocale = pathname.split('/')[1]
 
   const handleNavigate = (link?: string) => {
     if (link) {
-      const newRoute = `/${currentLocale}${link}`
+      const newRoute = `/${link}`
       if (pathname !== newRoute) {
         router.push(newRoute, { scroll: false })
       }
@@ -28,5 +27,5 @@ export function useNavigation() {
     handleNavigate(`/${subItem.link}`)
   }
 
-  return { handleNavigate, currentLocale, pathname, handleSubMenuClick }
+  return { handleNavigate, pathname, handleSubMenuClick }
 }
