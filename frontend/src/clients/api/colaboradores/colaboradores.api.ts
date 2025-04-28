@@ -3,8 +3,8 @@ import { IColaborador } from './colaboradores.types';
 
 const api = apiData()
 
-export const getListColaboradores = async (): Promise<IColaborador[]> => {
-  const { data } = await api.get('/colaboradores');
+export const getListColaboradoresArea = async (): Promise<IColaborador[]> => {
+  const { data } = await api.get('/colaboradores/areas');
   return data;
 };
 

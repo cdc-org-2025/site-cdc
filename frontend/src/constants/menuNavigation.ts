@@ -47,7 +47,7 @@ export const MenuOptions = [
     id: 3,
     label: 'Informe-se',
     subMenus: [
-      { id: 30, label: 'Notícias', link: '/' },
+      { id: 30, label: 'Notícias', link: 'noticias' },
       { id: 31, label: 'Publicações', link: 'publicacoes' },
     ],
   },

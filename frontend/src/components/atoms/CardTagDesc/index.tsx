@@ -2,9 +2,10 @@
 
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import React, { useState } from 'react'
+import React from 'react'
 import ButtonTag from '../ButtonTag'
 import { StaticImport } from 'next/dist/shared/lib/get-img-props'
+import { memo } from 'react'
 
 interface ICardTagDesc {
   info: {
@@ -20,14 +21,12 @@ interface ICardTagDesc {
   onclickTag?: (_?: any) => void
 }
 
-export default function CardTagDesc({
+function CardTagDesc({
   info,
   personal,
   onclick,
   onclickTag,
 }: ICardTagDesc) {
-  const [hover, setHover] = useState(false)
-
   if (personal) {
     return (
       <Box display="flex" flexDirection="column" gap="12px" width="100%">
@@ -50,27 +49,31 @@ export default function CardTagDesc({
             variant="overline"
             lineHeight="150%"
             textTransform="none"
-            color={'text.primary'}
+            color="text.primary"
             maxWidth="390px"
           >
             {info.description}
           </Typography>
-          <Typography
-            variant="subtitle2"
-            lineHeight="150%"
-            textTransform="none"
-            color={'#727271'}
-          >
-            {info.occupation}
-          </Typography>
-          <Typography
-            variant="subtitle2"
-            lineHeight="150%"
-            textTransform="none"
-            color={'#727271'}
-          >
-            {info.email}
-          </Typography>
+          {info.occupation && (
+            <Typography
+              variant="subtitle2"
+              lineHeight="150%"
+              textTransform="none"
+              color="#727271"
+            >
+              {info.occupation}
+            </Typography>
+          )}
+          {info.email && (
+            <Typography
+              variant="subtitle2"
+              lineHeight="150%"
+              textTransform="none"
+              color="#727271"
+            >
+              {info.email}
+            </Typography>
+          )}
         </Box>
       </Box>
     )
@@ -84,9 +87,13 @@ export default function CardTagDesc({
       gap="12px"
       sx={{
         cursor: 'pointer',
+        '&:hover .imgZoom': {
+          backgroundSize: '110%',
+        },
+        '&:hover .descText': {
+          color: 'primary.main',
+        },
       }}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
     >
       <Box
         onClick={onclick}
@@ -99,26 +106,30 @@ export default function CardTagDesc({
         }}
       >
         <Box
+          className="imgZoom"
           sx={{
             width: '100%',
             height: '100%',
             backgroundImage: `url(${info.image.src})`,
-            backgroundSize: hover ? '110%' : '100%',
+            backgroundSize: '100%',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
             transition: 'background-size 0.3s ease-in-out',
           }}
         />
       </Box>
+
       <Box>
         <ButtonTag onClick={onclickTag}>{info.tag}</ButtonTag>
       </Box>
+
       <Box onClick={onclick}>
         <Typography
+          className="descText"
           variant="overline"
           lineHeight="150%"
           textTransform="none"
-          color={hover ? 'primary.main' : 'text.primary'}
+          color="text.primary"
           maxWidth="390px"
         >
           {info.description}
@@ -127,3 +138,5 @@ export default function CardTagDesc({
     </Box>
   )
 }
+
+export default memo(CardTagDesc)

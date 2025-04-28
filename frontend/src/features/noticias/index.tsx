@@ -9,7 +9,7 @@ const areasDisponiveis = [
   ['PPCAM', 'Diretoria Institucional', 'Conselho Fiscal', 'PROVITA', 'MAIS VIDA', 'PPVIDA', 'PPDPI', 'ATM', 'Programa ATITUDE'],
 ]
 
-export default function Publicacoes() {
+export default function Noticias() {
   useScrollToTop()
   const [fieldSearch, setFieldSearch] = useState('')
   const [areaSelect, setAreaSelect] = useState<string[]>([])

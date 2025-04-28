@@ -59,16 +59,15 @@ const AnimatedContent: React.FC<AnimatedContentProps> = ({
 
   const springProps = useSpring({
     from: {
-      transform: `translate${directions[direction]}(${
-        reverse ? `-${distance}px` : `${distance}px`
-      }) scale(${scale})`,
+      transform: `translate${directions[direction]}(${reverse ? `-${distance}px` : `${distance}px`
+        }) scale(${scale})`,
       opacity: animateOpacity ? initialOpacity : 1,
     },
     to: inView
       ? {
-          transform: `translate${directions[direction]}(0px) scale(1)`,
-          opacity: 1,
-        }
+        transform: `translate${directions[direction]}(0px) scale(1)`,
+        opacity: 1,
+      }
       : undefined,
     config,
   })

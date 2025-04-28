@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Footer from '@/components/molecules/Footer'
 import HeaderBannerUnique from '@/components/templates/HeaderBannerUnique'
-import PPDI from '../../../assets/banner/ppdi.svg'
+import PPDI from '../../assets/banner/ppdi.svg'
 import Publicacoes from '@/features/publicacoes'
 
 export const metadata: Metadata = {
@@ -20,6 +20,7 @@ export default function PublicacoesPage() {
     title: 'Publicações',
     image: PPDI,
   }
+
   return (
     <>
       <HeaderBannerUnique noneMobile Banner={Banner} />

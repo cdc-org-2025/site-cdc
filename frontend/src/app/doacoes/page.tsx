@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Footer from '@/components/molecules/Footer'
 import HeaderBannerUnique from '@/components/templates/HeaderBannerUnique'
-import PPDI from '../../../assets/banner/ppdi.svg'
+import PPDI from '../../assets/banner/ppdi.svg'
 import Doacoes from '@/features/doacoes'
 
 export const metadata: Metadata = {

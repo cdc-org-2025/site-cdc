@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 
 export function useScrollToId(duration = 1000, offset = 100) {
   const scrollToId = useCallback(
@@ -34,4 +34,10 @@ export function useScrollToId(duration = 1000, offset = 100) {
   )
 
   return scrollToId
+}
+
+export function useScrollToTop() {
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0 })
+  }, [])
 }

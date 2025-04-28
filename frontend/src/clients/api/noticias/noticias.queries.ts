@@ -1,6 +1,6 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { getListNoticias, getNoticia, getShowNews } from './noticias.api';
-import { INoticias, INoticiasShowNews } from './noticias';
+import { getListNoticias, getNoticia, getNoticiaArea, getShowNews } from './noticias.api';
+import { INoticiaArea, INoticias, INoticiasShowNews } from './noticias';
 
 export const useNoticiasQuery = (options?: UseQueryOptions<INoticias[], Error>) => {
   return useQuery<INoticias[], Error>({
@@ -15,6 +15,15 @@ export const useNoticiaQuery = (id: number, options?: UseQueryOptions<INoticias,
     queryKey: ['noticia', id],
     queryFn: () => getNoticia(id),
     enabled: !!id,
+    ...options,
+  });
+};
+
+export const useNoticiasAreaQuery = (area: number, options?: UseQueryOptions<INoticiaArea[], Error>) => {
+  return useQuery<INoticiaArea[], Error>({
+    queryKey: ['noticia=area', area],
+    queryFn: () => getNoticiaArea(area),
+    enabled: !!area,
     ...options,
   });
 };

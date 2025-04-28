@@ -7,24 +7,10 @@ import Leadership from './Leadership'
 import Transparency from './Transparency'
 import Faq from './Faq'
 import VectorRoundedLines from '@/components/atoms/VectorRoundedLines'
-import { useEffect } from 'react'
-import { useSearchParams } from 'next/navigation'
-import { useScrollToId } from '@/hooks/useScroll'
+import { Suspense } from 'react'
+import SearchScrollHandler from './SearchScrollHandler'
 
 export default function InstitucionalPage() {
-  const searchParams = useSearchParams()
-  const scrollView = searchParams.get('scrollView')
-  const scrollToId = useScrollToId()
-
-  useEffect(() => {
-    if (scrollView) {
-      const timeout = setTimeout(() => {
-        scrollToId(scrollView)
-      }, 100)
-      return () => clearTimeout(timeout)
-    }
-  }, [scrollView, scrollToId])
-
   return (
     <Box
       width="100%"
@@ -35,6 +21,9 @@ export default function InstitucionalPage() {
       }}
       position="relative"
     >
+      <Suspense fallback={null}>
+        <SearchScrollHandler />
+      </Suspense>
       <VectorRoundedLines left={0} margin="400px 0px 0px 0px" />
       <VectorRoundedLines rotate={true} right={0} margin="1200px 0px 0px 0px" />
       <Timeline />
