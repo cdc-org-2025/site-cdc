@@ -60,7 +60,7 @@ const adminRouter = AdminJSExpress.buildAuthenticatedRouter(
   );
 
 app.use("/assets", express.static(path.join(__dirname, './assets')));
-app.use(authRoutes)
+// app.use(authRoutes)
 app.use(adminJs.options.rootPath, adminRouter)
 
 const PORT = process.env.PORT || 3000
