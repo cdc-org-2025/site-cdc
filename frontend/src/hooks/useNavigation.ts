@@ -17,14 +17,12 @@ export function useNavigation() {
   const handleSubMenuClick = (subItem: ISubMenu, labelItem: string) => {
     if (labelItem === 'Institucional') {
       if (subItem.scrollView) {
-        return handleNavigate(
-          `/institucional/?scrollView=${subItem.scrollView}`
-        )
+        return handleNavigate(`institucional/?scrollView=${subItem.scrollView}`);
       } else {
-        return handleNavigate(`/${subItem.link}`)
+        return handleNavigate(`${subItem.link}`);
       }
     }
-    handleNavigate(`/${subItem.link}`)
+    handleNavigate(`${subItem.link}`);
   }
 
   return { handleNavigate, pathname, handleSubMenuClick }
