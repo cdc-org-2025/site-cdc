@@ -204,9 +204,9 @@ export const adminJs = new AdminJS({
 });
 
 // No final do seu arquivo admin.js, adicione:
-// if (process.env.NODE_ENV === 'development') {
-adminJs.watch()
-// }
+if (process.env.NODE_ENV === 'development') {
+    adminJs.watch()
+}
 
 
 export const adminRouter = AdminJSExpress.buildRouter(adminJs)
