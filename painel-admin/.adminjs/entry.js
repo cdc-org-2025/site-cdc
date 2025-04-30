@@ -1,3 +1,3 @@
 AdminJS.UserComponents = {}
-import ConteudoEditor from './components/ConteudoEditor.jsx'
+import ConteudoEditor from '../src/components/conteudoEditor'
 AdminJS.UserComponents.ConteudoEditor = ConteudoEditor

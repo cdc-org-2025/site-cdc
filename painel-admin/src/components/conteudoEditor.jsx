@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
-import { Box, Button, TextArea } from '@adminjs/design-system';
+import { useState, useRef } from 'react';
+import { Box} from '@adminjs/design-system';
 import SunEditor from 'suneditor-react';
 
 const formats = [
