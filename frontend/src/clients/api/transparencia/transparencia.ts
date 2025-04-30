@@ -1,7 +1,8 @@
 export interface ITransparencia {
   id: number;
-  url_imagem: string
   titulo: string;
-  area: string;
-  url_doc?: string
+  imagem_url: string
+  documento_url?: string
+  ocumento_drive_id: string
+  area_id: number;
 }

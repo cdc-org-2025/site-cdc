@@ -1,14 +1,16 @@
 export interface INoticias {
   id: number
+  titulo: string
   imagem_capa: string
+  tipo: string
   autor: string
-  minutoLeitura: number
-  dataCreate: string
-  elements: IElementsNoticia[]
-  htmlOriginal: string
+  tempo_leitura: number
+  data_publicacao: string
+  conteudo: IConteudoNoticia[]
+  area_id: number
 }
 
-export interface IElementsNoticia {
+export interface IConteudoNoticia {
   type: string,
   content: string,
   html: string

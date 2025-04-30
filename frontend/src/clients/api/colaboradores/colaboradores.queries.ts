@@ -1,11 +1,19 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { getColaborador, getListColaboradoresArea } from './colaboradores.api';
+import { getColaborador, getListColaboradores, getListColaboradoresArea } from './colaboradores.api';
 import { IColaborador } from './colaboradores.types';
 
-export const useColaboradoresAreaQuery = (options?: UseQueryOptions<IColaborador[], Error>) => {
+export const useColaboradoresAreaQuery = (area_id: number, options?: UseQueryOptions<IColaborador[], Error>) => {
+  return useQuery<IColaborador[], Error>({
+    queryKey: ['colaboradores', area_id],
+    queryFn: () => getListColaboradoresArea(area_id),
+    ...options,
+  });
+};
+
+export const useColaboradoresQuery = (options?: UseQueryOptions<IColaborador[], Error>) => {
   return useQuery<IColaborador[], Error>({
     queryKey: ['colaboradores'],
-    queryFn: getListColaboradoresArea,
+    queryFn: () => getListColaboradores(),
     ...options,
   });
 };
