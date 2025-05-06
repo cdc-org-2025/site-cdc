@@ -1,4 +1,5 @@
 export interface IColaborador {
+  area_id: number;
   id: number;
   nome: string;
   cargo: string;

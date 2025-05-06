@@ -10,7 +10,7 @@ import { memo } from 'react'
 interface ICardTagDesc {
   info: {
     id: number
-    tag: string
+    tag: string | number
     description: string
     image: string | StaticImport | any
     occupation?: string
@@ -34,7 +34,7 @@ function CardTagDesc({
           width="100%"
           height="192px"
           sx={{
-            backgroundImage: `url(${info.image.src})`,
+            backgroundImage: `url(${info.image ?? 'https://ebarretoadvogados.com.br/wp-content/uploads/2021/11/Denuncia-anonima-conheca-melhor-suas-consequencias.jpg'})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',

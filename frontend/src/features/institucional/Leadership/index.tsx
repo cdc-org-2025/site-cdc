@@ -1,66 +1,45 @@
 'use client'
 
-import React, { useState, useMemo, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Grid'
 import CardTagDesc from '@/components/atoms/CardTagDesc'
 import MenuAreas from './MenuAreas'
-import LastNewsDefault from '../../../assets/pages/home-page/last-news-default.svg'
 import AnimationSplitText from '@/components/animations/splitText'
 import AnimetedSlide from '@/components/animations/slide'
 import { IArea, useAreasQuery } from '@/clients/api/areas'
-
-const lastNewsList = [
-  {
-    id: 1,
-    tag: 'Direito da Pessoa Idosa',
-    description: 'Estatuto do Centro de Desenvolvimento e Cidadania (CDC)',
-    image: LastNewsDefault,
-    occupation: 'ocuppation teste',
-    email: 'email teste',
-  },
-  {
-    id: 2,
-    tag: 'Direito da Pessoa Idosa',
-    description: 'Estatuto do Centro de Desenvolvimento e Cidadania (CDC)',
-    image: LastNewsDefault,
-    occupation: 'ocuppation teste',
-    email: 'email teste',
-  },
-  {
-    id: 3,
-    tag: 'Direito da Pessoa Idosa',
-    description: 'Estatuto do Centro de Desenvolvimento e Cidadania (CDC)',
-    image: LastNewsDefault,
-    occupation: 'ocuppation teste',
-    email: 'email teste',
-  },
-  {
-    id: 4,
-    tag: 'Direito da Pessoa Idosa',
-    description: 'Estatuto do Centro de Desenvolvimento e Cidadania (CDC)',
-    image: LastNewsDefault,
-    occupation: 'ocuppation teste',
-    email: 'email teste',
-  },
-]
+import { IColaborador, useColaboradoresQuery } from '@/clients/api/colaboradores'
 
 export default function Leadership() {
   const { data: dataAreas } = useAreasQuery()
+  const { data: dataColaboradores } = useColaboradoresQuery()
+  const [listColaboradores, setListColaboradores] = useState<IColaborador[] | undefined>([])
+
   const [areaSelect, setAreaSelect] = useState<IArea[]>([])
+
+  useEffect(() => {
+    if (dataColaboradores) {
+      setListColaboradores(dataColaboradores)
+    }
+  }, [dataColaboradores])
 
   const handleAreaSelect = useCallback((newAreaList: IArea[]) => {
     setAreaSelect(newAreaList)
-  }, [])
 
-  const filteredList = useMemo(() => {
-    if (!areaSelect.length) return lastNewsList;
+    if (!newAreaList.length) {
+      setListColaboradores(dataColaboradores)
+      return
+    }
 
-    return lastNewsList.filter((item) =>
-      areaSelect.some((area) => item.tag.includes(area.nome))
-    );
-  }, [areaSelect]);
+    const areaIds = newAreaList.map(area => Number(area.id))
+
+    const colabList = dataColaboradores?.filter(colaborador =>
+      areaIds.includes(colaborador.area_id)
+    )
+
+    setListColaboradores(colabList)
+  }, [dataColaboradores])
 
   return (
     <>
@@ -91,16 +70,16 @@ export default function Leadership() {
       />
 
       <Grid container spacing={4} pb="64px">
-        {filteredList.map((item) => (
+        {listColaboradores?.map((item: IColaborador) => (
           <Grid item key={item.id} xs={12} sm={6} md={4} lg={3}>
             <AnimetedSlide>
               <CardTagDesc
                 info={{
                   id: item.id,
-                  tag: item.tag,
-                  description: item.description,
-                  image: item.image,
-                  occupation: item.occupation,
+                  tag: item.area_id,
+                  description: item.nome,
+                  image: item.url_imagem,
+                  occupation: item.cargo,
                   email: item.email,
                 }}
                 personal

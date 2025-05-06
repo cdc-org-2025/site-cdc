@@ -21,7 +21,7 @@ export const useNoticiaQuery = (id: number, options?: UseQueryOptions<INoticias,
 
 export const useNoticiasAreaQuery = (area: number, options?: UseQueryOptions<INoticiaArea[], Error>) => {
   return useQuery<INoticiaArea[], Error>({
-    queryKey: ['noticia=area', area],
+    queryKey: ['noticia-area', area],
     queryFn: () => getNoticiaArea(area),
     enabled: !!area,
     ...options,
