@@ -6,11 +6,11 @@
   "_moduleAliases": {
     "components": "painel-admin/.adminjs/components"
   },
-"scripts": {
-  "fix-entry": "node scripts/fix-entry.js",
-  "dev": "nodemon index.js",
-  "start": "node index.js"
-},
+  "scripts": {
+    "fix-entry": "node scripts/fix-entry.js",
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -18,12 +18,16 @@
   "dependencies": {
     "@adminjs/express": "^6.1.1",
     "@adminjs/sequelize": "^4.1.1",
+    "@adminjs/upload": "^4.0.2",
+    "@google-cloud/storage": "^7.16.0",
     "adminjs": "^7.8.15",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "express-formidable": "^1.2.0",
     "express-session": "^1.18.1",
     "module-alias": "^2.2.3",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.2",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "pg": "^8.14.1",

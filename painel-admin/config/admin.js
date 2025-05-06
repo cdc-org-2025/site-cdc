@@ -4,6 +4,7 @@ import { Database, Resource } from '@adminjs/sequelize'
 import { initializeModels } from '../models/index.js'
 import { sequelize } from './database.js'
 import { Components, componentLoader } from '../src/components.js'
+import { uploadImageFeature } from './uploadStorage.js'
 
 
 AdminJS.registerAdapter({ Database, Resource })
@@ -70,12 +71,37 @@ export const adminJs = new AdminJS({
                         label: 'Área de Atuação',
                     },
                     area_id: {
-                        isVisible: false, // Esconde o area_id bruto
+                        isVisible: false
                     },
+                    url_imagem: {
+                        isVisible: { list: true, show: true, edit: false },
+                        components: {
+                            // 👇 se quiser mostrar preview no "show", podemos configurar isso depois
+                            // show: AdminJS.bundle('../components/ImagemPreview'),
+                        }
+                    },
+                    uploadImagem: {
+                        type: 'file',
+                        isVisible: { edit: true, list: false, show: false, filter: false },
+                        isArray: false, // 👈 isso força o AdminJS a usar `uploadImagem` ao invés de `uploadImagem.0`
+                      },                      
                 },
-                editProperties: ['nome', 'cargo', 'email', 'areaDeAtuacao', 'url_imagem'],
-                showProperties: ['nome', 'cargo', 'email', 'areaDeAtuacao', 'url_imagem'],
-            }
+                editProperties: [
+                    'nome',
+                    'cargo',
+                    'email',
+                    'areaDeAtuacao',
+                    'uploadImagem' // usado para enviar imagem
+                ],
+                showProperties: [
+                    'nome',
+                    'cargo',
+                    'email',
+                    'areaDeAtuacao',
+                    'url_imagem'
+                ]
+            },
+            features: [uploadImageFeature]
         },
         { resource: models.Oportunidade, options: { navigation: 'Oportunidades' } },
         { resource: models.Parceiro, options: { navigation: 'Parceiros' } },
@@ -201,7 +227,7 @@ export const adminJs = new AdminJS({
             },
         },
     },
-    componentLoader
+    componentLoader,
 });
 
 adminJs.watch()
