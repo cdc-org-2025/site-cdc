@@ -1,14 +1,10 @@
 import uploadFeature from '@adminjs/upload'
 import { componentLoader } from '../src/components.js'
+import { GCPProvider } from './GCPProvider.js'
 
 export const uploadImageFeature = uploadFeature({
   componentLoader,
-  provider: {
-    gcp: {
-      bucket: 'cdc-site',       // seu bucket GCS
-      expires: 0                // URL pública permanente
-    }
-  },
+  provider: new GCPProvider(),
   properties: {
     key: 'url_imagem',
     file: 'uploadImagem'
@@ -21,7 +17,7 @@ export const uploadImageFeature = uploadFeature({
     const id = record?.id?.() || `temp-${Date.now()}`
     const clean = filename.replace(/\s+/g, '_')
     const fullPath = `colaboradores/${id}-${clean}`
-    console.log('📤 Enviando para GCP em:', fullPath)
+    console.log('📤 Caminho final do upload:', fullPath)
     return fullPath
   }
 })
