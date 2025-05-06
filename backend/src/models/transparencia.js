@@ -5,7 +5,7 @@ class Transparencia extends Model {
   static init(sequelize) {
     return super.init({
       titulo: DataTypes.STRING(255),
-      imagem_url: DataTypes.TEXT,
+      url_imagem: DataTypes.STRING,
       documento_url: DataTypes.TEXT,
       documento_drive_id: DataTypes.STRING,
     }, {

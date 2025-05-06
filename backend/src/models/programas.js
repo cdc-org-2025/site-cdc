@@ -5,7 +5,7 @@ class Programa extends Model {
   static init(sequelize) {
     return super.init({
       conteudo: DataTypes.JSON,
-      url_image_capa: DataTypes.STRING,
+      url_imagem: DataTypes.STRING,
       titulo: DataTypes.STRING,
       descricao: DataTypes.STRING,
     }, {

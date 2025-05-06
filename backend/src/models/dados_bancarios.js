@@ -4,7 +4,7 @@ import { DataTypes, Model } from "sequelize";
 class DadosBancario extends Model {
   static init(sequelize) {
     return super.init({
-      url_img_qrcode: DataTypes.STRING,
+      url_imagem: DataTypes.STRING,
       banco: DataTypes.STRING,
       agencia: DataTypes.STRING,
       titular_conta: DataTypes.STRING,
