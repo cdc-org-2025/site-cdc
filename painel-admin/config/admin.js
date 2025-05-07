@@ -4,7 +4,7 @@ import { Database, Resource } from '@adminjs/sequelize'
 import { initializeModels } from '../models/index.js'
 import { sequelize } from './database.js'
 import { Components, componentLoader } from '../src/components.js'
-import { uploadImageFeature } from './uploadStorage.js'
+import { createUploadFeature } from './uploadStorage.js'
 
 
 AdminJS.registerAdapter({ Database, Resource })
@@ -59,7 +59,175 @@ export const adminJs = new AdminJS({
 
             }
         },
-        { resource: models.LinhaDoTempo, options: { navigation: 'Conteúdo' } },
+        {
+            resource: models.LinhaDoTempo,
+            features: [
+                createUploadFeature({
+                    folder: 'linha_do_tempos',
+                    file: 'uploadImagens',
+                    key: 'url_imagem',
+                    multiple: true,
+                }),
+            ],
+            options: {
+                navigation: 'Conteúdo',
+                listProperties: ['id', 'url_imagem', 'titulo', 'ano'],
+                actions: {
+                    new: {
+                        after: async (response, request, context) => {
+                            const { record } = context
+                            if (!record || record.isValid() === false) return response
+
+                            const imagens = Object.entries(request.files || {})
+                                .filter(([key]) => key.startsWith('uploadImagens'))
+                                .map(([, file]) => file)
+
+                            const LinhaDoTempoImagem = models.LinhaDoTempoImagem
+                            const bucketUrl = 'https://storage.googleapis.com/cdc-site'
+
+                            for (const imagem of imagens) {
+                                const filename = imagem?.name?.replace(/\s+/g, '_')
+                                const gcsPath = `linha_do_tempos/${record.id()}-${filename}`
+
+                                await LinhaDoTempoImagem.create({
+                                    linha_do_tempo_id: record.id(),
+                                    url_imagem: `${bucketUrl}/${gcsPath}`,
+                                })
+                            }
+
+                            console.log(`📥 ${imagens.length} imagens associadas à linha do tempo ${record.id()}`)
+                            return response
+                        }
+                    },
+                    list: {
+                        after: async (response) => {
+                            const imagens = await models.LinhaDoTempoImagem.findAll()
+
+                            const imagensMap = imagens.reduce((acc, img) => {
+                                const id = img.linha_do_tempo_id
+                                const relativePath = img.url_imagem.replace('https://storage.googleapis.com/cdc-site/', '')
+
+                                if (!acc[id]) {
+                                    acc[id] = []
+                                }
+
+                                acc[id].push(relativePath) // 👉 guarda todas as imagens
+
+                                return acc
+                            }, {})
+
+                            for (const record of response.records) {
+                                const id = record.params.id
+                                const imagemArray = imagensMap[id]
+
+                                if (imagemArray) {
+                                    record.params.url_imagem = imagemArray
+                                }
+                            }
+
+                            return response
+                        }
+                    }
+
+                    // list: {
+                    //     after: async (response) => {
+                    //       const imagens = await models.LinhaDoTempoImagem.findAll()
+                    //       const imagensMap = imagens.reduce((acc, img) => {
+                    //         if (!acc[img.linha_do_tempo_id]) {
+                    //           acc[img.linha_do_tempo_id] = img.url_imagem
+                    //         }
+                    //         return acc
+                    //       }, {})
+
+                    //       for (const record of response.records) {
+                    //         const id = record.params.id
+                    //         const imagem = imagensMap[id]
+
+                    //         if (imagem) {
+                    //           // 👇 CORRIGIDO para compatibilidade com ImageListPreview
+                    //           record.params.url_imagem = imagem.replace('https://storage.googleapis.com/cdc-site/', '')
+                    //         }
+                    //       }
+
+                    //       return response
+                    //     }
+                    //   }
+
+                },
+                properties: {
+                    titulo: { isTitle: true },
+                    conteudo: { type: 'richtext' },
+                    ano: { type: 'number' },
+                    uploadImagens: {
+                        type: 'mixed',
+                        isVisible: { list: false, show: false, filter: false, edit: true },
+                        components: {
+                            edit: Components.UploadMultiple
+                        },
+                        custom: { multiple: true }
+                    },
+                    url_imagem: {
+                        isVisible: { list: true, show: false, edit: false },
+                        components: {
+                            list: Components.ImageListPreview
+                        }
+                    }
+                },
+                editProperties: ['titulo', 'ano', 'conteudo', 'uploadImagens'],
+                showProperties: ['titulo', 'ano', 'conteudo']
+            }
+        },
+
+
+        // {
+        //     resource: models.LinhaDoTempo,
+        //     options: {
+        //         navigation: 'Conteúdo',
+        //         actions: {
+        //             new: {
+        //                 after: async (response, request, context) => {
+        //                     const { record } = context
+        //                     if (!record || record.isValid() === false) return response
+
+        //                     const imagens = Object.entries(request.files || {})
+        //                         .filter(([key]) => key.startsWith('uploadImagens'))
+        //                         .map(([, file]) => file)
+
+        //                     const LinhaDoTempoImagem = models.LinhaDoTempoImagem
+        //                     const bucketUrl = 'https://storage.googleapis.com/cdc-site'
+
+        //                     for (const imagem of imagens) {
+        //                         const filename = imagem?.name?.replace(/\s+/g, '_')
+        //                         const gcsPath = `linha_do_tempos/${record.id()}-${filename}`
+
+        //                         await LinhaDoTempoImagem.create({
+        //                             linha_do_tempo_id: record.id(),
+        //                             url_imagem: `${bucketUrl}/${gcsPath}`,
+        //                         })
+        //                     }
+
+        //                     console.log(`📥 ${imagens.length} imagens associadas à linha do tempo ${record.id()}`)
+        //                     return response
+        //                 }
+        //             }
+        //         },
+        //         properties: {
+        //             titulo: { isTitle: true },
+        //             conteudo: { type: 'richtext' },
+        //             ano: { type: 'number' },
+        //             uploadImagens: {
+        //                 type: 'mixed',
+        //                 isVisible: { list: false, show: false, filter: false, edit: true },
+        //                 components: {
+        //                     edit: Components.UploadMultiple
+        //                 },
+        //                 custom: { multiple: true }
+        //             }
+        //         },
+        //         editProperties: ['titulo', 'ano', 'conteudo', 'uploadImagens'],
+        //         showProperties: ['titulo', 'ano', 'conteudo']
+        //     }
+        // },
         {
             resource: models.Colaborador,
             options: {
@@ -76,15 +244,15 @@ export const adminJs = new AdminJS({
                     url_imagem: {
                         isVisible: { list: true, show: true, edit: false },
                         components: {
-                            // 👇 se quiser mostrar preview no "show", podemos configurar isso depois
-                            // show: AdminJS.bundle('../components/ImagemPreview'),
+                            list: Components.ImageListPreview,
+                            show: Components.ImageListPreview, // opcional, se quiser mostrar no "show"
                         }
                     },
                     uploadImagem: {
                         type: 'file',
                         isVisible: { edit: true, list: false, show: false, filter: false },
                         isArray: false, // 👈 isso força o AdminJS a usar `uploadImagem` ao invés de `uploadImagem.0`
-                      },                      
+                    },
                 },
                 editProperties: [
                     'nome',
@@ -101,7 +269,14 @@ export const adminJs = new AdminJS({
                     'url_imagem'
                 ]
             },
-            features: [uploadImageFeature]
+            features: [
+                createUploadFeature({
+                    folder: 'colaboradores',
+                    file: 'uploadImagem',
+                    key: 'url_imagem',
+                }),
+            ],
+            // features: [uploadImageFeature]
         },
         { resource: models.Oportunidade, options: { navigation: 'Oportunidades' } },
         { resource: models.Parceiro, options: { navigation: 'Parceiros' } },
@@ -115,8 +290,50 @@ export const adminJs = new AdminJS({
                         label: 'Área',
                         isVisible: { list: true, edit: true, filter: true, show: true },
                     },
+                    url_imagem: {
+                        isVisible: { list: true, show: true, edit: false },
+                        components: {
+                            list: Components.ImageListPreview,
+                            show: Components.ImageListPreview, // opcional, se quiser mostrar no "show"
+                        }
+                    },
+                    uploadImagem: {
+                        type: 'file',
+                        isVisible: { edit: true, list: false, show: false, filter: false },
+                        isArray: false, // 👈 isso força o AdminJS a usar `uploadImagem` ao invés de `uploadImagem.0`
+                    },
+                    areaDeAtuacao: {
+                        reference: 'areas',
+                        isVisible: { list: true, edit: true, filter: true, show: true },
+                        label: 'Área de Atuação',
+                    },
+                    area_id: {
+                        isVisible: false, // Esconde o area_id bruto
+                    },
+
                 },
-            }
+                editProperties: [
+                    'titulo',
+                    'areaDeAtuacao',
+                    'documento_url',
+                    'uploadImagem' // usado para enviar imagem
+                ],
+                showProperties: [
+                    'titulo',
+                    'documento_url',
+                    'documento_url',
+                    'url_imagem'
+                ]
+            },
+            features: [
+                createUploadFeature({
+                    folder: 'transparencia',
+                    file: 'uploadImagem',
+                    key: 'url_imagem',
+                }),
+            ],
+            // features: [uploadImageFeature]
+
         },
         {
             resource: models.Programa,
@@ -144,7 +361,47 @@ export const adminJs = new AdminJS({
                 },
             }
         },
-        { resource: models.DadosBancario, options: { navigation: 'Configurações' } },
+        {
+            resource: models.DadosBancario,
+            options: {
+                navigation: 'Configurações',
+                properties: {
+                    url_imagem: {
+                        isVisible: { list: true, show: true, edit: false },
+                        components: {
+                            list: Components.ImageListPreview,
+                            show: Components.ImageListPreview, // opcional, se quiser mostrar no "show"
+                        }
+                    },
+                    uploadImagem: {
+                        type: 'file',
+                        isVisible: { edit: true, list: false, show: false, filter: false },
+                        isArray: false, // 👈 isso força o AdminJS a usar `uploadImagem` ao invés de `uploadImagem.0`
+                    },
+                },
+                editProperties: [
+                    'titular_conta',
+                    'agencia',
+                    'banco',
+                    'uploadImagem' // usado para enviar imagem
+                ],
+                showProperties: [
+                    'titular_conta',
+                    'agencia',
+                    'banco',
+                    'url_imagem'
+                ]
+            },
+            features: [
+                createUploadFeature({
+                    folder: 'dados_bancarios',
+                    file: 'uploadImagem',
+                    key: 'url_imagem',
+                }),
+            ],
+            // features: [uploadImageFeature]
+
+        },
         { resource: models.PerguntaFrequente, options: { navigation: 'Configurações' } },
     ],
     rootPath: '/admin',

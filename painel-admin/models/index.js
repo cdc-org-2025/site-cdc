@@ -3,6 +3,7 @@ import { Categoria } from './categoria.js';
 import { Colaborador } from './colaborador.js';
 import { DadosBancario } from './dados_bancarios.js';
 import { LinhaDoTempo } from './linha_do_tempo.js';
+import { LinhaDoTempoImagem } from './linha_do_tempo_imagens.js';
 import { Noticia } from './noticia.js';
 import { Oportunidade } from './oportunidade.js';
 import { Parceiro } from './parceiro.js';
@@ -25,6 +26,7 @@ export function initializeModels(sequelize) {
     Programa: Programa.init(sequelize),
     Publicacao: Publicacao.init(sequelize),
     Transparencia: Transparencia.init(sequelize),
+    LinhaDoTempoImagem: LinhaDoTempoImagem.init(sequelize),
   };
 
   Object.values(models).forEach(model => {

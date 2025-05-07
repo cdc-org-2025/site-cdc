@@ -5,7 +5,7 @@ export class Publicacao extends Model {
     return super.init({
       titulo: DataTypes.STRING(100),
       documento_url: DataTypes.STRING,
-      imagem_url: DataTypes.STRING,
+      url_imagem: DataTypes.STRING,
       documento_drive_id: DataTypes.STRING(100),
       area_id: DataTypes.INTEGER,
     }, { sequelize, tableName: 'publicacao', timestamps: false });
