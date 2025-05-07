@@ -1,8 +1,6 @@
-// models/LinhaDoTempo.js
 import { Model, DataTypes } from 'sequelize'
 
-
-export class LinhaDoTempo extends Model {
+class LinhaDoTempo extends Model {
   static init(sequelize) {
     return super.init({
       titulo: DataTypes.STRING,
@@ -18,3 +16,5 @@ export class LinhaDoTempo extends Model {
     });
   }
 }
+
+export default LinhaDoTempo

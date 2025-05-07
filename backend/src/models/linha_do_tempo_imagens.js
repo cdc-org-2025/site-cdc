@@ -2,7 +2,7 @@
 
 import { Model, DataTypes } from 'sequelize'
 
-export class LinhaDoTempoImagem extends Model {
+class LinhaDoTempoImagem extends Model {
   static init(sequelize) {
     return super.init({
       url_imagem: DataTypes.STRING,
@@ -20,3 +20,5 @@ export class LinhaDoTempoImagem extends Model {
     });
   }
 }
+
+export default LinhaDoTempoImagem;
