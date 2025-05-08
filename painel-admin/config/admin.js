@@ -71,7 +71,7 @@ export const adminJs = new AdminJS({
             ],
             options: {
                 navigation: 'Conteúdo',
-                listProperties: ['id', 'url_imagem', 'titulo', 'ano'],
+                listProperties: ['id', 'url_imagem', 'titulo', 'conteudo','ano'],
                 actions: {
                     new: {
                         after: async (response, request, context) => {
@@ -128,31 +128,6 @@ export const adminJs = new AdminJS({
                             return response
                         }
                     }
-
-                    // list: {
-                    //     after: async (response) => {
-                    //       const imagens = await models.LinhaDoTempoImagem.findAll()
-                    //       const imagensMap = imagens.reduce((acc, img) => {
-                    //         if (!acc[img.linha_do_tempo_id]) {
-                    //           acc[img.linha_do_tempo_id] = img.url_imagem
-                    //         }
-                    //         return acc
-                    //       }, {})
-
-                    //       for (const record of response.records) {
-                    //         const id = record.params.id
-                    //         const imagem = imagensMap[id]
-
-                    //         if (imagem) {
-                    //           // 👇 CORRIGIDO para compatibilidade com ImageListPreview
-                    //           record.params.url_imagem = imagem.replace('https://storage.googleapis.com/cdc-site/', '')
-                    //         }
-                    //       }
-
-                    //       return response
-                    //     }
-                    //   }
-
                 },
                 properties: {
                     titulo: { isTitle: true },
@@ -177,57 +152,6 @@ export const adminJs = new AdminJS({
                 showProperties: ['titulo', 'ano', 'conteudo']
             }
         },
-
-
-        // {
-        //     resource: models.LinhaDoTempo,
-        //     options: {
-        //         navigation: 'Conteúdo',
-        //         actions: {
-        //             new: {
-        //                 after: async (response, request, context) => {
-        //                     const { record } = context
-        //                     if (!record || record.isValid() === false) return response
-
-        //                     const imagens = Object.entries(request.files || {})
-        //                         .filter(([key]) => key.startsWith('uploadImagens'))
-        //                         .map(([, file]) => file)
-
-        //                     const LinhaDoTempoImagem = models.LinhaDoTempoImagem
-        //                     const bucketUrl = 'https://storage.googleapis.com/cdc-site'
-
-        //                     for (const imagem of imagens) {
-        //                         const filename = imagem?.name?.replace(/\s+/g, '_')
-        //                         const gcsPath = `linha_do_tempos/${record.id()}-${filename}`
-
-        //                         await LinhaDoTempoImagem.create({
-        //                             linha_do_tempo_id: record.id(),
-        //                             url_imagem: `${bucketUrl}/${gcsPath}`,
-        //                         })
-        //                     }
-
-        //                     console.log(`📥 ${imagens.length} imagens associadas à linha do tempo ${record.id()}`)
-        //                     return response
-        //                 }
-        //             }
-        //         },
-        //         properties: {
-        //             titulo: { isTitle: true },
-        //             conteudo: { type: 'richtext' },
-        //             ano: { type: 'number' },
-        //             uploadImagens: {
-        //                 type: 'mixed',
-        //                 isVisible: { list: false, show: false, filter: false, edit: true },
-        //                 components: {
-        //                     edit: Components.UploadMultiple
-        //                 },
-        //                 custom: { multiple: true }
-        //             }
-        //         },
-        //         editProperties: ['titulo', 'ano', 'conteudo', 'uploadImagens'],
-        //         showProperties: ['titulo', 'ano', 'conteudo']
-        //     }
-        // },
         {
             resource: models.Colaborador,
             options: {

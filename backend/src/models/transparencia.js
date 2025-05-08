@@ -7,7 +7,6 @@ class Transparencia extends Model {
       titulo: DataTypes.STRING(255),
       url_imagem: DataTypes.STRING,
       documento_url: DataTypes.TEXT,
-      documento_drive_id: DataTypes.STRING,
     }, {
       sequelize,
       tableName: "transparencia",
