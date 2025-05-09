@@ -1,0 +1,20 @@
+import { Model, DataTypes } from 'sequelize'
+
+export class PublicacaoImagens extends Model {
+    static init(sequelize) {
+        return super.init({
+            url_imagem: DataTypes.STRING,
+        }, {
+            sequelize,
+            tableName: 'publicacao_imagens',
+            timestamps: false,
+        })
+    }
+
+    static associate(models) {
+        this.belongsTo(models.LinhaDoTempo, {
+            foreignKey: 'publicacao_id',
+            as: 'publicacao',
+        })
+    }
+}

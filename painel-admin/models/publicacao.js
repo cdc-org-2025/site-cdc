@@ -5,13 +5,27 @@ export class Publicacao extends Model {
     return super.init({
       titulo: DataTypes.STRING(100),
       documento_url: DataTypes.STRING,
-      url_imagem: DataTypes.STRING,
-      documento_drive_id: DataTypes.STRING(100),
+      url_imagem: DataTypes.STRING, // imagem de capa
       area_id: DataTypes.INTEGER,
+
+      // campo virtual só para AdminJS
+      uploadCapa: {
+        type: DataTypes.VIRTUAL,
+        get() {
+          return null;
+        },
+        set(value) {
+          // nada a fazer
+        }
+      }
     }, { sequelize, tableName: 'publicacao', timestamps: false });
   }
 
   static associate(models) {
     this.belongsTo(models.Area, { foreignKey: 'area_id' });
+    this.hasMany(models.PublicacaoImagens, {
+      foreignKey: 'publicacao_id',
+      as: 'imagens'
+    });
   }
 }

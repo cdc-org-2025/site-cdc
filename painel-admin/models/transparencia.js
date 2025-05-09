@@ -6,7 +6,6 @@ export class Transparencia extends Model {
       titulo: DataTypes.STRING(100),
       url_imagem: DataTypes.STRING(100),
       documento_url: DataTypes.STRING(100),
-      documento_drive_id: DataTypes.STRING(100),
       area_id: DataTypes.INTEGER,
       areaDeAtuacao: {
         type: DataTypes.VIRTUAL,

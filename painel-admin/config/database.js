@@ -6,5 +6,5 @@ export const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER,
   host: process.env.DB_HOST,
   dialect: 'postgres',
   dialectOptions: process.env.DB_HOST.includes('/cloudsql') ? { socketPath: process.env.DB_HOST } : {},
-  logging: false,
+  logging: console.log,
 })

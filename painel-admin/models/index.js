@@ -10,6 +10,7 @@ import { Parceiro } from './parceiro.js';
 import { PerguntaFrequente } from './pergunta_frequente.js';
 import { Programa } from './programa.js';
 import { Publicacao } from './publicacao.js';
+import { PublicacaoImagens } from './publicacao_imagens.js';
 import { Transparencia } from './transparencia.js';
 
 export function initializeModels(sequelize) {
@@ -27,6 +28,7 @@ export function initializeModels(sequelize) {
     Publicacao: Publicacao.init(sequelize),
     Transparencia: Transparencia.init(sequelize),
     LinhaDoTempoImagem: LinhaDoTempoImagem.init(sequelize),
+    PublicacaoImagens: PublicacaoImagens.init(sequelize)
   };
 
   Object.values(models).forEach(model => {
