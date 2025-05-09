@@ -7,7 +7,6 @@ class Publicacao extends Model {
       titulo: DataTypes.STRING,
       url_imagem: DataTypes.STRING,
       documento_url: DataTypes.TEXT,
-      documento_drive_id: DataTypes.STRING,
     }, {
       sequelize,
       tableName: "publicacao",
@@ -17,6 +16,10 @@ class Publicacao extends Model {
 
   static associate(models) {
     this.belongsTo(models.Area, { foreignKey: "area_id" });
+    this.hasMany(models.PublicacaoImagens, {
+      foreignKey: 'publicacao_id',
+      as: 'imagens',
+    });
   }
 }
 
