@@ -4,9 +4,9 @@ import { DataTypes, Model } from "sequelize";
 class Programa extends Model {
   static init(sequelize) {
     return super.init({
-      conteudo: DataTypes.JSON,
-      url_imagem: DataTypes.STRING,
+      url_image_capa: DataTypes.STRING,
       titulo: DataTypes.STRING,
+      subtitulo: DataTypes.STRING,
       descricao: DataTypes.STRING,
     }, {
       sequelize,
@@ -17,6 +17,10 @@ class Programa extends Model {
 
   static associate(models) {
     this.belongsTo(models.Area, { foreignKey: "area_id" });
+    this.hasMany(models.ProgramaImagens, {
+      foreignKey: 'programa_id',
+      as: 'imagens',
+    });
   }
 }
 
