@@ -6,11 +6,29 @@ export class Programa extends Model {
       titulo: DataTypes.STRING(100),
       descricao: DataTypes.TEXT,
       area_id: DataTypes.INTEGER,
-      url_imagem: DataTypes.STRING
-    }, { sequelize, tableName: 'programas', timestamps: false });
+      url_image_capa: DataTypes.STRING,
+      subtitulo: DataTypes.STRING,
+
+      uploadCapa: {
+        type: DataTypes.VIRTUAL,
+        get() {
+          return null;
+        },
+        set(value) {
+        }
+      }
+    }, {
+      sequelize,
+      tableName: 'programas',
+      timestamps: false,
+    });
   }
 
   static associate(models) {
     this.belongsTo(models.Area, { foreignKey: 'area_id' });
+    this.hasMany(models.ProgramaImagens, {
+      foreignKey: 'programa_id',
+      as: 'imagens',
+    });
   }
 }

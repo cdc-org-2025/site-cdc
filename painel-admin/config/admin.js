@@ -261,17 +261,145 @@ export const adminJs = new AdminJS({
         },
         {
             resource: models.Programa,
+            features: [
+                createUploadFeature({
+                    folder: 'programa',
+                    file: 'uploadImagens',
+                    key: 'galeria_url_imagem',
+                    filePath: 'galeria_filePath',
+                    filesToDelete: 'galeria_filesToDelete',
+                    multiple: true,
+                }),
+                createUploadFeature({
+                    folder: 'programa',
+                    file: 'uploadCapa',
+                    key: 'url_image_capa',
+                    filePath: 'capa_filePath',
+                    filesToDelete: 'capa_filesToDelete',
+                    multiple: false,
+                }),
+            ],
             options: {
                 navigation: 'Transparência',
+                actions: {
+                    new: {
+                        after: async (response, request, context) => {
+                            const { record } = context;
+
+                            if (!record || record.isValid() === false) {
+                                console.warn('❌ Record inválido ou ausente');
+                                return response;
+                            }
+
+                            const programaId = record.params.id;
+                            const galeriaParams = Object.entries(record.params)
+                                .filter(([key]) => key.startsWith('galeria_url_imagem'))
+                                .map(([, value]) => value)
+                                .filter(Boolean); // remove null/undefined
+
+                            console.log('🖼️ Galeria encontrada:', galeriaParams);
+
+                            for (const url of galeriaParams) {
+                                try {
+                                    const img = await models.ProgramaImagens.create({
+                                        programa_id: programaId,
+                                        url_imagem: `https://storage.googleapis.com/cdc-site/${url}`,
+                                    });
+                                    console.log('✅ Imagem inserida:', img.toJSON());
+                                } catch (error) {
+                                    console.error('❌ Erro ao salvar imagem da galeria:', error);
+                                }
+                            }
+
+                            return response;
+                        }
+                    }
+                },
                 properties: {
                     area_id: {
                         reference: 'areas',
                         label: 'Área',
                         isVisible: { list: true, edit: true, filter: true, show: true },
                     },
+                    uploadCapa: {
+                        type: 'mixed',
+                        label: 'Imagem de Capa',
+                        isVisible: { list: false, show: false, filter: false, edit: true },
+                        components: {
+                            edit: Components.UploadMultiple,
+                        },
+                    },
+                    uploadImagens: {
+                        type: 'mixed',
+                        isVisible: { list: false, show: false, filter: false, edit: true },
+                        components: {
+                            edit: Components.UploadMultiple,
+                        },
+                        custom: { multiple: true },
+                    },
+                    url_image_capa: {
+                        isVisible: { list: true, edit: false, show: true },
+                        components: {
+                            list: Components.ImageListPreview,
+                        },
+                    },
                 },
-            }
+            },
         },
+        // {
+        //     resource: models.Programa,
+        //     features: [
+        //         createUploadFeature({
+        //             folder: 'programa',
+        //             file: 'uploadImagens',
+        //             key: 'galeria_url_imagem',
+        //             filePath: 'galeria_filePath',
+        //             filesToDelete: 'galeria_filesToDelete',
+        //             multiple: true,
+        //         }),
+        //         createUploadFeature({
+        //             folder: 'programa',
+        //             file: 'uploadCapa',
+        //             key: 'url_image_capa',
+        //             filePath: 'capa_filePath',
+        //             filesToDelete: 'capa_filesToDelete',
+        //             multiple: false,
+        //         }),
+        //     ],
+        //     options: {
+        //         navigation: 'Transparência',
+        //         properties: {
+        //             area_id: {
+        //                 reference: 'areas',
+        //                 label: 'Área',
+        //                 isVisible: { list: true, edit: true, filter: true, show: true },
+        //             },
+
+        //             uploadCapa: {
+        //                 type: 'mixed',
+        //                 label: 'Imagem de Capa',
+        //                 isVisible: { list: false, show: false, filter: false, edit: true },
+        //                 components: {
+        //                     edit: Components.UploadMultiple,
+        //                 },
+        //             },
+        //             uploadImagens: {
+        //                 type: 'mixed',
+        //                 isVisible: { list: false, show: false, filter: false, edit: true },
+        //                 components: {
+        //                     edit: Components.UploadMultiple,
+        //                 },
+        //                 custom: { multiple: true },
+        //             },
+        //             url_image_capa: {
+        //                 isVisible: { list: true, edit: false, show: true },
+        //                 components: {
+        //                     list: Components.ImageListPreview,
+        //                 },
+        //             },
+        //         },
+        //     },
+        // },
         {
             resource: models.Publicacao,
             features: [
