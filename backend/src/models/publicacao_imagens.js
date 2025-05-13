@@ -14,7 +14,7 @@ class PublicacaoImagens extends Model {
   }
 
   static associate(models) {
-    this.belongsTo(models.LinhaDoTempo, {
+    this.belongsTo(models.Publicacao, {
       foreignKey: 'publicacao_id',
       as: 'publicacao',
     })

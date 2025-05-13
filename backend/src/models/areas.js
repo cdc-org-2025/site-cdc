@@ -5,7 +5,6 @@ class Area extends Model {
   static init(sequelize) {
     return super.init({
       nome: DataTypes.STRING(100),
-      descricao: DataTypes.TEXT,
     }, {
       sequelize,
       tableName: "areas",
