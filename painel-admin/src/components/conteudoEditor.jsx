@@ -1,9 +1,10 @@
 import { useState, useRef } from 'react';
-import { Box} from '@adminjs/design-system';
+import { Box, TextArea } from '@adminjs/design-system';
 import SunEditor from 'suneditor-react';
+// import { TextArea } from 'adminjs';
 
 const formats = [
-  { tag: 'h1', name: 'Titulo' },
+  // { tag: 'h1', name: 'Titulo' },
   { tag: 'h2', name: 'Subtitulo' },
   { tag: 'p', name: 'Paragrafo' },
   { tag: 'blockquote', name: 'Citacao' },
@@ -19,18 +20,18 @@ const formats = [
 //   autor: "",
 //   minutoLeitura: 3,
 //   dataCreate: "",
-  // "elements": [
-  //   {
-  //     "type": "Titulo",
-  //     "content": "teste",
-  //     "html": "<h1>teste</h1>"
-  //   },
-  //   {
-  //     "type": "Citacao",
-  //     "content": "teste",
-  //     "html": "<blockquote><div>teste<br></div></blockquote>"
-  //   }
-  // ],
+// "elements": [
+//   {
+//     "type": "Titulo",
+//     "content": "teste",
+//     "html": "<h1>teste</h1>"
+//   },
+//   {
+//     "type": "Citacao",
+//     "content": "teste",
+//     "html": "<blockquote><div>teste<br></div></blockquote>"
+//   }
+// ],
 //   "htmlOriginal": "<h1>teste</h1><blockquote><div>teste<br></div></blockquote><h1><br></h1>"
 // }
 
@@ -224,37 +225,138 @@ const extractOrderedContent = (html) => {
   }
 };
 
+// const ConteudoEditor = (props) => {
+//   const { onChange, property, record } = props;
+
+
+
+//   const initialData = record.params[property.path] || { conteudo: '<h1><br></h1>' };
+//   const [content, setContent] = useState(initialData.conteudo);
+//   const [htmlContent, setHtmlContent] = useState(initialData.html);
+//   const [structuredContent, setStructuredContent] = useState(initialData.structured);
+
+//   const editorRef = useRef(null);
+
+//   // const handleEditorChange = (content) => {
+//   //   setContent(content);
+//   //   onChange(property.path, content); // envia para o AdminJS imediatamente
+//   // };
+
+//   const handleEditorChange = (newHtml) => {
+//     setHtmlContent(newHtml);
+
+//     const extracted = extractOrderedContent(newHtml);
+//     setStructuredContent(extracted);
+
+//     // 🔥 Envia separadamente para os campos corretos
+//     onChange('conteudo', extracted.elements);
+//     onChange('html_original', extracted.htmlOriginal);
+//   };
+
+
+//   return (
+//     <Box>
+//       <Box mt="xl">
+//         <SunEditor
+//           ref={editorRef}
+//           setContents={content}
+//           onChange={handleEditorChange}
+//           setOptions={{
+//             height: 300,
+//             buttonList: [
+//               ['undo', 'redo'],
+//               ['formatBlock'],
+//               ['bold', 'underline', 'italic', 'strike', 'subscript', 'superscript'],
+//               ['fontColor', 'hiliteColor'],
+//               ['align', 'list', 'table'],
+//               ['link', 'image', 'video'],
+//               ['fullScreen', 'showBlocks', 'codeView'],
+//             ],
+//             formats,
+//             imageUploadUrl: '', // Desativa upload padrão
+//             imageFileInput: true,
+//             imageResizing: true,
+//             placeholder: "Comece digitando seu título...",
+
+//           }}
+//         />
+//       </Box>
+
+//     </Box>
+//   );
+// };
 const ConteudoEditor = (props) => {
   const { onChange, property, record } = props;
 
+  const initialData = record.params[property.path] || {
+    titulo: '',
+    conteudo: '<p><br></p>',
+  };
 
-
-  const initialData = record.params[property.path] || { conteudo: '<h1><br></h1>' };
+  const [titulo, setTitulo] = useState(initialData.titulo || '');
   const [content, setContent] = useState(initialData.conteudo);
   const [htmlContent, setHtmlContent] = useState(initialData.html);
   const [structuredContent, setStructuredContent] = useState(initialData.structured);
 
   const editorRef = useRef(null);
 
-  // const handleEditorChange = (content) => {
-  //   setContent(content);
-  //   onChange(property.path, content); // envia para o AdminJS imediatamente
-  // };
-
   const handleEditorChange = (newHtml) => {
     setHtmlContent(newHtml);
-  
+
     const extracted = extractOrderedContent(newHtml);
     setStructuredContent(extracted);
-  
-    // 🔥 Envia separadamente para os campos corretos
+
     onChange('conteudo', extracted.elements);
     onChange('html_original', extracted.htmlOriginal);
   };
-  
+
+  const handleTituloChange = (e) => {
+    const newTitulo = e.target.value;
+    setTitulo(newTitulo);
+    onChange('titulo', newTitulo);
+  };
+
+  const openCustomUploader = () => {
+    setUploaderOpen(true);
+  };
+
+  const handleImageSelected = async (file) => {
+    const url = await uploadImageToServer(file);
+    insertImage(url);
+    setUploaderOpen(false);
+  };
+
+  const insertImage = (url) => {
+    if (editorRef.current) {
+      editorRef.current.editor.insertHTML(`<img src="${url}" style="max-width: 100%;" />`);
+    }
+  };
+
 
   return (
     <Box>
+      {/* Campo de título */}
+      <TextArea
+        placeholder="Digite o título da notícia"
+        value={titulo}
+        onChange={handleTituloChange}
+        rows={2}
+        sm={12}
+        borderless
+        style={{
+          width: '100%',
+          cursor: 'text',
+          fontSize: '32px',
+          fontWeight: 'bold',
+          // border: "none",
+          color: "#A7181D",
+          // paddingLeft: '48px',
+          lineHeight: '1.3',
+          // border:
+        }}
+      />
+
+      {/* Editor de conteúdo */}
       <Box mt="xl">
         <SunEditor
           ref={editorRef}
@@ -272,15 +374,45 @@ const ConteudoEditor = (props) => {
               ['fullScreen', 'showBlocks', 'codeView'],
             ],
             formats,
-            imageUploadUrl: '', // Desativa upload padrão
-            imageFileInput: true,
+            imageUploadUrl: '',
+            imageFileInput: false,
             imageResizing: true,
             placeholder: "Comece digitando seu título...",
 
           }}
         />
-      </Box>
 
+        <SunEditor
+          ref={editorRef}
+          setContents={content}
+          onChange={handleEditorChange}
+          setOptions={{
+            height: 300,
+            buttonList: [
+              ['undo', 'redo'],
+              ['formatBlock'],
+              ['bold', 'underline', 'italic', 'strike', 'subscript', 'superscript'],
+              ['fontColor', 'hiliteColor'],
+              ['align', 'list', 'table'],
+              ['link', 'image', 'video'],
+              ['fullScreen', 'showBlocks', 'codeView'],
+            ],
+            imageFileInput: false, // importante!
+            formats,
+
+          }}
+          onImageUploadBefore={(files, info, uploadHandler) => {
+            // 👇 Evita o upload padrão
+            uploadHandler(); // cancela o comportamento nativo
+
+            // 👇 Aqui você chama seu componente
+            openCustomUploader(); // essa função exibe seu componente de upload
+
+            return false; // impede o upload automático
+          }}
+        />
+
+      </Box>
     </Box>
   );
 };

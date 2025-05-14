@@ -1,7 +1,7 @@
 import { Area } from './area.js';
 import { Categoria } from './categoria.js';
-import { Colaborador } from './colaborador.js';
 import { DadosBancario } from './dados_bancarios.js';
+import { Lideranca } from './lideranca.js';
 import { LinhaDoTempo } from './linha_do_tempo.js';
 import { LinhaDoTempoImagem } from './linha_do_tempo_imagens.js';
 import { Noticia } from './noticia.js';
@@ -18,7 +18,6 @@ export function initializeModels(sequelize) {
   const models = {
     Area: Area.init(sequelize),
     Categoria: Categoria.init(sequelize),
-    Colaborador: Colaborador.init(sequelize),
     DadosBancario: DadosBancario.init(sequelize),
     LinhaDoTempo: LinhaDoTempo.init(sequelize),
     Noticia: Noticia.init(sequelize),
@@ -30,7 +29,8 @@ export function initializeModels(sequelize) {
     Transparencia: Transparencia.init(sequelize),
     LinhaDoTempoImagem: LinhaDoTempoImagem.init(sequelize),
     PublicacaoImagens: PublicacaoImagens.init(sequelize),
-    ProgramaImagens: ProgramaImagens.init(sequelize)
+    ProgramaImagens: ProgramaImagens.init(sequelize),
+    Lideranca: Lideranca.init(sequelize),
   };
 
   Object.values(models).forEach(model => {

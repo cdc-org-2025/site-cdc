@@ -23,9 +23,5 @@ export class Publicacao extends Model {
 
   static associate(models) {
     this.belongsTo(models.Area, { foreignKey: 'area_id' });
-    this.hasMany(models.PublicacaoImagens, {
-      foreignKey: 'publicacao_id',
-      as: 'imagens'
-    });
   }
 }

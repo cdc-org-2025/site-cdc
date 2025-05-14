@@ -21,7 +21,7 @@ export const adminJs = new AdminJS({
     resources: [
         {
             resource: models.Area, options: {
-                navigation: 'Conteúdo',
+                navigation: 'Configurações',
                 properties: {
                     nome: {
                         isTitle: true
@@ -29,11 +29,11 @@ export const adminJs = new AdminJS({
                 }
             }
         },
-        { resource: models.Categoria, options: { navigation: 'Conteúdo' } },
+        { resource: models.Categoria, options: { navigation: 'Configurações' } },
         {
             resource: models.Noticia,
             options: {
-                navigation: 'Conteúdo',
+                navigation: 'Informe-se',
                 properties: {
                     conteudo: {
                         components: {
@@ -70,7 +70,7 @@ export const adminJs = new AdminJS({
                 }),
             ],
             options: {
-                navigation: 'Conteúdo',
+                navigation: 'Institucional',
                 listProperties: ['id', 'url_imagem', 'titulo', 'conteudo', 'ano'],
                 actions: {
                     new: {
@@ -153,9 +153,9 @@ export const adminJs = new AdminJS({
             }
         },
         {
-            resource: models.Colaborador,
+            resource: models.Lideranca,
             options: {
-                navigation: 'Equipe',
+                navigation: 'Institucional',
                 properties: {
                     areaDeAtuacao: {
                         reference: 'areas',
@@ -202,12 +202,12 @@ export const adminJs = new AdminJS({
             ],
             // features: [uploadImageFeature]
         },
-        { resource: models.Oportunidade, options: { navigation: 'Oportunidades' } },
+        { resource: models.Oportunidade, options: { navigation: 'Institucional' } },
         { resource: models.Parceiro, options: { navigation: 'Parceiros' } },
         {
             resource: models.Transparencia,
             options: {
-                navigation: 'Transparência',
+                navigation: 'Institucional',
                 properties: {
                     area_id: {
                         reference: 'areas',
@@ -280,7 +280,7 @@ export const adminJs = new AdminJS({
                 }),
             ],
             options: {
-                navigation: 'Transparência',
+                navigation: 'Programas',
                 actions: {
                     new: {
                         after: async (response, request, context) => {
@@ -346,71 +346,17 @@ export const adminJs = new AdminJS({
                 },
             },
         },
-        // {
-        //     resource: models.Programa,
-        //     features: [
-        //         createUploadFeature({
-        //             folder: 'programa',
-        //             file: 'uploadImagens',
-        //             key: 'galeria_url_imagem',
-        //             filePath: 'galeria_filePath',
-        //             filesToDelete: 'galeria_filesToDelete',
-        //             multiple: true,
-        //         }),
-        //         createUploadFeature({
-        //             folder: 'programa',
-        //             file: 'uploadCapa',
-        //             key: 'url_image_capa',
-        //             filePath: 'capa_filePath',
-        //             filesToDelete: 'capa_filesToDelete',
-        //             multiple: false,
-        //         }),
-        //     ],
-        //     options: {
-        //         navigation: 'Transparência',
-        //         properties: {
-        //             area_id: {
-        //                 reference: 'areas',
-        //                 label: 'Área',
-        //                 isVisible: { list: true, edit: true, filter: true, show: true },
-        //             },
-
-        //             uploadCapa: {
-        //                 type: 'mixed',
-        //                 label: 'Imagem de Capa',
-        //                 isVisible: { list: false, show: false, filter: false, edit: true },
-        //                 components: {
-        //                     edit: Components.UploadMultiple,
-        //                 },
-        //             },
-        //             uploadImagens: {
-        //                 type: 'mixed',
-        //                 isVisible: { list: false, show: false, filter: false, edit: true },
-        //                 components: {
-        //                     edit: Components.UploadMultiple,
-        //                 },
-        //                 custom: { multiple: true },
-        //             },
-        //             url_image_capa: {
-        //                 isVisible: { list: true, edit: false, show: true },
-        //                 components: {
-        //                     list: Components.ImageListPreview,
-        //                 },
-        //             },
-        //         },
-        //     },
-        // },
         {
             resource: models.Publicacao,
             features: [
-                createUploadFeature({
-                    folder: 'publicacao',
-                    file: 'uploadImagens',
-                    key: 'galeria_url_imagem',
-                    filePath: 'galeria_filePath',
-                    filesToDelete: 'galeria_filesToDelete',
-                    multiple: true,
-                }),
+                // createUploadFeature({
+                //     folder: 'publicacao',
+                //     file: 'uploadImagens',
+                //     key: 'galeria_url_imagem',
+                //     filePath: 'galeria_filePath',
+                //     filesToDelete: 'galeria_filesToDelete',
+                //     multiple: true,
+                // }),
                 createUploadFeature({
                     folder: 'publicacao',
                     file: 'uploadCapa',
@@ -421,7 +367,7 @@ export const adminJs = new AdminJS({
                 }),
             ],
             options: {
-                navigation: 'Transparência',
+                navigation: 'Informe-se',
                 properties: {
                     area_id: {
                         reference: 'areas',
@@ -436,14 +382,14 @@ export const adminJs = new AdminJS({
                             edit: Components.UploadMultiple,
                         },
                     },
-                    uploadImagens: {
-                        type: 'mixed',
-                        isVisible: { list: false, show: false, filter: false, edit: true },
-                        components: {
-                            edit: Components.UploadMultiple,
-                        },
-                        custom: { multiple: true },
-                    },
+                    // uploadImagens: {
+                    //     type: 'mixed',
+                    //     isVisible: { list: false, show: false, filter: false, edit: true },
+                    //     components: {
+                    //         edit: Components.UploadMultiple,
+                    //     },
+                    //     custom: { multiple: true },
+                    // },
                     url_imagem: {
                         isVisible: { list: true, edit: false, show: true },
                         components: {
@@ -451,41 +397,41 @@ export const adminJs = new AdminJS({
                         },
                     },
                 },
-                actions: {
-                    new: {
-                        after: async (response, request, context) => {
-                            const { record } = context;
-                            if (!record || record.isValid() === false) return response;
+                // actions: {
+                //     new: {
+                //         after: async (response, request, context) => {
+                //             const { record } = context;
+                //             if (!record || record.isValid() === false) return response;
 
-                            const bucketUrl = 'https://storage.googleapis.com/cdc-site';
+                //             const bucketUrl = 'https://storage.googleapis.com/cdc-site';
 
-                            // Upload da imagem de capa
-                            const capa = request.files?.['uploadCapa.0'];
-                            if (capa) {
-                                const filename = capa.name.replace(/\s+/g, '_');
-                                const gcsPath = `publicacao/${record.id()}-${filename}`;
-                                await record.update({ url_imagem: `${bucketUrl}/${gcsPath}` });
-                            }
+                //             // Upload da imagem de capa
+                //             const capa = request.files?.['uploadCapa.0'];
+                //             if (capa) {
+                //                 const filename = capa.name.replace(/\s+/g, '_');
+                //                 const gcsPath = `publicacao/${record.id()}-${filename}`;
+                //                 await record.update({ url_imagem: `${bucketUrl}/${gcsPath}` });
+                //             }
 
-                            // Upload da galeria via feature
-                            const imagens = Object.entries(request.files || {})
-                                .filter(([key]) => key.startsWith('uploadImagens'))
-                                .map(([, file]) => file);
+                //             // Upload da galeria via feature
+                //             const imagens = Object.entries(request.files || {})
+                //                 .filter(([key]) => key.startsWith('uploadImagens'))
+                //                 .map(([, file]) => file);
 
-                            for (const imagem of imagens) {
-                                const filename = imagem?.name?.replace(/\s+/g, '_');
-                                const gcsPath = `publicacao/${record.id()}-${filename}`;
+                //             for (const imagem of imagens) {
+                //                 const filename = imagem?.name?.replace(/\s+/g, '_');
+                //                 const gcsPath = `publicacao/${record.id()}-${filename}`;
 
-                                await models.PublicacaoImagens.create({
-                                    publicacao_id: record.id(),
-                                    url_imagem: `${bucketUrl}/${gcsPath}`,
-                                });
-                            }
+                //                 await models.PublicacaoImagens.create({
+                //                     publicacao_id: record.id(),
+                //                     url_imagem: `${bucketUrl}/${gcsPath}`,
+                //                 });
+                //             }
 
-                            return response;
-                        },
-                    },
-                },
+                //             return response;
+                //         },
+                //     },
+                // },
             },
         },
         // {
@@ -644,7 +590,8 @@ export const adminJs = new AdminJS({
             // features: [uploadImageFeature]
 
         },
-        { resource: models.PerguntaFrequente, options: { navigation: 'Configurações' } },
+        { resource: models.PerguntaFrequente, options: { navigation: 'Institucional' } },
+        
     ],
     rootPath: '/admin',
     branding: {
