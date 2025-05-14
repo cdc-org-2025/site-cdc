@@ -7,6 +7,12 @@ import UploadMultiple from '../src/components/UploadMultiple'
 AdminJS.UserComponents.UploadMultiple = UploadMultiple
 import uploadSingle from '../src/components/uploadSingle'
 AdminJS.UserComponents.uploadSingle = uploadSingle
+import OportunidadeEditor from '../src/components/oportunidadesEditor'
+AdminJS.UserComponents.OportunidadeEditor = OportunidadeEditor
+import OportunidadePreView from '../src/components/oportunidadesPreView'
+AdminJS.UserComponents.OportunidadePreView = OportunidadePreView
+import TituloEditor from '../src/components/tituloEditor'
+AdminJS.UserComponents.TituloEditor = TituloEditor
 import UploadEditComponent from '../node_modules/@adminjs/upload/build/features/upload-file/components/UploadEditComponent'
 AdminJS.UserComponents.UploadEditComponent = UploadEditComponent
 import UploadListComponent from '../node_modules/@adminjs/upload/build/features/upload-file/components/UploadListComponent'

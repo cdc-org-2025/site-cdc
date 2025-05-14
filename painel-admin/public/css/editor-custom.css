@@ -16,8 +16,8 @@
 
 .sun-editor-editable p {
     font-size: 16px;
-    line-height: 1.6;
-    color: #333;
+    /* line-height: 1.6; */
+    /* color: #333; */
     margin-bottom: 16px;
 }
 
@@ -37,4 +37,10 @@
     font-family: 'Courier New', monospace;
     overflow-x: auto;
     border-radius: 6px;
+}
+
+.oportunidade .sun-editor-editable h2 {
+    font-size: 24px;
+    color: #000000;
+    margin: 0;
 }
