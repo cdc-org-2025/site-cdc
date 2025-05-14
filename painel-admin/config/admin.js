@@ -221,7 +221,33 @@ export const adminJs = new AdminJS({
                 }
             }
         },
-        { resource: models.Parceiro, options: { navigation: 'Parceiros' } },
+        {
+            resource: models.Parceiro,
+            features: [
+                createUploadFeature({
+                    folder: 'parceiros',
+                    file: 'uploadImagem',
+                    key: 'url_imagem',
+                }),
+            ],
+            options: {
+                navigation: 'Parceiros',
+                properties: {
+                    url_imagem: {
+                        isVisible: { list: true, show: true, edit: false },
+                        components: {
+                            list: Components.ImageListPreview,
+                            show: Components.ImageListPreview, // opcional, se quiser mostrar no "show"
+                        }
+                    },
+                    uploadImagem: {
+                        type: 'file',
+                        isVisible: { edit: true, list: false, show: false, filter: false },
+                        isArray: false, // 👈 isso força o AdminJS a usar `uploadImagem` ao invés de `uploadImagem.0`
+                    },
+                },
+            }
+        },
         {
             resource: models.Transparencia,
             options: {
