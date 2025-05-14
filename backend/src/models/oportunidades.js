@@ -5,7 +5,7 @@ class Oportunidade extends Model {
   static init(sequelize) {
     return super.init({
       titulo: DataTypes.STRING,
-      descricao: DataTypes.JSON,
+      descricao: DataTypes.TEXT,
     }, {
       sequelize,
       tableName: "oportunidades",
