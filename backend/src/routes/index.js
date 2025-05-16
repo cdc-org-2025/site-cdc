@@ -12,6 +12,7 @@ import areasRoutes from "./areas.js";
 import transparenciaRoutes from "./transparencia.js";
 import publicacaoRoutes from "./publicacao.js";
 import dadosBancarioRoutes from "./dados_bancario.js";
+import linhaTempoRoutes from "./linha_tempo.js";
 
 const router = Router();
 
@@ -25,6 +26,7 @@ router.use("/inscricoes", inscricoesRoutes);
 router.use("/areas", areasRoutes);
 router.use("/transparencia", transparenciaRoutes);
 router.use("/publicacoes", publicacaoRoutes);
-router.use("/dados-bancario", dadosBancarioRoutes)
+router.use("/dados-bancario", dadosBancarioRoutes);
+router.use("/linha-tempo", linhaTempoRoutes)
 
 export default router;
