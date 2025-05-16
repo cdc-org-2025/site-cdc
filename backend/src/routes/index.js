@@ -14,6 +14,7 @@ import publicacaoRoutes from "./publicacao.js";
 import dadosBancarioRoutes from "./dados_bancario.js";
 import linhaTempoRoutes from "./linha_tempo.js";
 import parceirosRoutes from "./parceiros.js";
+import perguntasFrenquenteRoutes from "./perguntas_frenquente.js";
 
 const router = Router();
 
@@ -30,6 +31,7 @@ router.use("/publicacoes", publicacaoRoutes);
 router.use("/dados-bancario", dadosBancarioRoutes);
 router.use("/linha-tempo", linhaTempoRoutes);
 router.use("/parceiros", parceirosRoutes);
+router.use("/perguntas-frenquente", perguntasFrenquenteRoutes)
 
 
 export default router;

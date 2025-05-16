@@ -6,7 +6,7 @@ class LiderancaController {
     const liderancas = await db.Lideranca.findAll({
       include: [{
         model: db.Area,
-        attributes: ['nome'], // Apenas o nome da área
+        attributes: ['nome', 'id'], // Apenas o nome da área
       }],
       attributes: { exclude: ['area_id'] }, // Exclui area_id do resultado
     });
@@ -19,6 +19,7 @@ class LiderancaController {
       email: lider.email,
       url_imagem: lider.url_imagem,
       area: lider.Area?.nome || null,
+      area_id: lider.Area?.id || null,
     }));
 
     return res.json(response);
