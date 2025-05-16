@@ -18,7 +18,7 @@ interface SplitTextProps {
 
 const AnimationSplitText: React.FC<SplitTextProps> = ({
   children,
-  delay = 5,
+  delay = 2.50,
   threshold = 0.2,
   rootMargin = '-50px',
 }) => {
@@ -83,7 +83,7 @@ const AnimationSplitText: React.FC<SplitTextProps> = ({
             display: inline-block;
             opacity: 0;
             transform: translateY(20px);
-            animation: fadeUp 0.4s ease forwards;
+            animation: fadeUp 0.25s ease forwards;
           }
         `}
         </style>

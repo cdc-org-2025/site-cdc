@@ -15,6 +15,7 @@ interface IButtonTag {
   backgroundColor?: string
   fullWidth?: boolean
   height?: string
+  noAnimation?: boolean
 }
 
 export default function ButtonTag({
@@ -25,6 +26,7 @@ export default function ButtonTag({
   backgroundColor = 'transparent',
   fullWidth = false,
   height = '40px',
+  noAnimation
 }: IButtonTag) {
   const {
     palette: { secondary, text },
@@ -46,7 +48,7 @@ export default function ButtonTag({
         backgroundColor: backgroundColor,
         border: `1px solid ${secondary.light}`,
         '&:hover': {
-          backgroundColor: secondary.light,
+          backgroundColor: noAnimation ? 'transparent' : secondary.light,
         },
       }}
     >

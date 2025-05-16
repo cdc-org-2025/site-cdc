@@ -1,6 +1,5 @@
 'use client'
-import React, { useContext } from 'react'
-import { FeaturesContext } from '@/context/featuresContext'
+import React, { useCallback } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
@@ -9,19 +8,13 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import AddIcon from '@mui/icons-material/Add'
 import AnimetedSlide from '@/components/animations/slide'
+import { IPrograma } from '@/clients/api/programas'
 
 interface AccordionItemProps {
-  item: {
-    id: number
-    title?: string
-    description?: string
-    content?: string
-    link?: string
-  }
+  item: IPrograma
   index: number
   isExpanded: boolean
-  handleExpandAccordionImage: (_: any) => void
-  handleClickView: (_?: string) => void
+  handleExpandAccordionImage: (_: IPrograma) => void
   isLastItem: boolean
 }
 
@@ -30,7 +23,6 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
   index,
   isExpanded,
   handleExpandAccordionImage,
-  handleClickView,
   isLastItem,
 }) => {
   const contentRef = React.useRef<HTMLDivElement>(null)
@@ -67,7 +59,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
           alignItems="center"
         >
           <Typography variant="h4" fontWeight={500}>
-            {item.title}
+            {item.titulo}
           </Typography>
           <IconButton
             size="small"
@@ -96,7 +88,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
             variant="overline"
             lineHeight="150%"
           >
-            {item.description ?? 'Sem descrição disponível'}
+            {item.subtitulo ?? 'Sem subtitulo disponível'}
           </Typography>
           <Typography
             textTransform="none"
@@ -104,10 +96,10 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
             variant="subtitle1"
             lineHeight="150%"
           >
-            {item.content}
+            {item.descricao}
           </Typography>
           <Box display="flex" justifyContent="flex-end" color="primary">
-            <Button size="small" onClick={() => handleClickView(item?.link)}>
+            <Button size="small" onClick={() => console.log(item.id)}>
               <Typography
                 textTransform="none"
                 variant="subtitle1"
@@ -124,13 +116,25 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
   )
 }
 
-export default function AccordionProjectsDesktop() {
-  const {
-    expandedAccordion,
-    accordionProjectsOption,
-    handleExpandAccordionImage,
-    handleClickView,
-  } = useContext(FeaturesContext)
+export default function AccordionProjectsDesktop({
+  projectList,
+  expandedAccordion,
+  setExpandedAccordion }: {
+    projectList?: IPrograma[],
+    expandedAccordion: IPrograma | undefined,
+    setExpandedAccordion: React.Dispatch<React.SetStateAction<IPrograma | undefined>>
+  }) {
+
+  const handleExpandAccordionImage = useCallback(
+    (item: IPrograma) => {
+      setExpandedAccordion((prev: IPrograma | undefined) =>
+        prev?.id === item.id
+          ? projectList?.[0] ?? undefined
+          : item
+      )
+    },
+    [setExpandedAccordion, projectList]
+  )
 
   return (
     <Box
@@ -141,8 +145,8 @@ export default function AccordionProjectsDesktop() {
       mb="40px"
     >
       <Box bgcolor="transparent" width="50%">
-        {accordionProjectsOption.map((item, index) => {
-          const isExpanded = expandedAccordion.id === item.id
+        {projectList?.map((item, index) => {
+          const isExpanded = expandedAccordion?.id === item?.id
           return (
             <AccordionItem
               key={item.id}
@@ -150,8 +154,7 @@ export default function AccordionProjectsDesktop() {
               index={index}
               isExpanded={isExpanded}
               handleExpandAccordionImage={handleExpandAccordionImage}
-              handleClickView={handleClickView}
-              isLastItem={index === accordionProjectsOption.length - 1}
+              isLastItem={index === projectList?.length - 1}
             />
           )
         })}
@@ -162,7 +165,7 @@ export default function AccordionProjectsDesktop() {
           width: '50%',
           borderRadius: '32px',
           backgroundColor: '#f3f2ed',
-          backgroundImage: `url(${expandedAccordion.image})`,
+          backgroundImage: `url(${expandedAccordion?.url_image_capa ?? "https://support.heberjahiz.com/hc/article_attachments/21013076295570"} )`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',

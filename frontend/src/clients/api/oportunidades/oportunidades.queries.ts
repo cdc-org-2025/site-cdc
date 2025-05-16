@@ -2,7 +2,7 @@ import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { getListOportunidades, getOportunidade } from './oportunidades.api';
 import { IOportunidade } from './oportunidades';
 
-export const useOportunidadesQuery = (options?: UseQueryOptions<IOportunidade[], Error>) => {
+export const useOportunidadesListQuery = (options?: UseQueryOptions<IOportunidade[], Error>) => {
   return useQuery<IOportunidade[], Error>({
     queryKey: ['oportunidades'],
     queryFn: getListOportunidades,
@@ -10,7 +10,7 @@ export const useOportunidadesQuery = (options?: UseQueryOptions<IOportunidade[],
   });
 };
 
-export const useOportunidadeQuery = (id: number, options?: UseQueryOptions<IOportunidade, Error>) => {
+export const useOportunidadeQuery = (id: string | string[], options?: UseQueryOptions<IOportunidade, Error>) => {
   return useQuery<IOportunidade, Error>({
     queryKey: ['oportunidade', id],
     queryFn: () => getOportunidade(id),

@@ -12,6 +12,7 @@ import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import CloseIcon from '@mui/icons-material/Close'
 import { useNavigation } from '@/hooks/useNavigation'
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 export default function Header() {
   const [openMenuMobile, setOpenMenuMobile] = useState<boolean>(false)
@@ -56,17 +57,44 @@ export default function Header() {
             lg: 'flex',
           }}
         >
-          <Button variant="text" onClick={() => handleNavigate('/doacoes')}>
-            <Typography textTransform="none">Doe agora</Typography>
+          <Button
+            variant="contained"
+            onClick={() => handleNavigate('/doacoes')}
+            sx={{
+              width: 140,
+              height: 44,
+              borderRadius: 22,
+              backgroundColor: '#FE9A03',
+              '&:hover': {
+                backgroundColor: '#cb7a01',
+              },
+            }}
+          >
+            <Typography color='#222' fontWeight={400} textTransform="none" sx={{ marginRight: -1 }}>Doe agora</Typography>
+            <ArrowForwardIosIcon htmlColor='#222' sx={{ height: 17, marginRight: -2 }} />
           </Button>
           <ButtonSearch />
         </Box>
         <Box
+          gap="30px"
           display={{
-            xs: 'block',
+            xs: 'flex',
             lg: 'none',
           }}
+          alignItems="center"
         >
+          <Button
+            variant="text"
+            onClick={() => handleNavigate('/doacoes')}
+            sx={{
+              backgroundColor: 'transparent',
+              '&:hover': {
+                backgroundColor: 'transparent',
+              },
+            }}
+          >
+            <Typography whiteSpace={'nowrap'} color='#A7181D' fontWeight={400} textTransform="none" >Doe agora</Typography>
+          </Button>
           <ButtonAction
             startIcon={
               openMenuMobile ? <CloseIcon color="inherit" /> : <MenuIcon />

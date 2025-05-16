@@ -14,7 +14,7 @@ interface FadeContentProps {
 const AnimatedFade: React.FC<FadeContentProps> = ({
   children,
   blur = false,
-  duration = 1000,
+  duration = 250,
   easing = 'ease-out',
   delay = 0,
   threshold = 0.1,

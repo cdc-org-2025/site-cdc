@@ -1,17 +1,13 @@
 'use client'
-import { useNavigation } from '@/hooks/useNavigation'
+import { useOportunidadesListQuery } from '@/clients/api/oportunidades'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 
 export default function TrabalheConoscoPage() {
-  const { handleNavigate } = useNavigation()
-
-  const oportunidadeOption = [
-    { id: 1, label: 'Assistente de Comunicação', link: '/' },
-    { id: 2, label: 'Assistente de Comunicação', link: '/' },
-    { id: 3, label: 'Assistente de Limpeza', link: '/' },
-  ]
+  const { push } = useRouter()
+  const { data: listOportunidades } = useOportunidadesListQuery()
 
   return (
     <Box width="100%" pt="40px" pb="150px">
@@ -32,7 +28,7 @@ export default function TrabalheConoscoPage() {
         gap="16px"
         py="20px"
       >
-        {oportunidadeOption.length === 0 ? (
+        {listOportunidades?.length === 0 ? (
           <Typography
             component="a"
             variant="h4"
@@ -42,9 +38,9 @@ export default function TrabalheConoscoPage() {
             Infelizmente não temos vagas disponíveis no momento.
           </Typography>
         ) : (
-          oportunidadeOption.map((item) => (
+          listOportunidades?.map((item) => (
             <Typography
-              onClick={() => handleNavigate(`/trabalhe-conosco/${item.id}`)}
+              onClick={() => push(`/trabalhe-conosco/${item.id}`)}
               component="a"
               variant="h4"
               key={item.id}
@@ -57,7 +53,7 @@ export default function TrabalheConoscoPage() {
                 },
               }}
             >
-              {item.label}
+              {item.titulo}
             </Typography>
           ))
         )}

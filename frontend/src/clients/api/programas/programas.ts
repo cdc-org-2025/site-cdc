@@ -1,25 +1,12 @@
 export interface IPrograma {
-  id: number
-  imagem_capa: string
-  titulo: string
+  area_id: number
   descricao: string
-  imagens: [
-    {
-      url_imagem: string
-    }
-  ],
-  area: string
+  id: number
+  subtitulo: string
+  titulo: string
+  url_image_capa: string
 }
 
 export interface IProgramList {
-  programas: [
-    {
-      id: number
-      titulo: string
-      subTitulo: string
-      descricao: string
-      url_imagem: string
-    }
-  ]
-  qtd_programas: number
+  programas: IPrograma[]
 }

@@ -71,7 +71,7 @@ export default function ButtonUpload({
           pointerEvents: 'none',
           '& label': {
             color: 'text.secondary',
-            background: '#fff',
+            background: 'inherit',
             px: '8px',
           },
           '& label.Mui-focused': {

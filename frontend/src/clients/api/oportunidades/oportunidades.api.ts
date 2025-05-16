@@ -8,7 +8,7 @@ export const getListOportunidades = async (): Promise<IOportunidade[]> => {
   return data;
 };
 
-export const getOportunidade = async (id: number): Promise<IOportunidade> => {
+export const getOportunidade = async (id: string | string[]): Promise<IOportunidade> => {
   const { data } = await api.get(`/oportunidades/${id}`);
   return data;
 };

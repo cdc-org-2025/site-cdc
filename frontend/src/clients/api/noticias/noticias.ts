@@ -1,13 +1,14 @@
 export interface INoticias {
   id: number
-  titulo: string
+  titulo?: string
   imagem_capa: string
   tipo: string
   autor: string
-  tempo_leitura: number
+  tempo_leitura: string
   data_publicacao: string
   conteudo: IConteudoNoticia[]
   area_id: number
+  html_original: string
 }
 
 export interface IConteudoNoticia {
