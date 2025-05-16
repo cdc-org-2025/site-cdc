@@ -2,7 +2,7 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Contato", {
+    await queryInterface.createTable("card_informativo", {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -21,10 +21,14 @@ module.exports = {
         type: Sequelize.STRING(255),
         allowNull: false,
       },
+      tipo: {
+        type: Sequelize.ENUM('missao', 'visao', 'organizacao'),
+        allowNull: false,
+      }
     });
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Contato");
+    await queryInterface.dropTable("card_informativo");
   },
 };

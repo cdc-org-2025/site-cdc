@@ -6,14 +6,9 @@ class CardInformativo extends Model {
             titulo: DataTypes.STRING(100),
             descricao: DataTypes.STRING,
             url_imagem: DataTypes.STRING,
-            uploadImagem: {
-                type: DataTypes.VIRTUAL,
-                get() {
-                    return null
-                },
-                set() { }
-            }
+            tipo: DataTypes.ENUM('missao', 'visao', 'organizacao'),
         }, { sequelize, tableName: 'card_informativo', timestamps: false });
+
     }
 
     static associate(models) {
