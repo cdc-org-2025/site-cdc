@@ -11,6 +11,7 @@ import inscricoesRoutes from "./inscricoes_oportunidades.js";
 import areasRoutes from "./areas.js";
 import transparenciaRoutes from "./transparencia.js";
 import publicacaoRoutes from "./publicacao.js";
+import dadosBancarioRoutes from "./dados_bancario.js";
 
 const router = Router();
 
@@ -24,5 +25,6 @@ router.use("/inscricoes", inscricoesRoutes);
 router.use("/areas", areasRoutes);
 router.use("/transparencia", transparenciaRoutes);
 router.use("/publicacoes", publicacaoRoutes);
+router.use("/dados-bancario", dadosBancarioRoutes)
 
 export default router;
