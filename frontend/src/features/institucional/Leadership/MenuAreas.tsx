@@ -17,12 +17,14 @@ interface IMenuAreas {
   areaSelect: IArea[]
   setAreaSelect: (_: IArea[]) => void
   listAreasAvailable?: IArea[]
+  liderancas?: boolean
 }
 
 export default function MenuAreas({
   areaSelect,
   setAreaSelect,
   listAreasAvailable,
+  liderancas = false
 }: IMenuAreas) {
   const {
     palette: {
@@ -75,7 +77,7 @@ export default function MenuAreas({
           </ButtonTag>
         </Box>
 
-        <Box display="flex" flexWrap="wrap" gap="16px">
+        <Box display="flex" flexWrap="wrap" gap="16px" >
           {areaSelect?.map((area) => (
             <ButtonAction
               key={area.id}
@@ -95,9 +97,14 @@ export default function MenuAreas({
         anchorEl={anchorEl}
         open={open}
         onClose={handleCloseMenu}
-        MenuListProps={{ 'aria-labelledby': 'basic-button' }}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+          sx: {
+            padding: 0,
+          },
+        }}
       >
-        <Box p="24px">
+        <Box p="24px" bgcolor={liderancas ? '#fff' : 'inherit'}>
           <Box
             display="flex"
             justifyContent="space-between"
@@ -119,7 +126,7 @@ export default function MenuAreas({
               <ButtonTag
                 key={area.id}
                 backgroundColor={
-                  areaSelect?.includes(area) ? light : '#fff5e6'
+                  liderancas ? '#fff' : areaSelect?.includes(area) ? light : '#fff5e6'
                 }
                 startIcon={
                   areaSelect?.includes(area) && (

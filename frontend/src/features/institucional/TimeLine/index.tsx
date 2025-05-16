@@ -1,8 +1,5 @@
 'use client'
 import React from 'react'
-import Frame1 from '../../../assets/pages/home-page/1-3_1frame100.svg'
-import Frame2 from '../../../assets/pages/home-page/1-3_2frame50.svg'
-import Frame3 from '../../../assets/pages/home-page/1-3_3frame50.svg'
 import ImagesRounded from '@/components/atoms/ImagesRounded'
 import { useTheme } from '@mui/material'
 import Box from '@mui/material/Box'
@@ -11,56 +8,17 @@ import Circle from '@/components/atoms/Circle'
 import AnimationSplitText from '@/components/animations/splitText'
 import AnimetedSlide from '@/components/animations/slide'
 import AnimatedFade from '@/components/animations/fade'
-
-export interface ITimelineOption {
-  id: number
-  year: string
-  title: string
-  description: string
-  image1: { src: string }
-  image2: { src: string }
-  image3: { src: string }
-}
+import { ILinhaTempo, useTimeLineQuery } from '@/clients/api/linha-tempo'
 
 export default function Timeline() {
-  const timelineOptions = [
-    {
-      id: 0,
-      year: '2000',
-      title: 'Surgimento do CDC',
-      description:
-        'Fundada em 2000 como Centro de Luta e Incentivo à Cidadania (CLIC), a instituição buscou democratizar o acesso à tecnologia, promovendo a participação cidadã e a construção de uma sociedade mais inclusiva.',
-      image1: Frame1,
-      image2: Frame2,
-      image3: Frame3,
-    },
-    {
-      id: 1,
-      year: '2010',
-      title: 'Crescimento',
-      description:
-        'Fundada em 2000 como Centro de Luta e Incentivo à Cidadania (CLIC), a instituição buscou democratizar o acesso à tecnologia, promovendo a participação cidadã e a construção de uma sociedade mais inclusiva.',
-      image1: Frame1,
-      image2: Frame2,
-      image3: Frame3,
-    },
-    {
-      id: 2,
-      year: '2020',
-      title: 'Auge',
-      description:
-        'Fundada em 2000 como Centro de Luta e Incentivo à Cidadania (CLIC), a instituição buscou democratizar o acesso à tecnologia, promovendo a participação cidadã e a construção de uma sociedade mais inclusiva.',
-      image1: Frame1,
-      image2: Frame2,
-      image3: Frame3,
-    },
-  ]
   const {
     palette: {
       secondary: { light },
     },
   } = useTheme()
-  return timelineOptions.map((item: ITimelineOption, index: number) => (
+  const { data } = useTimeLineQuery()
+
+  return data?.map((item: ILinhaTempo, index: number) => (
     <Box
       display="flex"
       width="100%"
@@ -82,7 +40,7 @@ export default function Timeline() {
       >
         <AnimationSplitText>
           <Typography variant="h5" color="text.primary">
-            {item.title}
+            {item.titulo}
           </Typography>
         </AnimationSplitText>
         <AnimationSplitText>
@@ -92,14 +50,14 @@ export default function Timeline() {
             color="text.primary"
             lineHeight="150%"
           >
-            {item.description}
+            {item.conteudo}
           </Typography>
         </AnimationSplitText>
 
         <Box display="flex" flexDirection="column" gap="24px" width="100%">
           <AnimetedSlide>
             <Box width="100%" height="172px">
-              <ImagesRounded url={item.image1} />
+              <ImagesRounded url={item.imagens[0]} />
             </Box>
           </AnimetedSlide>
           <AnimetedSlide>
@@ -110,8 +68,8 @@ export default function Timeline() {
               gap="24px"
               height="172px"
             >
-              <ImagesRounded url={item.image2} />
-              <ImagesRounded url={item.image3} />
+              <ImagesRounded url={item.imagens[1]} />
+              <ImagesRounded url={item.imagens[2]} />
             </Box>
           </AnimetedSlide>
         </Box>
@@ -125,7 +83,7 @@ export default function Timeline() {
         <AnimatedFade duration={1000} easing="ease-out" initialOpacity={0}>
           <Circle color={light}>
             <Typography variant="h5" color="text.primary" fontWeight={400}>
-              {item.year}
+              {item.ano}
             </Typography>
           </Circle>
         </AnimatedFade>
@@ -133,7 +91,7 @@ export default function Timeline() {
         <Box
           width="1.35px"
           height="100%"
-          bgcolor={timelineOptions.length === index + 1 ? 'transparent' : light}
+          bgcolor={data.length === index + 1 ? 'transparent' : light}
         />
       </Box>
       <Box

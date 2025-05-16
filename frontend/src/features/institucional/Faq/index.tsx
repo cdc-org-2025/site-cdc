@@ -1,23 +1,18 @@
 'use client'
 
-import React, { useCallback } from 'react'
+import React from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { useTheme } from '@mui/material'
 import AccordionComponent from '@/components/atoms/Accordion'
 import AnimationSplitText from '@/components/animations/splitText'
-import { useNavigation } from '../../../hooks/useNavigation'
+import { useRouter } from 'next/navigation'
 
 export default function Faq() {
   const {
     palette: { primary },
   } = useTheme()
-
-  const { handleNavigate } = useNavigation()
-
-  const navigateToContato = useCallback(() => {
-    handleNavigate('/contato')
-  }, [handleNavigate])
+  const { push } = useRouter()
 
   return (
     <>
@@ -50,7 +45,7 @@ export default function Faq() {
           }}
         >
           Não encontrou o que queria? Entre em{' '}
-          <Box component="span" onClick={navigateToContato}>
+          <Box component="span" onClick={() => push('/contato')}>
             contato
           </Box>{' '}
           com o CDC

@@ -47,7 +47,7 @@ export default function AccordionProjectsMobile({
   return (
     <Box
       px="16px"
-      display={{ xs: 'flex', md: 'none' }}
+      display='flex'
       width="100%"
       gap="16px"
       flexDirection="column"
@@ -91,6 +91,7 @@ export default function AccordionProjectsMobile({
                 variant="subtitle2"
                 lineHeight="120%"
                 color={text.primary}
+                whiteSpace={'nowrap'}
               >
                 {item?.titulo}
               </Typography>

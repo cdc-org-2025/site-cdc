@@ -139,7 +139,7 @@ export default function AccordionProjectsDesktop({
   return (
     <Box
       px="32px"
-      display={{ xs: 'none', md: 'flex' }}
+      display='flex'
       width="100%"
       gap="24px"
       mb="40px"

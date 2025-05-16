@@ -29,7 +29,7 @@ export default function CardInformation({ item }: ICardInformation) {
       color="text.primary"
     >
       <Image src={image} alt={`icone-${title}`} />
-      <Typography pt="24px" variant="h4" fontWeight={500} lineHeight="120%">
+      <Typography textAlign={'center'} pt="24px" variant="h4" fontWeight={500} lineHeight="120%">
         {title}
       </Typography>
       <Typography

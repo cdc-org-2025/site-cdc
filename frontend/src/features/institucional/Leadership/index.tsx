@@ -64,6 +64,7 @@ export default function Leadership() {
       </Box>
 
       <MenuAreas
+        liderancas={true}
         areaSelect={areaSelect}
         setAreaSelect={handleAreaSelect}
         listAreasAvailable={dataAreas}

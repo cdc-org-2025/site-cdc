@@ -1,9 +1,7 @@
 import Box from '@mui/material/Box'
 
 interface IImagesRounded {
-  url: {
-    src: string
-  }
+  url: string
   borderRadius?: string
 }
 export default function ImagesRounded({ url, borderRadius }: IImagesRounded) {
@@ -12,7 +10,7 @@ export default function ImagesRounded({ url, borderRadius }: IImagesRounded) {
       width="100%"
       height="100%"
       sx={{
-        backgroundImage: `url(${url.src})`,
+        backgroundImage: `url(${url})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
