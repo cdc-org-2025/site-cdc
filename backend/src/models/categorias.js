@@ -13,10 +13,10 @@ class Categoria extends Model {
   }
 
   static associate(models) {
-    this.belongsToMany(models.Noticia, {
-      through: models.NoticiasCategoria,
-      foreignKey: "categoria_id",
-    });
+    // this.belongsToMany(models.Noticia, {
+    //   through: models.NoticiasCategoria,
+    //   foreignKey: "categoria_id",
+    // });
   }
 }
 
