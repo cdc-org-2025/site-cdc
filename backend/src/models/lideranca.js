@@ -10,7 +10,7 @@ class Lideranca extends Model {
       url_imagem: DataTypes.STRING,
     }, {
       sequelize,
-      tableName: "liderenca",
+      tableName: "lideranca",
       timestamps: false,
     });
   }
