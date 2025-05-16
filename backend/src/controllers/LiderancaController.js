@@ -3,8 +3,25 @@ import db from "../models/index.js";
 
 class LiderancaController {
   static async index(req, res) {
-    const colaboradores = await db.Lideranca.findAll();
-    return res.json(colaboradores);
+    const liderancas = await db.Lideranca.findAll({
+      include: [{
+        model: db.Area,
+        attributes: ['nome'], // Apenas o nome da área
+      }],
+      attributes: { exclude: ['area_id'] }, // Exclui area_id do resultado
+    });
+
+
+    const response = liderancas.map(lider => ({
+      id: lider.id,
+      nome: lider.nome,
+      cargo: lider.cargo,
+      email: lider.email,
+      url_imagem: lider.url_imagem,
+      area: lider.Area?.nome || null,
+    }));
+
+    return res.json(response);
   }
 
   static async show(req, res) {
