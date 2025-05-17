@@ -161,18 +161,18 @@ export const adminJs = new AdminJS({
                         label: 'Área de Atuação',
                         isArray: true,
                         components: {
-                            list: Components.AreaListDisplay, // 👈 mostrar os nomes das áreas na lista
+                            // list: Components.AreaListDisplay, // 👈 mostrar os nomes das áreas na lista
                             edit: Components.MultiSelectInput,
                         }
 
                     },
                     area_ids: {
-                        isVisible: { list: false, edit: false, filter: false, show: false },
+                       isVisible: false
                     },
                     url_imagem: {
                         isVisible: { list: true, show: true, edit: false },
                         components: {
-                            // list: Components.ImageListPreview,
+                            list: Components.ImageListPreview,
                             show: Components.ImageListPreview, // opcional, se quiser mostrar no "show"
                         }
                     },
