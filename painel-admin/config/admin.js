@@ -29,7 +29,7 @@ export const adminJs = new AdminJS({
                 }
             }
         },
-        { resource: models.Categoria, options: { navigation: 'Configurações' } },
+        // { resource: models.Categoria, options: { navigation: 'Configurações' } },
         {
             resource: models.Noticia,
             options: {
@@ -83,7 +83,6 @@ export const adminJs = new AdminJS({
                                 .map(([, file]) => file)
 
                             const LinhaDoTempoImagem = models.LinhaDoTempoImagem
-                            const bucketUrl = 'https://storage.googleapis.com/cdc-site'
 
                             for (const imagem of imagens) {
                                 const filename = imagem?.name?.replace(/\s+/g, '_')
@@ -91,7 +90,7 @@ export const adminJs = new AdminJS({
 
                                 await LinhaDoTempoImagem.create({
                                     linha_do_tempo_id: record.id(),
-                                    url_imagem: `${bucketUrl}/${gcsPath}`,
+                                    url_imagem: gcsPath,
                                 })
                             }
 
@@ -105,13 +104,12 @@ export const adminJs = new AdminJS({
 
                             const imagensMap = imagens.reduce((acc, img) => {
                                 const id = img.linha_do_tempo_id
-                                const relativePath = img.url_imagem.replace('https://storage.googleapis.com/cdc-site/', '')
 
                                 if (!acc[id]) {
                                     acc[id] = []
                                 }
 
-                                acc[id].push(relativePath) // 👉 guarda todas as imagens
+                                acc[id].push(img.url_imagem) // 👉 guarda todas as imagens
 
                                 return acc
                             }, {})
@@ -161,9 +159,15 @@ export const adminJs = new AdminJS({
                         reference: 'areas',
                         isVisible: { list: true, edit: true, filter: true, show: true },
                         label: 'Área de Atuação',
+                        isArray: true,
+                        components: {
+                            list: Components.AreaListDisplay, // 👈 mostrar os nomes das áreas na lista
+                            edit: Components.MultiSelectInput,
+                        }
+
                     },
-                    area_id: {
-                        isVisible: false
+                    area_ids: {
+                        isVisible: { list: false, edit: false, filter: false, show: false },
                     },
                     url_imagem: {
                         isVisible: { list: true, show: true, edit: false },
@@ -189,7 +193,7 @@ export const adminJs = new AdminJS({
                     'nome',
                     'cargo',
                     'email',
-                    'areaDeAtuacao',
+                    // 'areaDeAtuacao',
                     'url_imagem'
                 ]
             },
@@ -200,7 +204,6 @@ export const adminJs = new AdminJS({
                     key: 'url_imagem',
                 }),
             ],
-            // features: [uploadImageFeature]
         },
         {
             resource: models.Oportunidade,
@@ -308,14 +311,6 @@ export const adminJs = new AdminJS({
             features: [
                 createUploadFeature({
                     folder: 'programa',
-                    file: 'uploadImagens',
-                    key: 'galeria_url_imagem',
-                    filePath: 'galeria_filePath',
-                    filesToDelete: 'galeria_filesToDelete',
-                    multiple: true,
-                }),
-                createUploadFeature({
-                    folder: 'programa',
                     file: 'uploadCapa',
                     key: 'url_image_capa',
                     filePath: 'capa_filePath',
@@ -325,40 +320,7 @@ export const adminJs = new AdminJS({
             ],
             options: {
                 navigation: 'Programas',
-                actions: {
-                    new: {
-                        after: async (response, request, context) => {
-                            const { record } = context;
 
-                            if (!record || record.isValid() === false) {
-                                console.warn('❌ Record inválido ou ausente');
-                                return response;
-                            }
-
-                            const programaId = record.params.id;
-                            const galeriaParams = Object.entries(record.params)
-                                .filter(([key]) => key.startsWith('galeria_url_imagem'))
-                                .map(([, value]) => value)
-                                .filter(Boolean); // remove null/undefined
-
-                            console.log('🖼️ Galeria encontrada:', galeriaParams);
-
-                            for (const url of galeriaParams) {
-                                try {
-                                    const img = await models.ProgramaImagens.create({
-                                        programa_id: programaId,
-                                        url_imagem: `https://storage.googleapis.com/cdc-site/${url}`,
-                                    });
-                                    console.log('✅ Imagem inserida:', img.toJSON());
-                                } catch (error) {
-                                    console.error('❌ Erro ao salvar imagem da galeria:', error);
-                                }
-                            }
-
-                            return response;
-                        }
-                    }
-                },
                 properties: {
                     area_id: {
                         reference: 'areas',
@@ -372,14 +334,6 @@ export const adminJs = new AdminJS({
                         components: {
                             edit: Components.UploadMultiple,
                         },
-                    },
-                    uploadImagens: {
-                        type: 'mixed',
-                        isVisible: { list: false, show: false, filter: false, edit: true },
-                        components: {
-                            edit: Components.UploadMultiple,
-                        },
-                        custom: { multiple: true },
                     },
                     url_image_capa: {
                         isVisible: { list: true, edit: false, show: true },
@@ -393,21 +347,10 @@ export const adminJs = new AdminJS({
         {
             resource: models.Publicacao,
             features: [
-                // createUploadFeature({
-                //     folder: 'publicacao',
-                //     file: 'uploadImagens',
-                //     key: 'galeria_url_imagem',
-                //     filePath: 'galeria_filePath',
-                //     filesToDelete: 'galeria_filesToDelete',
-                //     multiple: true,
-                // }),
                 createUploadFeature({
-                    folder: 'publicacao',
-                    file: 'uploadCapa',
-                    key: 'capa_url_imagem',
-                    filePath: 'capa_filePath',
-                    filesToDelete: 'capa_filesToDelete',
-                    multiple: false,
+                    folder: 'parceiros',
+                    file: 'uploadImagem',
+                    key: 'url_imagem',
                 }),
             ],
             options: {
@@ -418,64 +361,18 @@ export const adminJs = new AdminJS({
                         label: 'Área',
                         isVisible: { list: true, edit: true, filter: true, show: true },
                     },
-                    uploadCapa: {
-                        type: 'mixed',
-                        label: 'Imagem de Capa',
-                        isVisible: { list: false, show: false, filter: false, edit: true },
-                        components: {
-                            edit: Components.UploadMultiple,
-                        },
-                    },
-                    // uploadImagens: {
-                    //     type: 'mixed',
-                    //     isVisible: { list: false, show: false, filter: false, edit: true },
-                    //     components: {
-                    //         edit: Components.UploadMultiple,
-                    //     },
-                    //     custom: { multiple: true },
-                    // },
                     url_imagem: {
                         isVisible: { list: true, edit: false, show: true },
                         components: {
                             list: Components.ImageListPreview,
                         },
                     },
+                    uploadImagem: {
+                        type: 'file',
+                        isVisible: { edit: true, list: false, show: false, filter: false },
+                        isArray: false, // 👈 isso força o AdminJS a usar `uploadImagem` ao invés de `uploadImagem.0`
+                    },
                 },
-                // actions: {
-                //     new: {
-                //         after: async (response, request, context) => {
-                //             const { record } = context;
-                //             if (!record || record.isValid() === false) return response;
-
-                //             const bucketUrl = 'https://storage.googleapis.com/cdc-site';
-
-                //             // Upload da imagem de capa
-                //             const capa = request.files?.['uploadCapa.0'];
-                //             if (capa) {
-                //                 const filename = capa.name.replace(/\s+/g, '_');
-                //                 const gcsPath = `publicacao/${record.id()}-${filename}`;
-                //                 await record.update({ url_imagem: `${bucketUrl}/${gcsPath}` });
-                //             }
-
-                //             // Upload da galeria via feature
-                //             const imagens = Object.entries(request.files || {})
-                //                 .filter(([key]) => key.startsWith('uploadImagens'))
-                //                 .map(([, file]) => file);
-
-                //             for (const imagem of imagens) {
-                //                 const filename = imagem?.name?.replace(/\s+/g, '_');
-                //                 const gcsPath = `publicacao/${record.id()}-${filename}`;
-
-                //                 await models.PublicacaoImagens.create({
-                //                     publicacao_id: record.id(),
-                //                     url_imagem: `${bucketUrl}/${gcsPath}`,
-                //                 });
-                //             }
-
-                //             return response;
-                //         },
-                //     },
-                // },
             },
         },
         {
@@ -516,10 +413,37 @@ export const adminJs = new AdminJS({
                     key: 'url_imagem',
                 }),
             ],
-            // features: [uploadImageFeature]
 
         },
         { resource: models.PerguntaFrequente, options: { navigation: 'Institucional' } },
+        {
+            resource: models.CardInformativo,
+            features: [
+                createUploadFeature({
+                    folder: 'cards',
+                    file: 'uploadImagem',
+                    key: 'url_imagem',
+                }),
+            ],
+            options: {
+                navigation: 'Informativos',
+                properties: {
+                    url_imagem: {
+                        isVisible: { list: true, show: true, edit: false },
+                        components: {
+                            list: Components.ImageListPreview,
+                            show: Components.ImageListPreview, // opcional, se quiser mostrar no "show"
+                        }
+                    },
+                    uploadImagem: {
+                        type: 'file',
+                        isVisible: { edit: true, list: false, show: false, filter: false },
+                        isArray: false, // 👈 isso força o AdminJS a usar `uploadImagem` ao invés de `uploadImagem.0`
+                    },
+                },
+            }
+        },
+
 
     ],
     rootPath: '/admin',

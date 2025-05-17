@@ -9,14 +9,21 @@ export class Publicacao extends Model {
       area_id: DataTypes.INTEGER,
 
       // campo virtual só para AdminJS
-      uploadCapa: {
+      // uploadCapa: {
+      //   type: DataTypes.VIRTUAL,
+      //   get() {
+      //     return null;
+      //   },
+      //   set(value) {
+      //     // nada a fazer
+      //   }
+      // },
+      uploadImagem: {
         type: DataTypes.VIRTUAL,
         get() {
-          return null;
+          return null
         },
-        set(value) {
-          // nada a fazer
-        }
+        set() { }
       }
     }, { sequelize, tableName: 'publicacao', timestamps: false });
   }

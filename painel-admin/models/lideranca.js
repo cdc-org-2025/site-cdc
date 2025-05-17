@@ -10,16 +10,18 @@ export class Lideranca extends Model {
         type: DataTypes.STRING,
         allowNull: true
       },
-      area_id: DataTypes.INTEGER,
-
+      area_ids: {
+        type: DataTypes.ARRAY(DataTypes.INTEGER), // array de inteiros
+        allowNull: true
+      },
       // Campo virtual para área
       areaDeAtuacao: {
         type: DataTypes.VIRTUAL,
         get() {
-          return this.getDataValue('area_id')
+          return this.getDataValue('area_ids')
         },
         set(value) {
-          this.setDataValue('area_id', value)
+          this.setDataValue('area_ids', value)
         }
       },
 
@@ -29,7 +31,7 @@ export class Lideranca extends Model {
         get() {
           return null
         },
-        set() {}
+        set() { }
       }
     }, {
       sequelize,
@@ -39,6 +41,6 @@ export class Lideranca extends Model {
   }
 
   static associate(models) {
-    this.belongsTo(models.Area, { foreignKey: 'area_id' });
+    // this.belongsTo(models.Area, { foreignKey: 'area_id' });
   }
 }

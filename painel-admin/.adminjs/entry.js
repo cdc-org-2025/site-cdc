@@ -13,6 +13,10 @@ import OportunidadePreView from '../src/components/oportunidadesPreView'
 AdminJS.UserComponents.OportunidadePreView = OportunidadePreView
 import TituloEditor from '../src/components/tituloEditor'
 AdminJS.UserComponents.TituloEditor = TituloEditor
+import MultiSelectInput from '../src/components/multiSelectInput'
+AdminJS.UserComponents.MultiSelectInput = MultiSelectInput
+import AreaListDisplay from '../src/components/areaListDisplay'
+AdminJS.UserComponents.AreaListDisplay = AreaListDisplay
 import UploadEditComponent from '../node_modules/@adminjs/upload/build/features/upload-file/components/UploadEditComponent'
 AdminJS.UserComponents.UploadEditComponent = UploadEditComponent
 import UploadListComponent from '../node_modules/@adminjs/upload/build/features/upload-file/components/UploadListComponent'
