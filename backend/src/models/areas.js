@@ -13,7 +13,7 @@ class Area extends Model {
   }
 
   static associate(models) {
-    this.hasMany(models.Lideranca, { foreignKey: 'area_id' });
+    // this.hasMany(models.Lideranca, { foreignKey: 'area_id' });
     this.hasMany(models.Programa, { foreignKey: 'area_id' });
     this.hasMany(models.Publicacao, { foreignKey: 'area_id' });
     this.hasMany(models.Transparencia, { foreignKey: 'area_id' });
