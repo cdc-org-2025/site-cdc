@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 3000
 
 # Comando para iniciar
-CMD [ "node", "index.js" ]
+CMD [ "node", "--max-old-space-size=1024" ,"index.js" ]
