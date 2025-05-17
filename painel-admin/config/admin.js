@@ -172,7 +172,7 @@ export const adminJs = new AdminJS({
                     url_imagem: {
                         isVisible: { list: true, show: true, edit: false },
                         components: {
-                            list: Components.ImageListPreview,
+                            // list: Components.ImageListPreview,
                             show: Components.ImageListPreview, // opcional, se quiser mostrar no "show"
                         }
                     },
@@ -193,7 +193,7 @@ export const adminJs = new AdminJS({
                     'nome',
                     'cargo',
                     'email',
-                    // 'areaDeAtuacao',
+                    'areaDeAtuacao',
                     'url_imagem'
                 ]
             },
