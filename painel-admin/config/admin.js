@@ -50,9 +50,15 @@ export const adminJs = new AdminJS({
                         reference: 'areas',
                         isVisible: { list: true, edit: true, filter: true, show: true },
                         label: 'Área de Atuação',
+                        isArray: true,
+                        components: {
+                            list: Components.AreaListDisplay, // 👈 mostrar os nomes das áreas na lista
+                            edit: Components.MultiSelectInput,
+                        }
+
                     },
-                    area_id: {
-                        isVisible: false, // Esconde o area_id bruto
+                    area_ids: {
+                        isVisible: false
                     },
                 },
                 editProperties: ['conteudo', 'areaDeAtuacao', 'tempo_leitura', 'imagem_capa', 'autor'],
@@ -94,7 +100,6 @@ export const adminJs = new AdminJS({
                                 })
                             }
 
-                            console.log(`📥 ${imagens.length} imagens associadas à linha do tempo ${record.id()}`)
                             return response
                         }
                     },
@@ -161,13 +166,13 @@ export const adminJs = new AdminJS({
                         label: 'Área de Atuação',
                         isArray: true,
                         components: {
-                            // list: Components.AreaListDisplay, // 👈 mostrar os nomes das áreas na lista
+                            list: Components.AreaListDisplay, // 👈 mostrar os nomes das áreas na lista
                             edit: Components.MultiSelectInput,
                         }
 
                     },
                     area_ids: {
-                       isVisible: false
+                        isVisible: false
                     },
                     url_imagem: {
                         isVisible: { list: true, show: true, edit: false },
@@ -256,10 +261,19 @@ export const adminJs = new AdminJS({
             options: {
                 navigation: 'Institucional',
                 properties: {
-                    area_id: {
+                    areaDeAtuacao: {
                         reference: 'areas',
-                        label: 'Área',
                         isVisible: { list: true, edit: true, filter: true, show: true },
+                        label: 'Área de Atuação',
+                        isArray: true,
+                        components: {
+                            list: Components.AreaListDisplay, // 👈 mostrar os nomes das áreas na lista
+                            edit: Components.MultiSelectInput,
+                        }
+
+                    },
+                    area_ids: {
+                        isVisible: false
                     },
                     url_imagem: {
                         isVisible: { list: true, show: true, edit: false },
@@ -273,14 +287,14 @@ export const adminJs = new AdminJS({
                         isVisible: { edit: true, list: false, show: false, filter: false },
                         isArray: false, // 👈 isso força o AdminJS a usar `uploadImagem` ao invés de `uploadImagem.0`
                     },
-                    areaDeAtuacao: {
-                        reference: 'areas',
-                        isVisible: { list: true, edit: true, filter: true, show: true },
-                        label: 'Área de Atuação',
-                    },
-                    area_id: {
-                        isVisible: false, // Esconde o area_id bruto
-                    },
+                    // areaDeAtuacao: {
+                    //     reference: 'areas',
+                    //     isVisible: { list: true, edit: true, filter: true, show: true },
+                    //     label: 'Área de Atuação',
+                    // },
+                    // area_id: {
+                    //     isVisible: false, // Esconde o area_id bruto
+                    // },
 
                 },
                 editProperties: [
@@ -322,11 +336,25 @@ export const adminJs = new AdminJS({
                 navigation: 'Programas',
 
                 properties: {
-                    area_id: {
+                    areaDeAtuacao: {
                         reference: 'areas',
-                        label: 'Área',
                         isVisible: { list: true, edit: true, filter: true, show: true },
+                        label: 'Área de Atuação',
+                        isArray: true,
+                        components: {
+                            list: Components.AreaListDisplay, // 👈 mostrar os nomes das áreas na lista
+                            edit: Components.MultiSelectInput,
+                        }
+
                     },
+                    area_ids: {
+                        isVisible: false
+                    },
+                    // area_id: {
+                    //     reference: 'areas',
+                    //     label: 'Área',
+                    //     isVisible: { list: true, edit: true, filter: true, show: true },
+                    // },
                     uploadCapa: {
                         type: 'mixed',
                         label: 'Imagem de Capa',
@@ -356,10 +384,19 @@ export const adminJs = new AdminJS({
             options: {
                 navigation: 'Informe-se',
                 properties: {
-                    area_id: {
+                    areaDeAtuacao: {
                         reference: 'areas',
-                        label: 'Área',
                         isVisible: { list: true, edit: true, filter: true, show: true },
+                        label: 'Área de Atuação',
+                        isArray: true,
+                        components: {
+                            list: Components.AreaListDisplay, // 👈 mostrar os nomes das áreas na lista
+                            edit: Components.MultiSelectInput,
+                        }
+
+                    },
+                    area_ids: {
+                        isVisible: false
                     },
                     url_imagem: {
                         isVisible: { list: true, edit: false, show: true },
