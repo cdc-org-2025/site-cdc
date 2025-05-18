@@ -8,6 +8,10 @@ class Programa extends Model {
       titulo: DataTypes.STRING,
       subtitulo: DataTypes.STRING,
       descricao: DataTypes.STRING,
+      area_ids: {
+        type: DataTypes.ARRAY(DataTypes.INTEGER), // <- Aqui está a mágica
+        allowNull: true,
+      },
     }, {
       sequelize,
       tableName: "programas",
@@ -16,7 +20,7 @@ class Programa extends Model {
   }
 
   static associate(models) {
-    this.belongsTo(models.Area, { foreignKey: "area_id" });
+    // this.belongsTo(models.Area, { foreignKey: "area_id" });
     this.hasMany(models.ProgramaImagens, {
       foreignKey: 'programa_id',
       as: 'imagens',
