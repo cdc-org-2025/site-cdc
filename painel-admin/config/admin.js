@@ -480,6 +480,8 @@ export const adminJs = new AdminJS({
                 },
             }
         },
+        { resource: models.Email, options: { navigation: 'Configurações' } },
+
 
 
     ],

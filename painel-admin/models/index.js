@@ -2,6 +2,7 @@ import { Area } from './area.js';
 import { CardInformativo } from './card_informativo.js';
 import { Categoria } from './categoria.js';
 import { DadosBancario } from './dados_bancarios.js';
+import { Email } from './email.js';
 import { Lideranca } from './lideranca.js';
 import { LinhaDoTempo } from './linha_do_tempo.js';
 import { LinhaDoTempoImagem } from './linha_do_tempo_imagens.js';
@@ -32,7 +33,8 @@ export function initializeModels(sequelize) {
     PublicacaoImagens: PublicacaoImagens.init(sequelize),
     ProgramaImagens: ProgramaImagens.init(sequelize),
     Lideranca: Lideranca.init(sequelize),
-    CardInformativo: CardInformativo.init(sequelize)
+    CardInformativo: CardInformativo.init(sequelize),
+    Email: Email.init(sequelize)
   };
 
   Object.values(models).forEach(model => {
