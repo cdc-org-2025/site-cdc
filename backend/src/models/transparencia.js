@@ -20,7 +20,6 @@ class Transparencia extends Model {
   }
 
   static associate(models) {
-    // this.belongsTo(models.Area, { foreignKey: "area_id" });
   }
 }
 
