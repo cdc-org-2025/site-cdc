@@ -1,9 +1,10 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, Typography } from '@mui/material'
 import MenuAreasWithSearchInput from '@/components/molecules/MenuAreaWithSearchInput'
 import ListCards from '@/components/molecules/ListCards'
 import { useScrollToTop } from '@/hooks/useScroll'
+import { INoticias, useNoticiasListQuery } from '@/clients/api/noticias'
 
 const areasDisponiveis = [
   ['PPCAM', 'Diretoria Institucional', 'Conselho Fiscal', 'PROVITA', 'MAIS VIDA', 'PPVIDA', 'PPDPI', 'ATM', 'Programa ATITUDE'],
@@ -13,6 +14,14 @@ export default function Noticias() {
   useScrollToTop()
   const [fieldSearch, setFieldSearch] = useState('')
   const [areaSelect, setAreaSelect] = useState<string[]>([])
+  const { data } = useNoticiasListQuery()
+  const [listNoticias, setListNoticias] = useState<INoticias[]>([])
+
+  useEffect(() => {
+    if (data) {
+      setListNoticias(data)
+    }
+  }, [data])
 
   return (
     <Box
@@ -36,7 +45,7 @@ export default function Noticias() {
           listAreasAvailable={areasDisponiveis}
         />
       </Box>
-      <ListCards />
+      <ListCards listNoticias={listNoticias} />
     </Box>
   )
 }
