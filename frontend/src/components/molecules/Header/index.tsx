@@ -11,12 +11,12 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import CloseIcon from '@mui/icons-material/Close'
-import { useNavigation } from '@/hooks/useNavigation'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { useRouter } from 'next/navigation'
 
 export default function Header() {
   const [openMenuMobile, setOpenMenuMobile] = useState<boolean>(false)
-  const { handleNavigate } = useNavigation()
+  const { push } = useRouter()
 
   return (
     <>
@@ -59,7 +59,7 @@ export default function Header() {
         >
           <Button
             variant="contained"
-            onClick={() => handleNavigate('/doacoes')}
+            onClick={() => push('/doacoes')}
             sx={{
               width: 140,
               height: 44,
@@ -85,7 +85,7 @@ export default function Header() {
         >
           <Button
             variant="text"
-            onClick={() => handleNavigate('/doacoes')}
+            onClick={() => push('/doacoes')}
             sx={{
               backgroundColor: 'transparent',
               '&:hover': {

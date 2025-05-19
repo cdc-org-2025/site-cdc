@@ -1,21 +1,11 @@
 'use client'
-
+import React, { memo } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import React from 'react'
 import ButtonTag from '../ButtonTag'
-import { StaticImport } from 'next/dist/shared/lib/get-img-props'
-import { memo } from 'react'
 
 interface ICardTagDesc {
-  info: {
-    id: number
-    tag: string | number
-    description: string
-    image: string | StaticImport | any
-    occupation?: string
-    email?: string
-  }
+  info: any
   personal?: boolean
   onclick?: (_?: any) => void
   onclickTag?: (_?: any) => void
@@ -27,6 +17,7 @@ function CardTagDesc({
   onclick,
   onclickTag,
 }: ICardTagDesc) {
+  const imageNotFound = 'https://ih1.redbubble.net/image.4905811447.8675/flat,750x,075,f-pad,750x1000,f8f8f8.jpg'
   if (personal) {
     return (
       <Box display="flex" flexDirection="column" gap="12px" width="100%">
@@ -34,15 +25,18 @@ function CardTagDesc({
           width="100%"
           height="192px"
           sx={{
-            backgroundImage: `url(${info.image ?? 'https://ebarretoadvogados.com.br/wp-content/uploads/2021/11/Denuncia-anonima-conheca-melhor-suas-consequencias.jpg'})`,
+            backgroundImage: `url(${info.image ?? imageNotFound})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
             borderRadius: '32px',
           }}
         />
-        <Box>
-          <ButtonTag>{info.tag}</ButtonTag>
+
+        <Box display={'flex'} gap='10px' flexWrap={'wrap'}>
+          {info?.areas?.map((area: { id: number, nome: string }) => (
+            <ButtonTag key={area.id}>{area.nome}</ButtonTag>
+          ))}
         </Box>
         <Box display="flex" flexDirection="column" gap="4px">
           <Typography
@@ -83,7 +77,6 @@ function CardTagDesc({
     <Box
       display="flex"
       flexDirection="column"
-      minWidth="260px"
       gap="12px"
       sx={{
         cursor: 'pointer',
@@ -97,9 +90,14 @@ function CardTagDesc({
     >
       <Box
         onClick={onclick}
+        height={{
+          xs: '260px',
+          sm: '173px',
+          md: '230px',
+          lg: '266px',
+        }}
         sx={{
           width: '100%',
-          height: 260,
           borderRadius: '8px',
           overflow: 'hidden',
           position: 'relative',
@@ -110,7 +108,8 @@ function CardTagDesc({
           sx={{
             width: '100%',
             height: '100%',
-            backgroundImage: `url(${info.image.src})`,
+            // backgroundImage: `url(${info?.imagem_capa ?? imageNotFound})`,
+            backgroundColor: 'red',
             backgroundSize: '100%',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
@@ -118,11 +117,11 @@ function CardTagDesc({
           }}
         />
       </Box>
-
-      <Box>
-        <ButtonTag onClick={onclickTag}>{info.tag}</ButtonTag>
+      <Box display={'flex'} gap='10px' flexWrap={'wrap'}>
+        {info?.areas?.map((area: { id: number, nome: string }) => (
+          <ButtonTag noAnimation={true} onClick={onclickTag} key={area.id}>{area.nome}</ButtonTag>
+        ))}
       </Box>
-
       <Box onClick={onclick}>
         <Typography
           className="descText"
@@ -132,7 +131,7 @@ function CardTagDesc({
           color="text.primary"
           maxWidth="390px"
         >
-          {info.description}
+          {info?.titulo ?? "Título não informado"}
         </Typography>
       </Box>
     </Box>
