@@ -32,13 +32,13 @@ export default function Leadership() {
       return
     }
 
-    const areaIds = newAreaList.map(area => Number(area.id))
+    const selectedIds = newAreaList.map(area => Number(area.id))
 
-    const colabList = dataLiderancas?.filter(lideranca =>
-      areaIds.includes(lideranca?.area_id)
+    const filtered = dataLiderancas?.filter(lideranca =>
+      lideranca.areas?.some(area => selectedIds.includes(Number(area.id)))
     )
 
-    setListColaboradores(colabList)
+    setListColaboradores(filtered)
   }, [dataLiderancas])
 
   return (
@@ -77,7 +77,7 @@ export default function Leadership() {
               <CardTagDesc
                 info={{
                   id: item.id,
-                  tag: item.area,
+                  areas: item.areas,
                   description: item.nome,
                   image: item.url_imagem,
                   occupation: item.cargo,

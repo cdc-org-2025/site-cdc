@@ -10,7 +10,7 @@ export const useNoticiasListQuery = (options?: UseQueryOptions<INoticias[], Erro
   });
 };
 
-export const useNoticiaQuery = (id: number, options?: UseQueryOptions<INoticias, Error>) => {
+export const useNoticiaQuery = (id: string | string[], options?: UseQueryOptions<INoticias, Error>) => {
   return useQuery<INoticias, Error>({
     queryKey: ['noticia', id],
     queryFn: () => getNoticia(id),

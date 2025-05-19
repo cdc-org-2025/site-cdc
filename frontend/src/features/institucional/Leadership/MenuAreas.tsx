@@ -126,7 +126,7 @@ export default function MenuAreas({
               <ButtonTag
                 key={area.id}
                 backgroundColor={
-                  liderancas ? '#fff' : areaSelect?.includes(area) ? light : '#fff5e6'
+                  areaSelect.some((a) => a.id === area.id) ? light : liderancas ? '#fff' : '#fff5e6'
                 }
                 startIcon={
                   areaSelect?.includes(area) && (

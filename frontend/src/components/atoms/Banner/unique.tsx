@@ -9,7 +9,7 @@ export interface IBannerUnique {
 
 export interface TypeBannerUnique {
   id: number
-  title: string
+  title?: string
   image: any
   highlight?: string
 }

@@ -1,5 +1,6 @@
 'use client'
 import { useOportunidadesListQuery } from '@/clients/api/oportunidades'
+import { useScrollToTop } from '@/hooks/useScroll'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { useRouter } from 'next/navigation'
@@ -8,6 +9,7 @@ import React from 'react'
 export default function TrabalheConoscoPage() {
   const { push } = useRouter()
   const { data: listOportunidades } = useOportunidadesListQuery()
+  useScrollToTop()
 
   return (
     <Box width="100%" pt="40px" pb="150px">

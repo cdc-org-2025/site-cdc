@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   },
 }
 
-export default function PublicacoesPage() {
+export default function NoticiasPage() {
   const Banner = {
     id: 1,
     title: 'Notícias',

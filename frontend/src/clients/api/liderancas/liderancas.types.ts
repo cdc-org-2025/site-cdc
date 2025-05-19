@@ -4,6 +4,8 @@ export interface ILideranca {
   cargo: string;
   url_imagem: string
   email: string
-  area: string
-  area_id: number
+  areas: {
+    id: number
+    nome: string
+  }[]
 }
