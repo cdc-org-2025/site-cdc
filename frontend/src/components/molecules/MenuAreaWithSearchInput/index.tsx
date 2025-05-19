@@ -109,6 +109,7 @@ export default function MenuAreasWithSearchInput({
       </Box>
 
       <Menu
+        disableScrollLock
         sx={{ marginTop: '14px' }}
         id="basic-menu"
         anchorEl={anchorEl}

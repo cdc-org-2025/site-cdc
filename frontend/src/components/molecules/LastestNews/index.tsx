@@ -8,11 +8,13 @@ import AnimationSplitText from '@/components/animations/splitText'
 import Grid from '@mui/material/Grid'
 import { useNoticiasListQuery } from '@/clients/api/noticias'
 import { useRouter } from 'next/navigation'
+import { useScrollToTop } from '@/hooks/useScroll'
 
 export default function LatestNews() {
   const { data } = useNoticiasListQuery()
   const dataset = data?.slice(0, 3)
   const { push } = useRouter()
+  useScrollToTop()
 
   return (
     <Box px={{ xs: '16px', md: '32px' }} mt="64px" pb="40px" width="100%">

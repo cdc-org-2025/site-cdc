@@ -15,6 +15,7 @@ export default function ImagesRounded({ url, borderRadius }: IImagesRounded) {
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
         borderRadius: borderRadius ?? '32px',
+        backgroundColor: 'gray',
       }}
     />
   )

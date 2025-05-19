@@ -10,6 +10,7 @@ import AnimetedSlide from '@/components/animations/slide'
 import AnimatedFade from '@/components/animations/fade'
 import { ILinhaTempo, useTimeLineQuery } from '@/clients/api/linha-tempo'
 import { stripHtmlTags } from '@/utils/stripHtmlTags'
+import { storageUrl } from '@/constants/storageDomain'
 
 export default function Timeline() {
   const {
@@ -18,6 +19,14 @@ export default function Timeline() {
     },
   } = useTheme()
   const { data } = useTimeLineQuery()
+
+  const isStorage = (url: string) => {
+    if (storageUrl?.includes(url)) {
+      return url
+    } else {
+      return `${storageUrl}/${url}`
+    }
+  }
 
   return data?.map((item: ILinhaTempo, index: number) => (
     <Box
@@ -56,23 +65,27 @@ export default function Timeline() {
         </AnimationSplitText>
 
         <Box display="flex" flexDirection="column" gap="24px" width="100%">
-          <AnimetedSlide>
-            <Box width="100%" height="172px">
-              <ImagesRounded url={item.imagens[0]} />
-            </Box>
-          </AnimetedSlide>
-          <AnimetedSlide>
-            <Box
-              width="100%"
-              display="flex"
-              justifyContent="space-between"
-              gap="24px"
-              height="172px"
-            >
-              <ImagesRounded url={item.imagens[1]} />
-              <ImagesRounded url={item.imagens[2]} />
-            </Box>
-          </AnimetedSlide>
+          {item.imagens[0] && (
+            <AnimetedSlide>
+              <Box width="100%" height="172px">
+                <ImagesRounded url={isStorage(item.imagens[0])} />
+              </Box>
+            </AnimetedSlide>
+          )}
+          {item.imagens[1] && (
+            <AnimetedSlide>
+              <Box
+                width="100%"
+                display="flex"
+                justifyContent="space-between"
+                gap="24px"
+                height="172px"
+              >
+                <ImagesRounded url={isStorage(item.imagens[1])} />
+                <ImagesRounded url={isStorage(item.imagens[2])} />
+              </Box>
+            </AnimetedSlide>
+          )}
         </Box>
       </Box>
       <Box

@@ -3,6 +3,7 @@ import React, { memo } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import ButtonTag from '../ButtonTag'
+import { storageUrl } from '@/constants/storageDomain'
 
 interface ICardTagDesc {
   info: any
@@ -25,11 +26,12 @@ function CardTagDesc({
           width="100%"
           height="192px"
           sx={{
-            backgroundImage: `url(${info.image ?? imageNotFound})`,
+            backgroundImage: `url(${storageUrl}/${info.image ?? imageNotFound})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
             borderRadius: '32px',
+            backgroundColor: 'gray',
           }}
         />
 
@@ -108,8 +110,8 @@ function CardTagDesc({
           sx={{
             width: '100%',
             height: '100%',
-            // backgroundImage: `url(${info?.imagem_capa ?? imageNotFound})`,
-            backgroundColor: 'red',
+            backgroundImage: `url(${storageUrl}/${info?.imagem_capa ?? imageNotFound})`,
+            backgroundColor: 'gray',
             backgroundSize: '100%',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',

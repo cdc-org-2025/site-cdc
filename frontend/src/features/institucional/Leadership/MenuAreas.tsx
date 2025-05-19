@@ -92,6 +92,7 @@ export default function MenuAreas({
       </Box>
 
       <Menu
+        disableScrollLock
         sx={{ marginTop: '14px' }}
         id="basic-menu"
         anchorEl={anchorEl}

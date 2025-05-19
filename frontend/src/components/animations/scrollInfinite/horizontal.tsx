@@ -1,6 +1,7 @@
 'use client'
 
 import { IParceiro } from '@/clients/api/parceiros'
+import { storageUrl } from '@/constants/storageDomain'
 import Box from '@mui/material/Box'
 import React from 'react'
 
@@ -48,7 +49,7 @@ export default function ScrollInfiniteHorizontal({
             ...styles.item,
             width: `${itemWidth}px`,
             height: `100%`,
-            backgroundImage: `url(${item.url_imagem})`,
+            backgroundImage: `url(${storageUrl}/${item.url_imagem})`,
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
             animationDelay: `calc(30s / ${items.length} * (${items.length} - ${index + 1}) * -1)`,
