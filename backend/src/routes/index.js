@@ -1,5 +1,7 @@
 
 import { Router } from "express";
+import express from 'express';
+import multer from 'multer'; 
 
 import noticiasRoutes from "./noticias.js";
 import categoriasRoutes from "./categorias.js";
@@ -16,6 +18,7 @@ import linhaTempoRoutes from "./linha_tempo.js";
 import parceirosRoutes from "./parceiros.js";
 import perguntasFrenquenteRoutes from "./perguntas_frenquente.js";
 import cardsInformativosRoutes from "./card_informativo.js";
+import candidaturaVagaForm from './candidaturaVagaForm.js'
 
 const router = Router();
 
@@ -34,6 +37,7 @@ router.use("/linha-tempo", linhaTempoRoutes);
 router.use("/parceiros", parceirosRoutes);
 router.use("/perguntas-frenquente", perguntasFrenquenteRoutes);
 router.use("/cards-informativos", cardsInformativosRoutes);
+router.use('/candidatura',  candidaturaVagaForm);
 
 
 

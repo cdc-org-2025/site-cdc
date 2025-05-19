@@ -11,6 +11,10 @@ class Noticia extends Model {
       imagem_capa: DataTypes.STRING,    // URL
       autor: DataTypes.STRING(255),
       data_publicacao: DataTypes.DATE,
+      area_ids: {
+        type: DataTypes.ARRAY(DataTypes.INTEGER), // <- Aqui está a mágica
+        allowNull: true,
+      },
     }, {
       sequelize,
       tableName: "noticias",
@@ -19,13 +23,20 @@ class Noticia extends Model {
   }
 
   static associate(models) {
-    this.belongsTo(models.Area, { foreignKey: "area_id" });
-    this.hasMany(models.NoticiasImagem, { foreignKey: "noticia_id" });
-    this.belongsToMany(models.Categoria, {
-      through: models.NoticiasCategoria,
-      foreignKey: "noticia_id",
+    this.hasMany(models.NoticiasImagem, {
+      as: 'imagens', // ← alias correto
+      foreignKey: 'noticia_id'
     });
+
+    this.belongsToMany(models.Categoria, {
+      through: 'noticias_categorias',
+      foreignKey: 'noticia_id',
+      otherKey: 'categoria_id',
+      as: 'Categorias'
+    });
+
   }
 }
 
 export default Noticia;
+
