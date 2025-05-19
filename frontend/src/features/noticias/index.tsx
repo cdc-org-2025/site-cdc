@@ -45,7 +45,7 @@ export default function Noticias() {
           listAreasAvailable={areasDisponiveis}
         />
       </Box>
-      <ListCards listNoticias={listNoticias} />
+      <ListCards page="/noticias" list={listNoticias} />
     </Box>
   )
 }

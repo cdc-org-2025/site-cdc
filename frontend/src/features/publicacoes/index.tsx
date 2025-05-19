@@ -36,7 +36,7 @@ export default function Publicacoes() {
           listAreasAvailable={areasDisponiveis}
         />
       </Box>
-      <ListCards />
+      <ListCards list={[]} page='/publicacoes' />
     </Box>
   )
 }

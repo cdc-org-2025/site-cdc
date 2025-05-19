@@ -83,8 +83,6 @@ export default function Doacoes() {
           </Box>
         </AnimatedContent>
       ))}
-
-
     </Box>
   )
 }
