@@ -60,7 +60,7 @@ export default function Doacoes() {
                 width={96}
                 height={96}
                 sx={{
-                  backgroundImage: `url(${storageUrl}/${item.url_imagem})`,
+                  backgroundImage: `url("${storageUrl}/${item?.url_imagem}")`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                   backgroundRepeat: 'no-repeat'
