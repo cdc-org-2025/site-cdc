@@ -24,13 +24,13 @@ class PublicacaoController {
 
     const response = publicacoes.map(pub => {
       // Mapear os IDs de áreas para objetos de áreas completos
-      const areas = pub.area_ids 
+      const areas = pub.area_ids
         ? pub.area_ids
-            .filter(id => areasMap[id])
-            .map(id => ({
-              id: areasMap[id].id,
-              nome: areasMap[id].nome
-            }))
+          .filter(id => areasMap[id])
+          .map(id => ({
+            id: areasMap[id].id,
+            nome: areasMap[id].nome
+          }))
         : [];
 
       return {
@@ -43,7 +43,22 @@ class PublicacaoController {
       };
     });
 
-    return res.json(response);
+    const areasFiltro = [];
+    const areaIdsSet = new Set();
+
+    response.forEach(element => {
+      element.areas.forEach(area => {
+        if (!areaIdsSet.has(area.id)) {
+          areaIdsSet.add(area.id);
+          areasFiltro.push(area);
+        }
+      });
+    });
+
+    return res.json({
+      data: response,
+      areas_filtro: areasFiltro
+    });
   }
 
   static async show(req, res) {
@@ -55,7 +70,7 @@ class PublicacaoController {
         attributes: ['id', 'url_imagem']
       }]
     });
-    
+
     if (!publicacao) return res.status(404).json({ error: "Publicação não encontrada" });
 
     // Buscar as áreas específicas desta publicação
@@ -68,7 +83,7 @@ class PublicacaoController {
 
     // Extrai os dados da publicação sem o area_ids
     const { area_ids, ...publicacaoData } = publicacao.get({ plain: true });
-    
+
     const response = {
       ...publicacaoData,
       areas: areas.map(area => ({

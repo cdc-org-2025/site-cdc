@@ -36,6 +36,23 @@ class TransparenciaController {
       };
     });
 
+    const areasFiltro = [];
+    const areaIdsSet = new Set();
+
+    response.forEach(element => {
+      element.areas.forEach(area => {
+        if (!areaIdsSet.has(area.id)) {
+          areaIdsSet.add(area.id);
+          areasFiltro.push(area);
+        }
+      });
+    });
+
+    return res.json({
+      data: response,
+      areas_filtro: areasFiltro
+    });
+
     return res.json(response);
 
     // return res.json(docs);

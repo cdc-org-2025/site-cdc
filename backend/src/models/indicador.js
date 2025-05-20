@@ -1,14 +1,14 @@
 
 import { DataTypes, Model } from "sequelize";
 
-class Email extends Model {
+class Inidicador extends Model {
   static init(sequelize) {
     return super.init({
-      email: DataTypes.STRING,
-      tipo: DataTypes.ENUM('curriculo', 'contato'),
+      descricao: DataTypes.STRING,
+      quantidade: DataTypes.INTEGER,
     }, {
       sequelize,
-      tableName: "email",
+      tableName: "inidicador",
       timestamps: false,
     });
   }
@@ -17,4 +17,4 @@ class Email extends Model {
   }
 }
 
-export default Email;
+export default Inidicador;

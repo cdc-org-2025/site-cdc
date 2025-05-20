@@ -24,13 +24,13 @@ class ProgramasController {
 
     const response = programas.map(prog => {
       // Mapear os IDs de áreas para objetos de áreas completos
-      const areas = prog.area_ids 
+      const areas = prog.area_ids
         ? prog.area_ids
-            .filter(id => areasMap[id])
-            .map(id => ({
-              id: areasMap[id].id,
-              nome: areasMap[id].nome
-            }))
+          .filter(id => areasMap[id])
+          .map(id => ({
+            id: areasMap[id].id,
+            nome: areasMap[id].nome
+          }))
         : [];
 
       return {
@@ -44,7 +44,22 @@ class ProgramasController {
       };
     });
 
-    return res.json(response);
+    const areasFiltro = [];
+    const areaIdsSet = new Set();
+
+    response.forEach(element => {
+      element.areas.forEach(area => {
+        if (!areaIdsSet.has(area.id)) {
+          areaIdsSet.add(area.id);
+          areasFiltro.push(area);
+        }
+      });
+    });
+
+    return res.json({
+      data: response,
+      areas_filtro: areasFiltro
+    });
   }
 
   static async show(req, res) {
@@ -56,7 +71,7 @@ class ProgramasController {
         attributes: ['id', 'url_imagem']
       }]
     });
-    
+
     if (!programa) return res.status(404).json({ error: "Programa não encontrado" });
 
     // Buscar as áreas específicas deste programa
@@ -69,7 +84,7 @@ class ProgramasController {
 
     // Extrai os dados do programa sem o area_ids
     const { area_ids, ...programaData } = programa.get({ plain: true });
-    
+
     const response = {
       ...programaData,
       areas: areas.map(area => ({
