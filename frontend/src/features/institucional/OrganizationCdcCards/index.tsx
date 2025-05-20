@@ -10,8 +10,11 @@ import ProgramImage from '../../../assets/cards-information/program-coordination
 import CardInformation from '@/components/molecules/CardInformation'
 import AnimationSplitText from '@/components/animations/splitText'
 import AnimetedSlide from '@/components/animations/slide'
+// import { useCardsInformativosListQuery } from '@/clients/api/cards-informativos'
 
 export default function OrganizationCdcCards() {
+  // const { data: listCards } = useCardsInformativosListQuery()
+
   const cardOptions = [
     {
       image: DirectorImage,

@@ -8,11 +8,10 @@ import CardTagDesc from '@/components/atoms/CardTagDesc'
 import MenuAreas from './MenuAreas'
 import AnimationSplitText from '@/components/animations/splitText'
 import AnimetedSlide from '@/components/animations/slide'
-import { IArea, useAreasQuery } from '@/clients/api/areas'
+import { IArea } from '@/clients/api/areas'
 import { ILideranca, useLiderancasListQuery } from '@/clients/api/liderancas'
 
 export default function Leadership() {
-  const { data: dataAreas } = useAreasQuery()
   const { data: dataLiderancas } = useLiderancasListQuery()
   const [listColaboradores, setListColaboradores] = useState<ILideranca[] | undefined>([])
   const [areaSelect, setAreaSelect] = useState<IArea[]>([])
@@ -66,7 +65,7 @@ export default function Leadership() {
         liderancas={true}
         areaSelect={areaSelect}
         setAreaSelect={handleAreaSelect}
-        listAreasAvailable={dataAreas}
+        listAreasAvailable={dataLiderancas?.areas_filtro}
       />
 
       <Grid container spacing={4} pb="64px">

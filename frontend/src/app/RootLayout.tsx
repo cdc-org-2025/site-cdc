@@ -6,7 +6,6 @@ import { SettingsContext } from "@/context/settingsContext";
 import { ContextProviders } from "@/context";
 import { ThemeProvider } from "@mui/material";
 import getTheme from "@/theme";
-import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function RootLayout({
@@ -36,7 +35,6 @@ function InnerRootLayout({
     <ThemeProvider theme={getTheme(theme)}>
       <html lang={locale}>
         <body>
-          <ToastContainer />
           {children}
         </body>
       </html>

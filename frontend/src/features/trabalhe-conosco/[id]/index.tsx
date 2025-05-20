@@ -14,7 +14,7 @@ export default function TrabalheConoscoVagaPage() {
 
   const Banner = {
     id: Number(id),
-    title: 'Assistente de Comunicação',
+    title: data?.titulo,
     image: PPDI,
   }
 

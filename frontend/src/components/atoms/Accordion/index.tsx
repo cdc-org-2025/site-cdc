@@ -32,6 +32,14 @@ const AccordionComponent = () => {
               expandIcon={<ExpandMoreIcon />}
               aria-controls={`panel-content-${item.id}`}
               id={`panel-header-${item.id}`}
+              sx={{
+                '& .MuiTypography-root': {
+                  color: '#000',
+                },
+                '&.Mui-expanded .MuiTypography-root': {
+                  color: '#a7181d',
+                },
+              }}
             >
               <Typography color='#000' component="span" fontWeight={400}>
                 {item.pergunta}

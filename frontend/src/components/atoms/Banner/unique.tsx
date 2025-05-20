@@ -2,6 +2,7 @@
 import React from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
+import { storageUrl } from '@/constants/storageDomain'
 
 export interface IBannerUnique {
   Banner: TypeBannerUnique
@@ -32,7 +33,7 @@ export default function BannerUnique({ Banner }: IBannerUnique) {
           width="100vw"
           height="100%"
           sx={{
-            backgroundImage: `url(${Banner.image.src})`,
+            backgroundImage: `url("${!Banner?.image?.src ? `${storageUrl}/${Banner?.image}` : Banner?.image?.src}")`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',

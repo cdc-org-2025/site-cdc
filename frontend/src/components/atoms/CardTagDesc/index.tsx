@@ -28,7 +28,7 @@ function CardTagDesc({
           width="100%"
           height="260px"
           sx={{
-            backgroundImage: `url(${storageUrl}/${info.image ?? imageNotFound})`,
+            backgroundImage: `url("${storageUrl}/${info?.image ?? imageNotFound}")`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
@@ -84,7 +84,7 @@ function CardTagDesc({
           width="100%"
           height="192px"
           sx={{
-            backgroundImage: `url(${storageUrl}/${info.image ?? imageNotFound})`,
+            backgroundImage: `url("${storageUrl}/${info?.image ?? imageNotFound}")`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
@@ -168,7 +168,7 @@ function CardTagDesc({
           sx={{
             width: '100%',
             height: '100%',
-            backgroundImage: `url(${storageUrl}/${info?.imagem_capa ?? info?.url_imagem})`,
+            backgroundImage: `url("${storageUrl}/${info?.imagem_capa ?? info?.url_imagem}")`,
             backgroundColor: 'gray',
             backgroundSize: '100%',
             backgroundPosition: 'center',

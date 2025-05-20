@@ -11,6 +11,7 @@ import SelectComponent from '../atoms/Select'
 import AnimationSplitText from '../animations/splitText'
 import AnimetedSlide from '../animations/slide'
 import { IPostContato, useContatoMutation } from '@/clients/api/contato'
+import { toast } from 'react-toastify'
 
 const schema = yup
   .object({
@@ -39,29 +40,41 @@ export default function FormContactMap() {
   } = useForm({
     resolver: yupResolver(schema),
   })
-  const { mutate } = useContatoMutation();
+  const { mutateAsync } = useContatoMutation();
 
   const [messageResponseForm, setmessageResponseForm] = useState<{
     sucesso?: boolean
     mensagem?: string
   }>({ sucesso: undefined, mensagem: '' })
   const onSubmit = async (data: IPostContato) => {
-    mutate(data, {
-      onSuccess: () => {
-        setmessageResponseForm({
-          sucesso: true,
-          mensagem: 'Formulário enviado com sucesso!',
-        })
-        reset()
-      },
-      onError: () => {
-        setmessageResponseForm({
-          sucesso: false,
-          mensagem:
-            'Algum erro aconteceu no envio do formulário. Entre em contato com a organização',
-        })
-      },
-    });
+    const id = toast.loading("O formulário está sendo enviado");
+    try {
+      await mutateAsync(data)
+      toast.update(id, {
+        render: "Formulário enviado com sucesso",
+        type: "success",
+        isLoading: false,
+        autoClose: 5000,
+      });
+      setmessageResponseForm({
+        sucesso: true,
+        mensagem: 'Formulário enviado com sucesso!',
+      })
+      reset()
+    } catch {
+      toast.update(id, {
+        render: 'Algum erro aconteceu no envio do formulário. Entre em contato com a organização',
+        type: "error",
+        isLoading: false,
+        autoClose: 5000,
+      });
+      setmessageResponseForm({
+        sucesso: false,
+        mensagem:
+          'Algum erro aconteceu no envio do formulário. Entre em contato com a organização',
+      })
+    }
+
   }
 
   return (

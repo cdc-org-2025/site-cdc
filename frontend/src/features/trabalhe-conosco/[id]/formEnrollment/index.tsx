@@ -11,6 +11,7 @@ import TextfieldComponent from '@/components/atoms/Textfield'
 import ButtonAction from '@/components/atoms/ButtonAction'
 import ButtonUpload from '@/components/atoms/ButtonUpload'
 import { useCandidaturaMutation } from '@/clients/api/candidaturas'
+import { toast } from 'react-toastify'
 
 const schema = yup
   .object({
@@ -26,7 +27,32 @@ const schema = yup
       .string()
       .required('A mensagem é obrigatório')
       .min(10, 'O mensagem deve ter pelo menos 10 caracteres.'),
-    anexo: yup.mixed().required('O arquivo é obrigatório.'),
+    anexo: yup
+      .mixed()
+      .required('O arquivo é obrigatório e apenas arquivos PDF ou Word (.pdf, .doc, .docx) são permitidos.')
+      .test(
+        'fileFormat',
+        'Apenas arquivos PDF ou Word (.pdf, .doc, .docx) são permitidos.',
+        (file) => {
+          if (!file) return false;
+
+          const allowedTypes = [
+            'application/pdf',
+            'application/msword',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          ];
+
+          const allowedExtensions = ['.pdf', '.doc', '.docx'];
+
+          const fileType = (file as File).type;
+          const fileName = (file as File).name.toLowerCase();
+
+          const isValidType = allowedTypes.includes(fileType);
+          const isValidExtension = allowedExtensions.some(ext => fileName.endsWith(ext));
+
+          return isValidType && isValidExtension;
+        }
+      )
   })
   .required()
 
@@ -46,28 +72,41 @@ export default function FormEnrollment() {
     mensagem?: string
   }>({ sucesso: undefined, mensagem: '' })
   const [fileName, setFileName] = useState('')
-  const { mutate } = useCandidaturaMutation();
 
-  const onSubmit = (data: any) => {
+  const { mutateAsync } = useCandidaturaMutation();
 
-    mutate(data, {
-      onSuccess: () => {
-        setmessageResponseForm({
-          sucesso: true,
-          mensagem: 'Formulário enviado com sucesso!',
-        })
-        reset()
-        setFileName('')
-      },
-      onError: () => {
-        setmessageResponseForm({
-          sucesso: false,
-          mensagem:
-            'Algum erro aconteceu no envio do formulário. Entre em contato com a organização',
-        })
-      },
-    });
-  }
+  const onSubmit = async (data: any) => {
+    const id = toast.loading("O formulário está sendo enviado");
+
+    try {
+      await mutateAsync(data);
+      toast.update(id, {
+        render: "Formulário enviado com sucesso",
+        type: "success",
+        isLoading: false,
+        autoClose: 5000,
+      });
+
+      setmessageResponseForm({
+        sucesso: true,
+        mensagem: 'Formulário enviado com sucesso!',
+      });
+      reset();
+      setFileName('');
+    } catch (error) {
+      toast.update(id, {
+        render: "Erro no envio do formulário",
+        type: "error",
+        isLoading: false,
+        autoClose: 5000,
+      });
+      setmessageResponseForm({
+        sucesso: false,
+        mensagem:
+          'Algum erro aconteceu no envio do formulário. Entre em contato com a organização',
+      });
+    }
+  };
 
   return (
     <Box width="100%" pt="16px" pb="160px">
@@ -110,7 +149,7 @@ export default function FormEnrollment() {
               />
             </Box>
             <TextfieldComponent
-              label="Escreva seu e-mail"
+              label="Descrição"
               placeholder={'Descrição'}
               register={register('mensagem')}
               error={!!errors.mensagem}
@@ -121,11 +160,28 @@ export default function FormEnrollment() {
               <ButtonUpload
                 label={'Anexo'}
                 placeholder={'Anexe um documento'}
-                onFileSelect={(file) => {
-                  if (file) {
-                    setFileName(file.name)
-                    setValue('anexo', file)
-                    clearErrors('anexo')
+                onFileSelect={(file: any) => {
+                  if (!file) return;
+
+                  const allowedTypes = [
+                    'application/pdf',
+                    'application/msword',
+                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                  ];
+                  const allowedExtensions = ['.pdf', '.doc', '.docx'];
+                  const fileType = file.type;
+                  const fileName = file.name.toLowerCase();
+
+                  const isValidType = allowedTypes.includes(fileType);
+                  const isValidExtension = allowedExtensions.some(ext => fileName.endsWith(ext));
+
+                  if (isValidType && isValidExtension) {
+                    setFileName(file.name);
+                    setValue('anexo', file, { shouldValidate: true });
+                    clearErrors('anexo');
+                  } else {
+                    setFileName('');
+                    setValue('anexo', null as any, { shouldValidate: true });
                   }
                 }}
                 fileName={fileName}

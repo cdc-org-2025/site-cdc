@@ -29,7 +29,7 @@ export default function Partners() {
       <ScrollInfiniteHorizontal
         items={data}
         itemWidth={210}
-        itemHeight={52}
+        itemHeight={100}
       />
     </Box>
   )

@@ -10,7 +10,7 @@ export const usePublicacoesQuery = (options?: UseQueryOptions<IPublicacaoRespons
   });
 };
 
-export const usePublicacaoQuery = (id: number, options?: UseQueryOptions<IPublicacao, Error>) => {
+export const usePublicacaoQuery = (id: string | string[], options?: UseQueryOptions<IPublicacao, Error>) => {
   return useQuery<IPublicacao, Error>({
     queryKey: ['publicacao', id],
     queryFn: () => getPublicacao(id),

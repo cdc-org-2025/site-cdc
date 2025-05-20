@@ -42,6 +42,7 @@ export default function ButtonUpload({
         ref={fileInputRef}
         onChange={handleFileChange}
         disabled={disabled}
+        accept=".pdf,.doc,.docx"
       />
 
       <TextField

@@ -1,7 +1,6 @@
 'use client'
 import Footer from '@/components/molecules/Footer'
 import HeaderBannerUnique from '@/components/templates/HeaderBannerUnique'
-import PPDI from '../../../assets/banner/ppdi.svg'
 import { useParams } from 'next/navigation'
 import { useNoticiaQuery } from '@/clients/api/noticias'
 import { Box } from '@mui/material'
@@ -14,16 +13,16 @@ export default function NoticiasUniquePage() {
   const Banner = {
     id: 1,
     title: data?.titulo,
-    image: PPDI,
+    image: data?.imagem_capa,
   }
 
   return (
     <>
       <HeaderBannerUnique noneMobile Banner={Banner} />
-      {data?.conteudo && (
+      {data?.html_original && (
         <Box width={'100%'} display='flex' justifyContent={'center'}>
           <Box width={'100%'} maxWidth={'800px'} p='16px'>
-            {stripHtmlTags(data.conteudo)}
+            {stripHtmlTags(data.html_original)}
           </Box>
         </Box>
       )}
