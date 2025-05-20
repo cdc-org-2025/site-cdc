@@ -75,7 +75,7 @@ export default function Footer() {
           justifyContent="space-between"
           gap="16px"
         >
-          <Typography variant="body2" color="text.primary">
+          <Typography variant="body2" color="text.primary" fontWeight={700}>
             Redes sociais
           </Typography>
           <Box display="flex" gap="24px">

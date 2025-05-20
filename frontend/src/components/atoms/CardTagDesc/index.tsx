@@ -8,6 +8,7 @@ import { storageUrl } from '@/constants/storageDomain'
 interface ICardTagDesc {
   info: any
   personal?: boolean
+  leadership?: boolean
   onclick?: (_?: any) => void
   onclickTag?: (_?: any) => void
 }
@@ -15,10 +16,67 @@ interface ICardTagDesc {
 function CardTagDesc({
   info,
   personal,
+  leadership,
   onclick,
   onclickTag,
 }: ICardTagDesc) {
   const imageNotFound = 'https://ih1.redbubble.net/image.4905811447.8675/flat,750x,075,f-pad,750x1000,f8f8f8.jpg'
+  if (leadership) {
+    return (
+      <Box display="flex" flexDirection="column" gap="12px" width="100%">
+        <Box
+          width="100%"
+          height="260px"
+          sx={{
+            backgroundImage: `url(${storageUrl}/${info.image ?? imageNotFound})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            borderRadius: '32px',
+            backgroundColor: 'gray',
+          }}
+        />
+
+        <Box display={'flex'} gap='10px' flexWrap={'wrap'}>
+          {info?.areas?.map((area: { id: number, nome: string }) => (
+            <ButtonTag key={area.id}>{area.nome}</ButtonTag>
+          ))}
+        </Box>
+        <Box display="flex" flexDirection="column" gap="4px">
+          <Typography
+            variant="overline"
+            lineHeight="150%"
+            textTransform="none"
+            color="text.primary"
+            maxWidth="390px"
+          >
+            {info.description}
+          </Typography>
+          {info.occupation && (
+            <Typography
+              variant="subtitle2"
+              lineHeight="150%"
+              textTransform="none"
+              color="#727271"
+            >
+              {info.occupation}
+            </Typography>
+          )}
+          {info.email && (
+            <Typography
+              variant="subtitle2"
+              lineHeight="150%"
+              textTransform="none"
+              color="#727271"
+            >
+              {info.email}
+            </Typography>
+          )}
+        </Box>
+      </Box>
+    )
+  }
+
   if (personal) {
     return (
       <Box display="flex" flexDirection="column" gap="12px" width="100%">
@@ -93,7 +151,7 @@ function CardTagDesc({
       <Box
         onClick={onclick}
         height={{
-          xs: '260px',
+          xs: '230px',
           sm: '173px',
           md: '230px',
           lg: '266px',
@@ -116,6 +174,7 @@ function CardTagDesc({
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
             transition: 'background-size 0.3s ease-in-out',
+            borderRadius: "32px"
           }}
         />
       </Box>
