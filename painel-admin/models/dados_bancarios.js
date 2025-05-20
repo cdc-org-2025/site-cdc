@@ -10,13 +10,6 @@ export class DadosBancario extends Model {
         type: DataTypes.STRING,
         allowNull: true
       },
-      uploadImagem: {
-        type: DataTypes.VIRTUAL,
-        get() {
-          return null
-        },
-        set() {}
-      }
     }, { sequelize, tableName: 'dados_bancarios', timestamps: false });
   }
 }

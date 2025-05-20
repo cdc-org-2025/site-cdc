@@ -75,32 +75,12 @@ export const adminJs = new AdminJS({
                     }
                 },
                 properties: {
-                    // titulo_temp: {
-                    //     components: {
-                    //         edit: Components.TituloEditor,
-                    //         // list: Components.NoticiaPreview,
-                    //     },
-                    //     isVisible: { list: true, edit: true, filter: false, show: true },
-                    //     actions: {
-                    //         new: {
-                    //             before: async (request) => {
-                    //                 console.log('Payload antes de salvar:', request.payload);
-                    //                 return request;
-                    //             }
-                    //         }
-                    //     }
-                    // },
                     html_original: {
                         components: {
                             edit: Components.ConteudoEditor,
                             list: Components.NoticiaPreview,
                         },
                         isVisible: { list: true, edit: true, filter: false, show: true },
-                        // isValid: (value) => {
-                        //     if (!value) return true;
-                        //     return Array.isArray(value) &&
-                        //         value.every(item => item.type && item.content && item.html);
-                        // }
                     },
                     areaDeAtuacao: {
                         reference: 'areas',
@@ -283,6 +263,13 @@ export const adminJs = new AdminJS({
                     'email',
                     'areaDeAtuacao',
                     'url_imagem'
+                ],
+                listProperties: [
+                    'nome',
+                    'cargo',
+                    'email',
+                    'areaDeAtuacao',
+                    'url_imagem'
                 ]
             },
             features: [
@@ -298,19 +285,23 @@ export const adminJs = new AdminJS({
             options: {
                 navigation: 'Institucional',
                 properties: {
-                    descricao: {
-                        components: {
-                            edit: Components.OportunidadeEditor,
-                            list: Components.OportunidadePreView, // novo componente para a listagem
-
-                        }
-                    },
                     titulo: {
                         isVisible: { list: true, edit: false, show: true }, // para esconder o campo padrão
                     },
+                    descricao: {
+                        components: {
+                            edit: Components.OportunidadeEditor,
+                            list: Components.NoticiaPreview, // novo componente para a listagem
 
-                }
+                        }
+                    },
+                },
+                listProperties: [
+                    'titulo',
+                    'descricao'
+                ]
             }
+
         },
         {
             resource: models.Parceiro,
@@ -383,6 +374,12 @@ export const adminJs = new AdminJS({
                     'documento_url',
                     'documento_url',
                     'url_imagem'
+                ],
+                listProperties: [
+                    'titulo',
+                    'documento_url',
+                    'areaDeAtuacao',
+                    'url_imagem'
                 ]
             },
             features: [
@@ -392,8 +389,6 @@ export const adminJs = new AdminJS({
                     key: 'url_imagem',
                 }),
             ],
-            // features: [uploadImageFeature]
-
         },
         {
             resource: models.Programa,
@@ -402,15 +397,16 @@ export const adminJs = new AdminJS({
                     folder: 'programa',
                     file: 'uploadCapa',
                     key: 'url_image_capa',
-                    filePath: 'capa_filePath',
-                    filesToDelete: 'capa_filesToDelete',
-                    multiple: false,
                 }),
             ],
             options: {
                 navigation: 'Programas',
 
                 properties: {
+
+                    area_ids: {
+                        isVisible: false
+                    },
                     areaDeAtuacao: {
                         reference: 'areas',
                         isVisible: { list: true, edit: true, filter: true, show: true },
@@ -422,29 +418,40 @@ export const adminJs = new AdminJS({
                         }
 
                     },
-                    area_ids: {
-                        isVisible: false
-                    },
-                    // area_id: {
-                    //     reference: 'areas',
-                    //     label: 'Área',
-                    //     isVisible: { list: true, edit: true, filter: true, show: true },
-                    // },
                     uploadCapa: {
-                        type: 'mixed',
-                        label: 'Imagem de Capa',
-                        isVisible: { list: false, show: false, filter: false, edit: true },
-                        components: {
-                            edit: Components.UploadMultiple,
-                        },
+                        type: 'file',
+                        isVisible: { edit: true, list: false, show: false, filter: false },
+                        isArray: false,
                     },
                     url_image_capa: {
-                        isVisible: { list: true, edit: false, show: true },
+                        isVisible: { list: true, show: true, edit: false },
                         components: {
                             list: Components.ImageListPreview,
+                            show: Components.ImageListPreview,
                         },
                     },
                 },
+                editProperties: [
+                    'titulo',
+                    'subtitulo',
+                    'descricao',
+                    'areaDeAtuacao',
+                    'uploadCapa'
+                ],
+                showProperties: [
+                    'titulo',
+                    'subtitulo',
+                    'descricao',
+                    'areaDeAtuacao',
+                    'url_image_capa'
+                ],
+                listProperties: [
+                    'titulo',
+                    'subtitulo',
+                    'descricao',
+                    'areaDeAtuacao',
+                    'url_image_capa'
+                ]
             },
         },
         {
@@ -485,6 +492,26 @@ export const adminJs = new AdminJS({
                         isArray: false, // 👈 isso força o AdminJS a usar `uploadImagem` ao invés de `uploadImagem.0`
                     },
                 },
+
+                editProperties: [
+                    'titulo',
+                    'documento_url',
+                    'areaDeAtuacao',
+                    'uploadImagem' // usado para enviar imagem
+                ],
+                showProperties: [
+                    'titulo',
+                    'documento_url',
+                    'areaDeAtuacao',
+                    'url_imagem'
+                ],
+                listProperties: [
+                    'titulo',
+                    'documento_url',
+                    'areaDeAtuacao',
+                    'url_imagem'
+                ]
+
             },
         },
         {
@@ -527,7 +554,24 @@ export const adminJs = new AdminJS({
             ],
 
         },
-        { resource: models.PerguntaFrequente, options: { navigation: 'Institucional' } },
+        {
+            resource: models.PerguntaFrequente,
+            options: {
+                navigation: 'Institucional',
+                listProperties: [
+                    'pergunta',
+                    'resposta'
+                ],
+                showProperties: [
+                    'pergunta',
+                    'resposta'
+                ],
+                editProperties: [
+                    'pergunta',
+                    'resposta'
+                ]
+            }
+        },
         {
             resource: models.CardInformativo,
             features: [
@@ -553,10 +597,45 @@ export const adminJs = new AdminJS({
                         isArray: false, // 👈 isso força o AdminJS a usar `uploadImagem` ao invés de `uploadImagem.0`
                     },
                 },
+                editProperties: [
+                    'titulo',
+                    'descricao',
+                    'tipo',
+                    'uploadImagem' // usado para enviar imagem
+                ],
+                showProperties: [
+                    'titulo',
+                    'descricao',
+                    'tipo',
+                    'url_imagem'
+                ],
+                listProperties: [
+                    'titulo',
+                    'descricao',
+                    'tipo',
+                    'url_imagem'
+                ]
             }
         },
         { resource: models.Email, options: { navigation: 'Configurações' } },
-        { resource: models.Inidicador, options: { navigation: 'Informativos' } },
+        {
+            resource: models.Inidicador,
+            options: {
+                navigation: 'Informativos',
+                editProperties: [
+                    'descricao',
+                    'quantidade',
+                ],
+                showProperties: [
+                    'descricao',
+                    'quantidade',
+                ],
+                listProperties: [
+                    'descricao',
+                    'quantidade',
+                ]
+            }
+        },
 
 
 

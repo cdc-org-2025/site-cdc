@@ -23,14 +23,14 @@ export class Programa extends Model {
         }
       },
 
-      uploadCapa: {
-        type: DataTypes.VIRTUAL,
-        get() {
-          return null;
-        },
-        set(value) {
-        }
-      }
+      // uploadCapa: {
+      //   type: DataTypes.VIRTUAL,
+      //   get() {
+      //     return null;
+      //   },
+      //   set(value) {
+      //   }
+      // }
     }, {
       sequelize,
       tableName: 'programas',

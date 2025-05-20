@@ -21,23 +21,6 @@ export class Publicacao extends Model {
         }
       },
 
-      // campo virtual só para AdminJS
-      // uploadCapa: {
-      //   type: DataTypes.VIRTUAL,
-      //   get() {
-      //     return null;
-      //   },
-      //   set(value) {
-      //     // nada a fazer
-      //   }
-      // },
-      uploadImagem: {
-        type: DataTypes.VIRTUAL,
-        get() {
-          return null
-        },
-        set() { }
-      }
     }, { sequelize, tableName: 'publicacao', timestamps: false });
   }
 

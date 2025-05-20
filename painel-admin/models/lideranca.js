@@ -24,15 +24,6 @@ export class Lideranca extends Model {
           this.setDataValue('area_ids', value)
         }
       },
-
-      // Campo virtual para upload (não persistido)
-      uploadImagem: {
-        type: DataTypes.VIRTUAL,
-        get() {
-          return null
-        },
-        set() { }
-      }
     }, {
       sequelize,
       tableName: 'lideranca',
