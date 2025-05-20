@@ -3,7 +3,6 @@ import { Model, DataTypes } from 'sequelize';
 export class Noticia extends Model {
   static init(sequelize) {
     return super.init({
-      titulo: DataTypes.STRING(255),
       tempo_leitura: DataTypes.STRING, // tempo em minutos
       tipo: {
         type: DataTypes.ENUM("noticias", "publicacoes"),
@@ -34,11 +33,26 @@ export class Noticia extends Model {
           this.setDataValue('area_ids', value)
         }
       },
+      // titulo: {
+      //   type: DataTypes.TEXT,
+      // },
+      titulo: DataTypes.TEXT,
+
+      uploadCapa: {
+        type: DataTypes.VIRTUAL,
+        get() {
+          return null;
+        },
+        set(value) {
+        },
+
+
+
+      }
     }, { sequelize, tableName: 'noticias', timestamps: false });
   }
 
   static associate(models) {
-    // this.belongsTo(models.Area, { foreignKey: 'area_id' });
     this.belongsToMany(models.Categoria, { through: 'noticias_categorias', foreignKey: 'noticia_id' });
   }
 }

@@ -8,9 +8,10 @@ const Components = {
   UploadSingle: componentLoader.add('uploadSingle', './components/uploadSingle.jsx'),
   OportunidadeEditor: componentLoader.add('OportunidadeEditor', './components/oportunidadesEditor.jsx'),
   OportunidadePreView: componentLoader.add('OportunidadePreView', './components/oportunidadesPreView.jsx'),
-  TituloEditor: componentLoader.add("TituloEditor", "./components/tituloEditor.jsx"),
   MultiSelectInput: componentLoader.add("MultiSelectInput", "./components/multiSelectInput.jsx"),
   AreaListDisplay: componentLoader.add("AreaListDisplay", "./components/areaListDisplay.jsx"),
+  NoticiaPreview: componentLoader.add("NoticiaPreview", "./components/noticiasPreview.jsx"),
+
 };
 
 export { componentLoader, Components };

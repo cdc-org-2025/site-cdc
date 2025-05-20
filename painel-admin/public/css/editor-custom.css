@@ -18,7 +18,7 @@
     font-size: 16px;
     /* line-height: 1.6; */
     /* color: #333; */
-    margin-bottom: 16px;
+    /* margin-bottom: 16px; */
 }
 
 .sun-editor-editable blockquote {
@@ -43,4 +43,22 @@
     font-size: 24px;
     color: #000000;
     margin: 0;
+}
+
+.se-image-container {
+  display: inline-block !important;
+  margin-right: 10px;
+  vertical-align: top;
+}
+
+.se-image-container figure {
+  margin: 0;
+  width: auto !important;
+}
+
+.se-image-container img {
+  display: inline-block !important;
+  max-width: 150px !important;
+  height: auto !important;
+  display: block;
 }

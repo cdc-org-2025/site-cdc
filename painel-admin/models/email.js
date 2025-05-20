@@ -5,6 +5,8 @@ export class Email extends Model {
   static init(sequelize) {
     return super.init({
       email: DataTypes.STRING,
+      tipo: DataTypes.ENUM('curriculo', 'contato'),
+
     }, {
       sequelize,
       tableName: "email",

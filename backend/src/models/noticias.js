@@ -3,7 +3,8 @@ import { DataTypes, Model } from "sequelize";
 class Noticia extends Model {
   static init(sequelize) {
     return super.init({
-      titulo: DataTypes.STRING(255),
+      titulo_temp: DataTypes.TEXT,
+      titulo: DataTypes.STRING,
       tempo_leitura: DataTypes.STRING, // tempo em minutos
       tipo: DataTypes.ENUM("noticias", "publicacoes"),
       conteudo: DataTypes.JSON,         // lista de elementos com type/content/html

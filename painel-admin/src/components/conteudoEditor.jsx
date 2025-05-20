@@ -1,290 +1,44 @@
-import { useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { Box, TextArea } from '@adminjs/design-system';
 import SunEditor from 'suneditor-react';
-// import { TextArea } from 'adminjs';
+import axios from 'axios';
 
+
+// Se necessário, defina os formatos
 const formats = [
-  // { tag: 'h1', name: 'Titulo' },
-  { tag: 'h2', name: 'Subtitulo' },
-  { tag: 'p', name: 'Paragrafo' },
+  { tag: 'h2', name: 'Subtítulo' },
+  { tag: 'p', name: 'Parágrafo' },
   { tag: 'blockquote', name: 'Citacao' },
-  { tag: 'img', name: 'Imagem' },
-  { tag: 'vdo', name: 'Video' },
-
 ];
 
-//noticias/:id
-// noticia_id = {
-//   id: 1,
-//   imagem_capa: "",
-//   autor: "",
-//   minutoLeitura: 3,
-//   dataCreate: "",
-// "elements": [
-//   {
-//     "type": "Titulo",
-//     "content": "teste",
-//     "html": "<h1>teste</h1>"
-//   },
-//   {
-//     "type": "Citacao",
-//     "content": "teste",
-//     "html": "<blockquote><div>teste<br></div></blockquote>"
-//   }
-// ],
-//   "htmlOriginal": "<h1>teste</h1><blockquote><div>teste<br></div></blockquote><h1><br></h1>"
-// }
+// Converte estilos para inline
+function convertStylesToInline(html) {
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = html;
 
-// //noticias/area
-// noticias = [
-//   {
-//     url_imagem: "",
-//     area: "",
-//     titulo: ""
-//   }
-// ]
+  tempDiv.querySelectorAll('h1').forEach(el => {
+    el.style.fontSize = '32px';
+    el.style.color = '#A7181D';
+    el.style.fontWeight = 'bold';
+    el.style.lineHeight = '1.3';
+  });
 
+  tempDiv.querySelectorAll('h2').forEach(el => {
+    el.style.fontSize = '24px';
+    el.style.color = '#333333';
+    el.style.fontWeight = '600';
+    el.style.lineHeight = '1.4';
+  });
 
-// publicacao = [
-//   {
-//     url_imagem: "",
-//     area: "",
-//     titulo: ""
-//   }
-// ]
+  tempDiv.querySelectorAll('p').forEach(el => {
+    el.style.fontSize = '18px';
+    el.style.color = '#000000';
+    el.style.lineHeight = '1.6';
+  });
 
-// "linha-tempo" = [
-//   {
-//     id: 1,
-//     ano: 2000,
-//     titulo: "",
-//     descricao: "",
-//     imagem: []
-//   },
-// ]
+  return tempDiv.innerHTML;
+}
 
-// perguntas = [
-//   {
-//     id: 1,
-//     pergunta: "",
-//     resposta: ""
-//   }
-// ]
-
-// //colaboradores/area
-// colaboradores = [
-//   {
-//     email: "",
-//     id: 1,
-//     url_imagem: "",
-//     area: "",
-//     cargo: "",
-//     nome: ""
-//   }
-// ]
-
-// //programas/:id
-// programa_id = {
-//   id: 1,
-//   imagem_capa: "",
-//   titulo: "",
-//   descricao: "",
-//   imagens: [
-//     {
-//       url_imagem: "",
-//     }
-//   ],
-//   area:""
-// }
-
-// //programas
-// programas = {
-//   programas: [
-//     {
-//       id: 1,
-//       titulo: "",
-//       subTitulo: "",
-//       descricao: "",
-//       url_imagem: "",
-//     }
-//   ],
-//   qtd_programas: 1000
-// }
-
-// parceiros = [
-//   {
-//     id: 1,
-//     url_imagem: "",
-//     descriacao: "",
-//   }
-// ]
-
-// organizacao = [
-//   {
-//     id: 1,
-//     url_imagem: "",
-//     titulo: "",
-//     descriacao: ""
-//   }
-// ]
-
-// dados_bancarios = {
-//   url_imagem: "",
-//   banco: "",
-//   agencia: "",
-//   titular: ""
-// }
-
-// //transparencia/area=""
-// transparencia= [
-//   {
-//     id:1,
-//     url_imagem: "",
-//     area:"",
-//     titulo:""
-//   }
-// ]
-
-// //transparencia/:id
-// transparencia_id={
-//   url_doc:""
-// }
-
-// oportunidades= [
-//   {
-//     id:1,
-//     titulo:""
-//   }
-// ]
-
-// //oportunidades/:id
-// oportunidade_id= {
-//   id:1,
-//   elements: [
-//     {
-//       "type": "Titulo",
-//       "content": "teste",
-//       "html": "<h1>teste</h1>"
-//     },
-//     {
-//       "type": "Citacao",
-//       "content": "teste",
-//       "html": "<blockquote><div>teste<br></div></blockquote>"
-//     }
-//   ],
-// }
-
-// areas = [
-//   {
-//     id:1,
-//     nome:""
-//   }
-// ]
-
-
-
-
-
-
-const extractOrderedContent = (html) => {
-  if (!html) return { elements: [], htmlOriginal: '' };
-
-  try {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
-    const body = doc.body;
-    const elements = body.childNodes;
-    const result = [];
-
-    for (let i = 0; i < elements.length; i++) {
-      const element = elements[i];
-      if (element.nodeType === Node.ELEMENT_NODE) {
-        const tag = element.tagName.toLowerCase();
-        const text = element.textContent?.trim() || '';
-
-        if (text || tag === 'img') { // Permite imagens mesmo sem texto
-          result.push({
-            type: formats.find(e => e.tag === tag).name,
-            content: text,
-            html: element.outerHTML
-          });
-        }
-      }
-    }
-
-    return {
-      elements: result,
-      htmlOriginal: html
-    };
-  } catch (e) {
-    console.error('Error parsing HTML:', e);
-    return {
-      elements: [],
-      htmlOriginal: html
-    };
-  }
-};
-
-// const ConteudoEditor = (props) => {
-//   const { onChange, property, record } = props;
-
-
-
-//   const initialData = record.params[property.path] || { conteudo: '<h1><br></h1>' };
-//   const [content, setContent] = useState(initialData.conteudo);
-//   const [htmlContent, setHtmlContent] = useState(initialData.html);
-//   const [structuredContent, setStructuredContent] = useState(initialData.structured);
-
-//   const editorRef = useRef(null);
-
-//   // const handleEditorChange = (content) => {
-//   //   setContent(content);
-//   //   onChange(property.path, content); // envia para o AdminJS imediatamente
-//   // };
-
-//   const handleEditorChange = (newHtml) => {
-//     setHtmlContent(newHtml);
-
-//     const extracted = extractOrderedContent(newHtml);
-//     setStructuredContent(extracted);
-
-//     // 🔥 Envia separadamente para os campos corretos
-//     onChange('conteudo', extracted.elements);
-//     onChange('html_original', extracted.htmlOriginal);
-//   };
-
-
-//   return (
-//     <Box>
-//       <Box mt="xl">
-//         <SunEditor
-//           ref={editorRef}
-//           setContents={content}
-//           onChange={handleEditorChange}
-//           setOptions={{
-//             height: 300,
-//             buttonList: [
-//               ['undo', 'redo'],
-//               ['formatBlock'],
-//               ['bold', 'underline', 'italic', 'strike', 'subscript', 'superscript'],
-//               ['fontColor', 'hiliteColor'],
-//               ['align', 'list', 'table'],
-//               ['link', 'image', 'video'],
-//               ['fullScreen', 'showBlocks', 'codeView'],
-//             ],
-//             formats,
-//             imageUploadUrl: '', // Desativa upload padrão
-//             imageFileInput: true,
-//             imageResizing: true,
-//             placeholder: "Comece digitando seu título...",
-
-//           }}
-//         />
-//       </Box>
-
-//     </Box>
-//   );
-// };
 const ConteudoEditor = (props) => {
   const { onChange, property, record } = props;
 
@@ -294,52 +48,91 @@ const ConteudoEditor = (props) => {
   };
 
   const [titulo, setTitulo] = useState(initialData.titulo || '');
-  const [content, setContent] = useState(initialData.conteudo);
-  const [htmlContent, setHtmlContent] = useState(initialData.html);
-  const [structuredContent, setStructuredContent] = useState(initialData.structured);
-
   const editorRef = useRef(null);
 
-  const handleEditorChange = (newHtml) => {
-    setHtmlContent(newHtml);
-
-    const extracted = extractOrderedContent(newHtml);
-    setStructuredContent(extracted);
-
-    onChange('conteudo', extracted.elements);
-    onChange('html_original', extracted.htmlOriginal);
+  const handleSetInstance = (instance) => {
+    editorRef.current = instance;
   };
 
-  const handleTituloChange = (e) => {
-    const newTitulo = e.target.value;
+  const uploadImageToGCP = async (file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('folder', 'editor-images');
+
+    try {
+      const response = await axios.post('/admin/upload-editor-image', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      return response.data.url;
+    } catch (error) {
+      console.error('Erro ao fazer upload da imagem:', error);
+      return null;
+    }
+  };
+  const onImageUploadBefore = async (files) => {
+    // 1. Primeiro obtemos o conteúdo atual do editor
+    const currentContent = editorRef.current ? editorRef.current.getContents() : '';
+
+    // 2. Fazemos o upload das imagens para o GCP
+    const uploadPromises = Array.from(files).map(async (file) => {
+      const imageUrl = await uploadImageToGCP(file);
+      if (imageUrl) {
+        return `<img src="${imageUrl}" style="display: inline-block; margin: 0 5px; max-width: 100%; height: auto;" />`;
+      }
+      return '';
+    });
+
+    const htmlImages = await Promise.all(uploadPromises);
+    const filteredImages = htmlImages.filter(img => img !== '');
+
+    if (filteredImages.length > 0) {
+      const inlineHtml = filteredImages.join("") + "&nbsp;";
+
+      if (editorRef.current) {
+        editorRef.current.insertHTML(inlineHtml); // insere na posição do cursor
+
+        // Aguarda a imagem ser inserida, então limpa as base64 sem afetar a posição do cursor anterior
+        setTimeout(() => {
+          let updatedContent = editorRef.current.getContents();
+
+          // Remove imagens base64
+          updatedContent = updatedContent.replace(/<img[^>]src="data:image\/[^;]+;base64[^"]+"[^>]*>/g, '');
+
+          // Remove divs de imagem vazias (div com class se-image-container com figure vazio)
+          updatedContent = updatedContent.replace(
+            /<div class="se-component se-image-container[^"]*"[^>]*>\s*<figure[^>]*>\s*<\/figure>\s*<\/div>/g,
+            ''
+          );
+          updatedContent = updatedContent.replace(/<p>(\s|&nbsp;|<br\s*\/?>)*<\/p>/g, '');
+
+
+          editorRef.current.setContents(updatedContent);
+        }, 0);
+
+      }
+    }
+    return false; // Impede a inserção padrão do SunEditor com Base64
+  };
+
+  const handleTituloChange_temp = (e) => {
+    const newTitulo = convertStylesToInline(e.target.value);
     setTitulo(newTitulo);
     onChange('titulo', newTitulo);
   };
 
-  const openCustomUploader = () => {
-    setUploaderOpen(true);
+  const handleEditorChange = (newHtml) => {
+    const styledHtml = convertStylesToInline(newHtml);
+    onChange('html_original', styledHtml); // salva com estilos inline
   };
-
-  const handleImageSelected = async (file) => {
-    const url = await uploadImageToServer(file);
-    insertImage(url);
-    setUploaderOpen(false);
-  };
-
-  const insertImage = (url) => {
-    if (editorRef.current) {
-      editorRef.current.editor.insertHTML(`<img src="${url}" style="max-width: 100%;" />`);
-    }
-  };
-
 
   return (
     <Box>
-      {/* Campo de título */}
       <TextArea
         placeholder="Digite o título da notícia"
         value={titulo}
-        onChange={handleTituloChange}
+        onChange={handleTituloChange_temp}
         rows={2}
         sm={12}
         borderless
@@ -348,70 +141,45 @@ const ConteudoEditor = (props) => {
           cursor: 'text',
           fontSize: '32px',
           fontWeight: 'bold',
-          // border: "none",
           color: "#A7181D",
-          // paddingLeft: '48px',
           lineHeight: '1.3',
-          // border:
         }}
       />
 
-      {/* Editor de conteúdo */}
       <Box mt="xl">
         <SunEditor
-          ref={editorRef}
-          setContents={content}
+          getSunEditorInstance={handleSetInstance}
+          placeholder="Digite algo aqui..."
+          height="600px"
+          onImageUploadBefore={onImageUploadBefore}
           onChange={handleEditorChange}
           setOptions={{
-            height: 300,
+            height: 800,
             buttonList: [
-              ['undo', 'redo'],
-              ['formatBlock'],
-              ['bold', 'underline', 'italic', 'strike', 'subscript', 'superscript'],
-              ['fontColor', 'hiliteColor'],
-              ['align', 'list', 'table'],
-              ['link', 'image', 'video'],
-              ['fullScreen', 'showBlocks', 'codeView'],
+              ["undo", "redo"],
+              ["formatBlock"],
+              ["bold", "underline", "italic", "strike", "subscript", "superscript"],
+              ["fontColor", "hiliteColor"],
+              ["align", "list", "table"],
+              ["link", "image", "video"],
+              ["fullScreen", "showBlocks", "codeView"],
             ],
-            formats,
-            imageUploadUrl: '',
-            imageFileInput: false,
+            imageWidth: "150px",
+            addTagsWhitelist: "div,img,span",
+            mediaAutoSelect: false,
+            imageMultipleFile: true,
+            imageFileInput: true,
+            imageUploadUrl: "",
             imageResizing: true,
-            placeholder: "Comece digitando seu título...",
-
+            imageUrlInput: false,
+            imageHeightShow: false,
+            imageAlignShow: false,
+            imageRotation: false,
+            paragraphTags: false,
+            defaultTag: "",
+            formats
           }}
         />
-
-        <SunEditor
-          ref={editorRef}
-          setContents={content}
-          onChange={handleEditorChange}
-          setOptions={{
-            height: 300,
-            buttonList: [
-              ['undo', 'redo'],
-              ['formatBlock'],
-              ['bold', 'underline', 'italic', 'strike', 'subscript', 'superscript'],
-              ['fontColor', 'hiliteColor'],
-              ['align', 'list', 'table'],
-              ['link', 'image', 'video'],
-              ['fullScreen', 'showBlocks', 'codeView'],
-            ],
-            imageFileInput: false, // importante!
-            formats,
-
-          }}
-          onImageUploadBefore={(files, info, uploadHandler) => {
-            // 👇 Evita o upload padrão
-            uploadHandler(); // cancela o comportamento nativo
-
-            // 👇 Aqui você chama seu componente
-            openCustomUploader(); // essa função exibe seu componente de upload
-
-            return false; // impede o upload automático
-          }}
-        />
-
       </Box>
     </Box>
   );

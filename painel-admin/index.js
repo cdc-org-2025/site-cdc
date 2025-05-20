@@ -4,6 +4,7 @@ import passport from './config/passport.js'
 import { adminJs } from './config/admin.js'
 import { sequelize } from './config/database.js'
 import authRoutes from './routes/auth.js'
+import uploadEditorImageRoute from './routes/uploadIMG.js';
 import AdminJSExpress from '@adminjs/express'
 import path from 'path';
 import { fileURLToPath } from 'url'; // Necessário para ESM
@@ -61,6 +62,7 @@ app.use(adminJs.options.rootPath, (req, res, next) => {
 
 app.use("/assets", express.static(path.join(__dirname, './assets')));
 app.use(authRoutes)
+app.use(uploadEditorImageRoute);
 app.use(adminJs.options.rootPath, adminRouter)
 
 const PORT = process.env.PORT || 3000

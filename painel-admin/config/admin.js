@@ -5,6 +5,8 @@ import { initializeModels } from '../models/index.js'
 import { sequelize } from './database.js'
 import { Components, componentLoader } from '../src/components.js'
 import { createUploadFeature } from './uploadStorage.js'
+import readingTime from 'reading-time';
+
 
 
 AdminJS.registerAdapter({ Database, Resource })
@@ -29,22 +31,76 @@ export const adminJs = new AdminJS({
                 }
             }
         },
-        // { resource: models.Categoria, options: { navigation: 'Configurações' } },
         {
             resource: models.Noticia,
+            features: [
+                createUploadFeature({
+                    folder: 'noticias',
+                    file: 'uploadCapa',
+                    key: 'imagem_capa',
+                    filePath: 'capa_filePath',
+                    filesToDelete: 'capa_filesToDelete',
+                    multiple: false,
+                }),
+            ],
             options: {
                 navigation: 'Informe-se',
+                actions: {
+                    new: {
+                        before: async (request) => {
+                            if (request.payload?.html_original) {
+                                const rawHtml = request.payload.html_original;
+
+                                // Remove tags HTML e extrai só o texto
+                                const plainText = rawHtml.replace(/<[^>]*>/g, ' ');
+                                const tempoLeituraMin = Math.ceil(readingTime(plainText).minutes);
+
+                                request.payload.tempo_leitura = tempoLeituraMin;
+                            }
+                            return request;
+                        }
+                    },
+                    edit: {
+                        before: async (request) => {
+                            if (request.payload?.html_original) {
+                                const rawHtml = request.payload.html_original;
+
+                                const plainText = rawHtml.replace(/<[^>]*>/g, ' ');
+                                const tempoLeituraMin = Math.ceil(readingTime(plainText).minutes);
+
+                                request.payload.tempo_leitura = tempoLeituraMin;
+                            }
+                            return request;
+                        }
+                    }
+                },
                 properties: {
-                    conteudo: {
+                    // titulo_temp: {
+                    //     components: {
+                    //         edit: Components.TituloEditor,
+                    //         // list: Components.NoticiaPreview,
+                    //     },
+                    //     isVisible: { list: true, edit: true, filter: false, show: true },
+                    //     actions: {
+                    //         new: {
+                    //             before: async (request) => {
+                    //                 console.log('Payload antes de salvar:', request.payload);
+                    //                 return request;
+                    //             }
+                    //         }
+                    //     }
+                    // },
+                    html_original: {
                         components: {
-                            edit: Components.ConteudoEditor
+                            edit: Components.ConteudoEditor,
+                            list: Components.NoticiaPreview,
                         },
                         isVisible: { list: true, edit: true, filter: false, show: true },
-                        isValid: (value) => {
-                            if (!value) return true;
-                            return Array.isArray(value) &&
-                                value.every(item => item.type && item.content && item.html);
-                        }
+                        // isValid: (value) => {
+                        //     if (!value) return true;
+                        //     return Array.isArray(value) &&
+                        //         value.every(item => item.type && item.content && item.html);
+                        // }
                     },
                     areaDeAtuacao: {
                         reference: 'areas',
@@ -57,11 +113,38 @@ export const adminJs = new AdminJS({
                         }
 
                     },
+                    conteudo: {
+                        isVisible: false
+                    },
                     area_ids: {
                         isVisible: false
                     },
+
+                    uploadCapa: {
+                        type: 'mixed',
+                        label: 'Imagem de Capa',
+                        isVisible: { list: false, show: true, filter: false, edit: true },
+                        components: {
+                            edit: Components.UploadMultiple,
+                        },
+                    },
+
+                    imagem_capa: {
+                        isVisible: { list: true, edit: false, show: true },
+                        components: {
+                            list: Components.ImageListPreview,
+                        },
+                    },
+                    titulo: {
+                        isVisible: false
+                    },
+                    tipo: {
+                        isVisible: false
+                    }
+
                 },
-                editProperties: ['conteudo', 'areaDeAtuacao', 'tempo_leitura', 'imagem_capa', 'autor'],
+                editProperties: ['html_original', 'uploadCapa', 'areaDeAtuacao', 'autor'],
+                showProperties: ['areaDeAtuacao', 'tempo_leitura', 'uploadCapa', 'autor', 'html_original']
 
             }
         },
@@ -287,14 +370,6 @@ export const adminJs = new AdminJS({
                         isVisible: { edit: true, list: false, show: false, filter: false },
                         isArray: false, // 👈 isso força o AdminJS a usar `uploadImagem` ao invés de `uploadImagem.0`
                     },
-                    // areaDeAtuacao: {
-                    //     reference: 'areas',
-                    //     isVisible: { list: true, edit: true, filter: true, show: true },
-                    //     label: 'Área de Atuação',
-                    // },
-                    // area_id: {
-                    //     isVisible: false, // Esconde o area_id bruto
-                    // },
 
                 },
                 editProperties: [
@@ -481,6 +556,7 @@ export const adminJs = new AdminJS({
             }
         },
         { resource: models.Email, options: { navigation: 'Configurações' } },
+        { resource: models.Inidicador, options: { navigation: 'Informativos' } },
 
 
 
@@ -568,6 +644,6 @@ export const adminJs = new AdminJS({
     componentLoader,
 });
 
-adminJs.watch()
+adminJs.watch();
 
 export const adminRouter = AdminJSExpress.buildRouter(adminJs)
