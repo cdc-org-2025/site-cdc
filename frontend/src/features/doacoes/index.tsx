@@ -5,6 +5,7 @@ import AnimationSplitText from '@/components/animations/splitText'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import React from 'react'
+import { storageUrl } from '@/constants/storageDomain'
 
 export default function Doacoes() {
   const { data } = useDadosBancariosQuery()
@@ -59,7 +60,7 @@ export default function Doacoes() {
                 width={96}
                 height={96}
                 sx={{
-                  backgroundImage: `url(${item.url_imagem})`,
+                  backgroundImage: `url(${storageUrl}/${item.url_imagem})`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                   backgroundRepeat: 'no-repeat'
