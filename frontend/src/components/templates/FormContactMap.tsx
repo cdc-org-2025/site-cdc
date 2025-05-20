@@ -10,10 +10,11 @@ import ButtonAction from '../atoms/ButtonAction'
 import SelectComponent from '../atoms/Select'
 import AnimationSplitText from '../animations/splitText'
 import AnimetedSlide from '../animations/slide'
+import { useContatoMutation } from '@/clients/api/contato'
 
 const schema = yup
   .object({
-    name: yup
+    nome: yup
       .string()
       .required('O nome é obrigatório')
       .min(3, 'São necessários 3 caracteres.'),
@@ -21,8 +22,8 @@ const schema = yup
       .string()
       .email('É necessaria formatar para E-mail.')
       .required('O e-mail é obrigatório.'),
-    subject: yup.string().required('O motivo é obrigatório.'),
-    message: yup
+    motivo: yup.string().required('O motivo é obrigatório.'),
+    mensagem: yup
       .string()
       .required('A mensagem é obrigatório')
       .min(10, 'O mensagem deve ter pelo menos 10 caracteres.'),
@@ -33,32 +34,39 @@ export default function FormContactMap() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: yupResolver(schema),
   })
+  const { mutate } = useContatoMutation();
+
   const [messageResponseForm, setmessageResponseForm] = useState<{
     sucesso?: boolean
     mensagem?: string
   }>({ sucesso: undefined, mensagem: '' })
-  const onSubmit = (data: any) => {
-    console.log('Dados do formulário:', data)
-
-    setmessageResponseForm({
-      sucesso: false,
-      mensagem:
-        'Algum erro aconteceu no envio do formulário. Entre em contato com a organização',
-    })
-
-    setmessageResponseForm({
-      sucesso: true,
-      mensagem: 'Formulário enviado com sucesso!',
-    })
+  const onSubmit = async (data: any) => {
+    mutate(data, {
+      onSuccess: () => {
+        setmessageResponseForm({
+          sucesso: true,
+          mensagem: 'Formulário enviado com sucesso!',
+        })
+        reset()
+      },
+      onError: () => {
+        setmessageResponseForm({
+          sucesso: false,
+          mensagem:
+            'Algum erro aconteceu no envio do formulário. Entre em contato com a organização',
+        })
+      },
+    });
   }
 
   return (
     <Box
-      mb={{ xs: '120px', md: '80px' }}
+      mb={{ xs: '40px', md: '80px' }}
       px={{ xs: '16px', md: '32px' }}
       width="100%"
     >
@@ -69,13 +77,25 @@ export default function FormContactMap() {
           color="primary"
           textTransform="none"
           pb="24px"
-          fontSize={{ xs: '28px', md: '1.94rem' }}
+          fontSize={{ xs: '27px', md: '1.94rem' }}
         >
           Entre em contato conosco
         </Typography>
       </AnimationSplitText>
 
+      <AnimationSplitText>
+        <Typography
+          width="100%"
+          variant="overline"
+          color="#222"
+          textTransform="none"
+          lineHeight={"150%"}
+        >
+          O Centro de Democracia e Cidadania está disponível para contato, tanto por e-mail, WhatsApp, como presencialmente.</Typography>
+      </AnimationSplitText>
+
       <Box
+        mt="32px"
         display="flex"
         flexDirection={{ xs: 'column', md: 'row' }}
         width="100%"
@@ -96,9 +116,9 @@ export default function FormContactMap() {
               <TextfieldComponent
                 label="Nome"
                 placeholder={'Digite seu nome'}
-                register={register('name')}
-                error={!!errors.name}
-                helperText={errors.name?.message}
+                register={register('nome')}
+                error={!!errors.nome}
+                helperText={errors.nome?.message}
               />
               <TextfieldComponent
                 label="E-mail"
@@ -111,9 +131,9 @@ export default function FormContactMap() {
             <Box width="100%" pb="8px">
               <SelectComponent
                 label={'Razão do contato'}
-                register={register('subject')}
-                error={!!errors.subject}
-                helperText={errors.subject?.message}
+                register={register('motivo')}
+                error={!!errors.motivo}
+                helperText={errors.motivo?.message}
                 options={[
                   { label: 'teste1', value: 1 },
                   { label: 'teste2', value: 3 },
@@ -123,9 +143,9 @@ export default function FormContactMap() {
             <TextfieldComponent
               label="Motivo do contato"
               placeholder={'Digite aqui sua mensagem'}
-              register={register('message')}
-              error={!!errors.message}
-              helperText={errors.message?.message}
+              register={register('mensagem')}
+              error={!!errors.mensagem}
+              helperText={errors.mensagem?.message}
               rows={4}
             />
             <Box width="185px" mb="24px">

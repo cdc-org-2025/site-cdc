@@ -59,7 +59,7 @@ export default function Transparency() {
                     description: item.titulo,
                     image: item.url_imagem
                   }}
-                  personal
+                  leadership
                 />
               </Box>
             </AnimetedSlide>

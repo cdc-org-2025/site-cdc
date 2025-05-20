@@ -15,7 +15,6 @@ export default function Leadership() {
   const { data: dataAreas } = useAreasQuery()
   const { data: dataLiderancas } = useLiderancasListQuery()
   const [listColaboradores, setListColaboradores] = useState<ILideranca[] | undefined>([])
-
   const [areaSelect, setAreaSelect] = useState<IArea[]>([])
 
   useEffect(() => {
@@ -83,7 +82,7 @@ export default function Leadership() {
                   occupation: item.cargo,
                   email: item.email,
                 }}
-                personal
+                leadership
               />
             </AnimetedSlide>
           </Grid>

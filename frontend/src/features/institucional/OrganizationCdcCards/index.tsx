@@ -70,18 +70,18 @@ export default function OrganizationCdcCards() {
         pt="90px"
         pb="32px"
       >
-        {/* <AnimationSplitText> */}
-        <Typography
-          variant="h3"
-          color="primary"
-          textAlign="center"
-          width="100%"
-          id='organizationCdc'
-          fontSize={{ xs: '28px', md: '1.94rem' }}
-        >
-          Organização do CDC
-        </Typography>
-        {/* </AnimationSplitText> */}
+        <AnimationSplitText>
+          <Typography
+            variant="h3"
+            color="primary"
+            textAlign="center"
+            width="100%"
+            id='organizationCdc'
+            fontSize={{ xs: '35px', md: '1.94rem' }}
+          >
+            Organização do CDC
+          </Typography>
+        </AnimationSplitText>
         <AnimationSplitText>
           <Typography
             variant="overline"
