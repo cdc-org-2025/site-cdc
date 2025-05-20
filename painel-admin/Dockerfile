@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Expõe porta 3000
-EXPOSE 8080
+EXPOSE 3000
 
 # Comando para iniciar
 CMD [ "node", "--max-old-space-size=3072", "index.js" ]
