@@ -26,7 +26,7 @@ const router = Router();
 
 router.use("/noticias", noticiasRoutes);
 router.use("/categorias", categoriasRoutes);
-router.use("/contato", contatoRoutes);
+// router.use("/contato", contatoRoutes);
 router.use("/liderancas", liderancaRoutes);
 router.use("/programas", programasRoutes);
 router.use("/oportunidades", oportunidadesRoutes);
