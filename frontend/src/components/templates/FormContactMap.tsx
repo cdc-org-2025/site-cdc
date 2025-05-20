@@ -10,7 +10,7 @@ import ButtonAction from '../atoms/ButtonAction'
 import SelectComponent from '../atoms/Select'
 import AnimationSplitText from '../animations/splitText'
 import AnimetedSlide from '../animations/slide'
-import { useContatoMutation } from '@/clients/api/contato'
+import { IPostContato, useContatoMutation } from '@/clients/api/contato'
 
 const schema = yup
   .object({
@@ -45,7 +45,7 @@ export default function FormContactMap() {
     sucesso?: boolean
     mensagem?: string
   }>({ sucesso: undefined, mensagem: '' })
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: IPostContato) => {
     mutate(data, {
       onSuccess: () => {
         setmessageResponseForm({

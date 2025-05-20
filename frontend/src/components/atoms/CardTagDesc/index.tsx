@@ -168,7 +168,7 @@ function CardTagDesc({
           sx={{
             width: '100%',
             height: '100%',
-            backgroundImage: `url(${storageUrl}/${info?.imagem_capa ?? imageNotFound})`,
+            backgroundImage: `url(${storageUrl}/${info?.imagem_capa ?? info?.url_imagem})`,
             backgroundColor: 'gray',
             backgroundSize: '100%',
             backgroundPosition: 'center',

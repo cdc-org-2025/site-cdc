@@ -41,7 +41,7 @@ export default function LatestNews() {
       <Grid container spacing={{ xs: '35px', md: 4 }}>
         {dataset?.map((news) => (
           <Grid item key={news.id} xs={12} sm={4} md={4}>
-            <CardTagDesc info={news} />
+            <CardTagDesc info={news} onclick={() => push(`/noticias/${news.id}`)} />
           </Grid>
         ))}
       </Grid>
