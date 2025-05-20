@@ -7,12 +7,12 @@ export class LinhaDoTempo extends Model {
       titulo: DataTypes.STRING,
       ano: DataTypes.INTEGER,
       conteudo: DataTypes.TEXT,
-      url_imagem: {
-        type: DataTypes.VIRTUAL,
-        get() {
-          return this.getDataValue('url_imagem')
-        },
-      },
+      // url_imagem: {
+      //   type: DataTypes.VIRTUAL,
+      //   get() {
+      //     return this.getDataValue('url_imagem')
+      //   },
+      // },
       
     }, { sequelize, tableName: 'linha_do_tempo', timestamps: false })
   }
