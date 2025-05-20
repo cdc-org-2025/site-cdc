@@ -7,7 +7,7 @@ import React, {
   ReactElement,
   cloneElement,
 } from 'react'
-import { TypographyProps, useTheme } from '@mui/material'
+import { TypographyProps } from '@mui/material'
 
 interface SplitTextProps {
   children: ReactElement<TypographyProps>
@@ -18,11 +18,10 @@ interface SplitTextProps {
 
 const AnimationSplitText: React.FC<SplitTextProps> = ({
   children,
-  delay = 2.50,
+  delay = 80,
   threshold = 0.2,
   rootMargin = '-50px',
 }) => {
-  const theme: any = useTheme()
   const ref = useRef<HTMLSpanElement>(null)
   const [inView, setInView] = useState(false)
 
@@ -49,56 +48,45 @@ const AnimationSplitText: React.FC<SplitTextProps> = ({
   }
 
   const content = extractText(children)
-  const letters = content.split('')
-  const variant = children.props.variant || 'body1'
-  const fontSize = theme.typography[variant]?.fontSize || 'inherit'
-  const fontWeight = theme.typography[variant]?.fontWeight || 'inherit'
+  const words = content.split(' ')
 
   return cloneElement(children, {
     ref,
-    component: 'span',
-    sx: {
-      display: 'inline-block',
-      whiteSpace: 'pre-wrap',
-      fontSize,
-      fontWeight,
-      ...children.props.sx,
-    },
     children: (
       <>
         <style>
           {`
-          @keyframes fadeUp {
-            0% {
+            @keyframes fadeUp {
+              0% {
+                opacity: 0;
+                transform: translateY(20px);
+              }
+              100% {
+                opacity: 1;
+                transform: translateY(0);
+              }
+            }
+
+            .word {
+              display: inline-block;
               opacity: 0;
               transform: translateY(20px);
+              animation: fadeUp 0.4s ease forwards;
+              white-space: nowrap;
             }
-            100% {
-              opacity: 1;
-              transform: translateY(0);
-            }
-          }
-
-          .letter {
-            display: inline-block;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeUp 0.25s ease forwards;
-          }
-        `}
+          `}
         </style>
-        {letters.map((char, index) => (
+        {words.map((word, index) => (
           <span
             key={index}
-            className="letter"
+            className="word"
             style={{
               animationDelay: inView ? `${index * delay}ms` : '0ms',
-              fontSize,
-              fontWeight,
+              marginRight: '0.25em',
               color: 'inherit',
             }}
           >
-            {char}
+            {word}
           </span>
         ))}
       </>

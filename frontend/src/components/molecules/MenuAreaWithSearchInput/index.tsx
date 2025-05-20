@@ -10,11 +10,12 @@ import CloseIcon from '@mui/icons-material/Close'
 import ButtonTag from '@/components/atoms/ButtonTag'
 import ButtonAction from '@/components/atoms/ButtonAction'
 import TextfieldSearch from '@/components/atoms/Textfield/TextfieldSearch'
+import { IArea } from '@/clients/api/areas'
 
 interface IMenuAreas {
   areaSelect: string[]
   setAreaSelect: (_: any) => void
-  listAreasAvailable: string[][]
+  listAreasAvailable: IArea[]
   title?: string
   valueInput: string
   setValueInput: (_: string) => void
@@ -117,12 +118,13 @@ export default function MenuAreasWithSearchInput({
         onClose={handleCloseMenu}
         MenuListProps={{ 'aria-labelledby': 'basic-button' }}
       >
-        <Box p="24px">
+        <Box p="24px" >
           <Box
             display="flex"
             justifyContent="space-between"
             alignItems="center"
             mb="16px"
+            width={"100%"}
           >
             <Typography variant="subtitle1">Áreas</Typography>
             <IconButton size="small" onClick={handleCloseMenu}>
@@ -131,32 +133,28 @@ export default function MenuAreasWithSearchInput({
               />
             </IconButton>
           </Box>
-          <Box display="flex" flexDirection="column" gap="12px">
-            {listAreasAvailable?.map((linha, index) => (
+          <Box width={"100%"} maxWidth={800} display="flex" flexWrap={'wrap'} gap="12px">
+            {listAreasAvailable?.map((item, index) => (
               <Box
                 key={index}
-                display="grid"
-                gridTemplateColumns={`repeat(${linha.length}, auto)`}
                 gap="12px"
               >
-                {linha?.map((area) => (
-                  <ButtonTag
-                    key={area}
-                    backgroundColor={
-                      areaSelect.includes(area) ? light : '#fff5e6'
-                    }
-                    startIcon={
-                      areaSelect.includes(area) && (
-                        <CloseIcon
-                          sx={{ width: '20px', height: '20px', color: '#222' }}
-                        />
-                      )
-                    }
-                    onClick={() => handleAreasSelect(area)}
-                  >
-                    {area}
-                  </ButtonTag>
-                ))}
+                <ButtonTag
+                  key={item.id}
+                  backgroundColor={
+                    areaSelect.includes(item.nome) ? light : '#fff5e6'
+                  }
+                  startIcon={
+                    areaSelect.includes(item.nome) && (
+                      <CloseIcon
+                        sx={{ width: '20px', height: '20px', color: '#222' }}
+                      />
+                    )
+                  }
+                  onClick={() => handleAreasSelect(item.nome)}
+                >
+                  {item.nome}
+                </ButtonTag>
               </Box>
             ))}
           </Box>

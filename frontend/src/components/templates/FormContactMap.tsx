@@ -69,10 +69,12 @@ export default function FormContactMap() {
           color="primary"
           textTransform="none"
           pb="24px"
+          fontSize={{ xs: '28px', md: '1.94rem' }}
         >
           Entre em contato conosco
         </Typography>
       </AnimationSplitText>
+
       <Box
         display="flex"
         flexDirection={{ xs: 'column', md: 'row' }}

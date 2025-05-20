@@ -37,7 +37,7 @@ export default function Transparency() {
       </Box>
 
       <Grid container spacing={4} pb="64px">
-        {listTransparencia?.map((item: ITransparencia) => (
+        {listTransparencia?.data?.map((item: ITransparencia) => (
           <Grid item key={item.id} xs={12} sm={6} md={4} lg={3}>
             <AnimetedSlide>
               <Box
@@ -55,7 +55,7 @@ export default function Transparency() {
                 <CardTagDesc
                   info={{
                     id: item.id,
-                    tag: item.area,
+                    areas: item.areas,
                     description: item.titulo,
                     image: item.url_imagem
                   }}

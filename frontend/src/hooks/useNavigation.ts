@@ -7,7 +7,7 @@ export function useNavigation() {
 
   const handleNavigate = (link?: string) => {
     if (link) {
-      push(link, { scroll: false })
+      push(link)
     }
   }
 

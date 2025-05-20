@@ -19,22 +19,22 @@ export default function Leadership() {
   const [areaSelect, setAreaSelect] = useState<IArea[]>([])
 
   useEffect(() => {
-    if (dataLiderancas) {
-      setListColaboradores(dataLiderancas)
+    if (dataLiderancas?.data) {
+      setListColaboradores(dataLiderancas?.data)
     }
-  }, [dataLiderancas])
+  }, [dataLiderancas?.data])
 
   const handleAreaSelect = useCallback((newAreaList: IArea[]) => {
     setAreaSelect(newAreaList)
 
     if (!newAreaList.length) {
-      setListColaboradores(dataLiderancas)
+      setListColaboradores(dataLiderancas?.data)
       return
     }
 
     const selectedIds = newAreaList.map(area => Number(area.id))
 
-    const filtered = dataLiderancas?.filter(lideranca =>
+    const filtered = dataLiderancas?.data?.filter(lideranca =>
       lideranca.areas?.some(area => selectedIds.includes(Number(area.id)))
     )
 

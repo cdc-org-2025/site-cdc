@@ -2,7 +2,6 @@
   box-sizing: border-box;
   padding: 0;
   margin: 0;
-  font-size: 18px;
 
   body {
     background-color: #f3f2ed;
@@ -25,4 +24,8 @@
     background-color: #525252;
     border-radius: 20px;
   }
+}
+
+html {
+  font-size: 18px;
 }
