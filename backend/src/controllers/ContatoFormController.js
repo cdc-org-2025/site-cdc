@@ -4,15 +4,14 @@ import nodemailer from 'nodemailer';
 import fs from 'fs';
 import path from 'path';
 
-class CandidaturaVagaFormController {
+class ContatoFormController {
     static async index(req, res) {
         try {
-            const { nome, email, mensagem } = req.body;
-            const anexo = req.file || null;
+            const { nome, email, motivo, mensagem } = req.body;
 
 
             const destinatarios = await db.Email.findAll({
-                where: { tipo: 'curriculo' }
+                where: { tipo: 'contato' }
             });
 
 
@@ -31,30 +30,21 @@ class CandidaturaVagaFormController {
             });
 
             const mailOptions = {
-                from: "comunicacao@cdc.org.br",
-                to: destinatarios.map(d => d.email), // envia para todos do banco
-                subject: 'Nova Candidatura Recebida',
+                from: process.env.EMAIL_FROM,
+                to: destinatarios.map(d => d.email),
+                subject: `Novo Contato - Motivo: ${motivo}`,
                 html: `
-                <h3>Nova Candidatura Recebida</h3>
-                <p><strong>Nome:</strong> ${nome}</p>
-                <p><strong>Email:</strong> ${email}</p>
-                <p><strong>Mensagem:</strong></p>
-                <p>${mensagem}</p>
-                `,
-                attachments: anexo ? [{
-                    filename: anexo.originalname,
-                    path: path.resolve(anexo.path)
-                }] : []
+                    <h3>Novo Contato Recebido</h3>
+                    <p><strong>Nome:</strong> ${nome}</p>
+                    <p><strong>Email:</strong> ${email}</p>
+                    <p><strong>Motivo do Contato:</strong> ${motivo}</p>
+                    <p><strong>Mensagem:</strong></p>
+                    <p>${mensagem}</p>
+                `
             };
 
             await transporter.sendMail(mailOptions);
-
-            // Remove arquivo após envio
-            if (anexo) {
-                fs.unlinkSync(path.resolve(anexo.path));
-            }
-
-            return res.json({ message: 'Formulário enviado com sucesso!' });
+            return res.json({ message: 'Mensagem enviada com sucesso!' });
 
         } catch (error) {
             console.error(error);
@@ -63,4 +53,4 @@ class CandidaturaVagaFormController {
     }
 }
 
-export default CandidaturaVagaFormController;
+export default ContatoFormController;

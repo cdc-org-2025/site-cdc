@@ -20,6 +20,7 @@ import perguntasFrenquenteRoutes from "./perguntas_frenquente.js";
 import cardsInformativosRoutes from "./card_informativo.js";
 import candidaturaVagaForm from './candidaturaVagaForm.js'
 import indicadoresRoutes from "./indicadores.js";
+import contatoForm from './contatoForm.js'
 
 const router = Router();
 
@@ -40,6 +41,7 @@ router.use("/perguntas-frenquente", perguntasFrenquenteRoutes);
 router.use("/cards-informativos", cardsInformativosRoutes);
 router.use('/candidatura',  candidaturaVagaForm);
 router.use('/indicadores', indicadoresRoutes)
+router.use('/contato', contatoForm)
 
 
 export default router;
