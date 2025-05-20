@@ -1,9 +1,9 @@
 import apiData from '@/clients/axiosClient/apiData';
-import { IPublicacao } from './publicacoes';
+import { IPublicacao, IPublicacaoResponse } from './publicacoes';
 
 const api = apiData()
 
-export const getListPublicacoes = async (): Promise<IPublicacao[]> => {
+export const getListPublicacoes = async (): Promise<IPublicacaoResponse> => {
   const { data } = await api.get('/publicacoes');
   return data;
 };

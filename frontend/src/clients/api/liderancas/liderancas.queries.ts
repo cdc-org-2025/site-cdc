@@ -1,5 +1,5 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { ILideranca } from './liderancas.types';
+import { ILideranca, ILiderancaResponse } from './liderancas.types';
 import { getLideranca, getListLiderancas, getListLiderancasArea } from './liderancas.api';
 
 export const useLiderancasAreaQuery = (area_id: number, options?: UseQueryOptions<ILideranca[], Error>) => {
@@ -10,8 +10,8 @@ export const useLiderancasAreaQuery = (area_id: number, options?: UseQueryOption
   });
 };
 
-export const useLiderancasListQuery = (options?: UseQueryOptions<ILideranca[], Error>) => {
-  return useQuery<ILideranca[], Error>({
+export const useLiderancasListQuery = (options?: UseQueryOptions<ILiderancaResponse, Error>) => {
+  return useQuery<ILiderancaResponse, Error>({
     queryKey: ['colaboradores'],
     queryFn: () => getListLiderancas(),
     ...options,

@@ -10,10 +10,11 @@ import AnimetedSlide from '@/components/animations/slide'
 import TextfieldComponent from '@/components/atoms/Textfield'
 import ButtonAction from '@/components/atoms/ButtonAction'
 import ButtonUpload from '@/components/atoms/ButtonUpload'
+import { useCandidaturaMutation } from '@/clients/api/candidaturas'
 
 const schema = yup
   .object({
-    name: yup
+    nome: yup
       .string()
       .required('O nome é obrigatório')
       .min(3, 'São necessários 3 caracteres.'),
@@ -21,11 +22,11 @@ const schema = yup
       .string()
       .email('É necessaria formatar para E-mail.')
       .required('O e-mail é obrigatório.'),
-    description: yup
+    mensagem: yup
       .string()
       .required('A mensagem é obrigatório')
       .min(10, 'O mensagem deve ter pelo menos 10 caracteres.'),
-    file: yup.mixed().required('O arquivo é obrigatório.'),
+    anexo: yup.mixed().required('O arquivo é obrigatório.'),
   })
   .required()
 
@@ -45,24 +46,27 @@ export default function FormEnrollment() {
     mensagem?: string
   }>({ sucesso: undefined, mensagem: '' })
   const [fileName, setFileName] = useState('')
+  const { mutate } = useCandidaturaMutation();
 
   const onSubmit = (data: any) => {
-    console.log('Dados do formulário:', data)
 
-    //SUCESSO
-    setmessageResponseForm({
-      sucesso: true,
-      mensagem: 'Formulário enviado com sucesso!',
-    })
-    reset()
-    setFileName('')
-
-    //ERRO
-    setmessageResponseForm({
-      sucesso: false,
-      mensagem:
-        'Algum erro aconteceu no envio do formulário. Entre em contato com a organização',
-    })
+    mutate(data, {
+      onSuccess: () => {
+        setmessageResponseForm({
+          sucesso: true,
+          mensagem: 'Formulário enviado com sucesso!',
+        })
+        reset()
+        setFileName('')
+      },
+      onError: () => {
+        setmessageResponseForm({
+          sucesso: false,
+          mensagem:
+            'Algum erro aconteceu no envio do formulário. Entre em contato com a organização',
+        })
+      },
+    });
   }
 
   return (
@@ -93,9 +97,9 @@ export default function FormEnrollment() {
               <TextfieldComponent
                 label="Nome"
                 placeholder={'Digite seu nome'}
-                register={register('name')}
-                error={!!errors.name}
-                helperText={errors.name?.message}
+                register={register('nome')}
+                error={!!errors.nome}
+                helperText={errors.nome?.message}
               />
               <TextfieldComponent
                 label="E-mail"
@@ -108,9 +112,9 @@ export default function FormEnrollment() {
             <TextfieldComponent
               label="Escreva seu e-mail"
               placeholder={'Descrição'}
-              register={register('description')}
-              error={!!errors.description}
-              helperText={errors.description?.message}
+              register={register('mensagem')}
+              error={!!errors.mensagem}
+              helperText={errors.mensagem?.message}
               rows={4}
             />
             <Box maxWidth="280px" pt="10px">
@@ -120,13 +124,13 @@ export default function FormEnrollment() {
                 onFileSelect={(file) => {
                   if (file) {
                     setFileName(file.name)
-                    setValue('file', file)
-                    clearErrors('file')
+                    setValue('anexo', file)
+                    clearErrors('anexo')
                   }
                 }}
                 fileName={fileName}
-                error={!!errors.file}
-                helperText={errors.file?.message}
+                error={!!errors.anexo}
+                helperText={errors.anexo?.message}
               />
             </Box>
 

@@ -6,20 +6,29 @@ import ListCards from '@/components/molecules/ListCards'
 import { useScrollToTop } from '@/hooks/useScroll'
 import { INoticias, useNoticiasListQuery } from '@/clients/api/noticias'
 
-const areasDisponiveis = [
-  ['PPCAM', 'Diretoria Institucional', 'Conselho Fiscal', 'PROVITA', 'MAIS VIDA', 'PPVIDA', 'PPDPI', 'ATM', 'Programa ATITUDE'],
-]
-
 export default function Noticias() {
   useScrollToTop()
   const [fieldSearch, setFieldSearch] = useState('')
   const [areaSelect, setAreaSelect] = useState<string[]>([])
   const { data } = useNoticiasListQuery()
   const [listNoticias, setListNoticias] = useState<INoticias[]>([])
+  const [areasFiltro, setAreasFiltro] = useState<{ id: number, nome: string }[]>([])
+
+  useEffect(() => {
+    if (data?.data && areaSelect.length > 0) {
+      const filtradas = data.data.filter((noticia: INoticias) =>
+        noticia.areas?.some(area => areaSelect.includes(area.nome))
+      )
+      setListNoticias(filtradas)
+    } else if (data?.data) {
+      setListNoticias(data.data)
+    }
+  }, [areaSelect, data])
 
   useEffect(() => {
     if (data) {
-      setListNoticias(data)
+      setListNoticias(data?.data)
+      setAreasFiltro(data?.areas_filtro)
     }
   }, [data])
 
@@ -33,7 +42,7 @@ export default function Noticias() {
     >
       <Box display={{ xs: 'flex', sm: 'none' }}>
         <Typography variant="h3" color="primary">
-          Publicações
+          Notícias
         </Typography>
       </Box>
       <Box display="flex" gap="24px" alignItems={'center'}>
@@ -42,7 +51,7 @@ export default function Noticias() {
           setValueInput={setFieldSearch}
           areaSelect={areaSelect}
           setAreaSelect={setAreaSelect}
-          listAreasAvailable={areasDisponiveis}
+          listAreasAvailable={areasFiltro}
         />
       </Box>
       <ListCards page="/noticias" list={listNoticias} />

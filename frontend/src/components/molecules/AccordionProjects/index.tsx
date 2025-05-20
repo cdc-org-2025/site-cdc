@@ -8,27 +8,28 @@ import { useMediaQuery, useTheme } from '@mui/material'
 export default function AccordionProjects() {
   const { data } = useProgramasListQuery()
   const [expandedAccordion, setExpandedAccordion] = useState<IPrograma | undefined>()
+  const dataset = data?.data
 
   const theme = useTheme()
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'))
 
   useEffect(() => {
-    if (data && data.length > 0) {
-      setExpandedAccordion(data[0])
+    if (dataset && dataset.length > 0) {
+      setExpandedAccordion(dataset[0])
     }
-  }, [data])
+  }, [data, dataset])
 
   return (
     <>
       {isDesktop ? (
         <AccordionProjectsDesktop
-          projectList={data}
+          projectList={dataset}
           expandedAccordion={expandedAccordion}
           setExpandedAccordion={setExpandedAccordion}
         />
       ) : (
         <AccordionProjectsMobile
-          projectList={data}
+          projectList={dataset}
           expandedAccordion={expandedAccordion}
           setExpandedAccordion={setExpandedAccordion}
         />

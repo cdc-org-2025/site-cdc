@@ -1,9 +1,9 @@
 import apiData from '@/clients/axiosClient/apiData';
-import { ITransparencia } from './transparencia';
+import { ITransparencia, ITransparenciaResponse } from './transparencia';
 
 const api = apiData()
 
-export const getListTransparencia = async (): Promise<ITransparencia[]> => {
+export const getListTransparencia = async (): Promise<ITransparenciaResponse> => {
   const { data } = await api.get('/transparencia');
   return data;
 };

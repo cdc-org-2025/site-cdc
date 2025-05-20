@@ -10,3 +10,8 @@ export interface IPrograma {
 export interface IProgramList {
   programas: IPrograma[]
 }
+
+export interface IProgramResponse {
+  data: IPrograma[]
+  areas_filtro: { id: number, nome: string }
+}

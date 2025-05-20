@@ -1,3 +1,5 @@
+import { IArea } from "../areas"
+
 export interface INoticias {
   id: number
   titulo?: string
@@ -8,21 +10,18 @@ export interface INoticias {
   data_publicacao: string
   conteudo: string
   html_original: string
-  areas: IAreas[]
+  areas: IArea[]
   imagens: []
   categorias: []
 }
-
-interface IAreas {
-  id: number
-  nome: string
+export interface INoticiasResponse {
+  data: INoticias[]
+  areas_filtro: IArea[]
 }
-
 export interface INoticiaArea {
   url_imagem: string,
   area: string,
   titulo: string
-
 }
 
 export interface INoticiasShowNews {

@@ -1,5 +1,5 @@
 import apiData from '@/clients/axiosClient/apiData';
-import { ILideranca } from './liderancas.types';
+import { ILideranca, ILiderancaResponse } from './liderancas.types';
 
 const api = apiData()
 
@@ -8,7 +8,7 @@ export const getListLiderancasArea = async (area_id: number): Promise<ILideranca
   return data;
 };
 
-export const getListLiderancas = async (): Promise<ILideranca[]> => {
+export const getListLiderancas = async (): Promise<ILiderancaResponse> => {
   const { data } = await api.get(`/liderancas`);
   return data;
 };

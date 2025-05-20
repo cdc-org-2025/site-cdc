@@ -25,7 +25,7 @@ export default function Header() {
         display="flex"
         justifyContent="space-between"
         alignItems="center"
-        p="16px 32px"
+        p={{ xs: "16px ", md: "16px 32px" }}
         height="94px"
         position="fixed"
         top={0}
@@ -76,7 +76,10 @@ export default function Header() {
           <ButtonSearch />
         </Box>
         <Box
-          gap="30px"
+          gap={{
+            xs: '10px',
+            lg: '30px',
+          }}
           display={{
             xs: 'flex',
             lg: 'none',
@@ -95,14 +98,18 @@ export default function Header() {
           >
             <Typography whiteSpace={'nowrap'} color='#A7181D' fontWeight={400} textTransform="none" >Doe agora</Typography>
           </Button>
-          <ButtonAction
-            startIcon={
-              openMenuMobile ? <CloseIcon color="inherit" /> : <MenuIcon />
-            }
-            onClick={() => setOpenMenuMobile((prev) => !prev)}
+          <Box
+            width={{ xs: '110px', md: '140px' }}
           >
-            Menu
-          </ButtonAction>
+            <ButtonAction
+              startIcon={
+                openMenuMobile ? <CloseIcon color="inherit" /> : <MenuIcon />
+              }
+              onClick={() => setOpenMenuMobile((prev) => !prev)}
+            >
+              Menu
+            </ButtonAction>
+          </Box>
           {openMenuMobile && <NavbarMobile setOpen={setOpenMenuMobile} />}
         </Box>
       </Box>

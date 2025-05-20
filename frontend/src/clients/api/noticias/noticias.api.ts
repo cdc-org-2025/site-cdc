@@ -1,10 +1,10 @@
 import apiData from '@/clients/axiosClient/apiData';
-import { INoticiaArea, INoticias, INoticiasShowNews } from './noticias';
+import { INoticiaArea, INoticias, INoticiasResponse, INoticiasShowNews } from './noticias';
 import { buildQueryParams } from '@/utils/buildQueryParams';
 
 const api = apiData()
 
-export const getListNoticias = async (): Promise<INoticias[]> => {
+export const getListNoticias = async (): Promise<INoticiasResponse> => {
   const { data } = await api.get('/noticias');
   return data;
 };
