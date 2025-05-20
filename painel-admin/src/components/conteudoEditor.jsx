@@ -42,12 +42,13 @@ function convertStylesToInline(html) {
 const ConteudoEditor = (props) => {
   const { onChange, property, record } = props;
 
-  const initialData = record.params[property.path] || {
+  console.log('record.params Noticias', record.params)
+  const initialData = record.params['html_original'] || {
     titulo: '',
     conteudo: '<p><br></p>',
   };
 
-  const [titulo, setTitulo] = useState(initialData.titulo || '');
+  const [titulo, setTitulo] = useState(record.params['titulo'] || '');
   const editorRef = useRef(null);
 
   const handleSetInstance = (instance) => {
@@ -153,6 +154,7 @@ const ConteudoEditor = (props) => {
           height="600px"
           onImageUploadBefore={onImageUploadBefore}
           onChange={handleEditorChange}
+          defaultValue={initialData}
           setOptions={{
             height: 800,
             buttonList: [

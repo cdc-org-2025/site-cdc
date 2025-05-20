@@ -38,17 +38,14 @@ export class Noticia extends Model {
       // },
       titulo: DataTypes.TEXT,
 
-      uploadCapa: {
-        type: DataTypes.VIRTUAL,
-        get() {
-          return null;
-        },
-        set(value) {
-        },
-
-
-
-      }
+      // uploadCapa: {
+      //   type: DataTypes.VIRTUAL,
+      //   get() {
+      //     return null;
+      //   },
+      //   set(value) {
+      //   },
+      // }
     }, { sequelize, tableName: 'noticias', timestamps: false });
   }
 

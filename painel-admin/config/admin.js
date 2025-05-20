@@ -101,18 +101,16 @@ export const adminJs = new AdminJS({
                     },
 
                     uploadCapa: {
-                        type: 'mixed',
-                        label: 'Imagem de Capa',
-                        isVisible: { list: false, show: true, filter: false, edit: true },
-                        components: {
-                            edit: Components.UploadMultiple,
-                        },
+                        type: 'file',
+                        isVisible: { edit: true, list: false, show: false, filter: false },
+                        isArray: false, // 👈 isso força o AdminJS a usar `uploadImagem` ao invés de `uploadImagem.0`
                     },
 
                     imagem_capa: {
-                        isVisible: { list: true, edit: false, show: true },
+                        isVisible: { list: true, show: true, edit: false },
                         components: {
                             list: Components.ImageListPreview,
+                            show: Components.ImageListPreview,
                         },
                     },
                     titulo: {
@@ -123,8 +121,9 @@ export const adminJs = new AdminJS({
                     }
 
                 },
-                editProperties: ['html_original', 'uploadCapa', 'areaDeAtuacao', 'autor'],
+                editProperties: ['html_original', 'areaDeAtuacao', 'autor', 'uploadCapa'],
                 showProperties: ['areaDeAtuacao', 'tempo_leitura', 'uploadCapa', 'autor', 'html_original']
+
 
             }
         },
