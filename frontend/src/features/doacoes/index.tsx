@@ -1,4 +1,5 @@
 'use client'
+import { useDadosBancariosQuery } from '@/clients/api/dados-bancarios'
 import AnimatedContent from '@/components/animations/slide/AnimatedContent'
 import AnimationSplitText from '@/components/animations/splitText'
 import Box from '@mui/material/Box'
@@ -6,6 +7,8 @@ import Typography from '@mui/material/Typography'
 import React from 'react'
 
 export default function Doacoes() {
+  const { data } = useDadosBancariosQuery()
+
   return (
     <Box
       width="100%"
@@ -38,28 +41,48 @@ export default function Doacoes() {
           qualquer valor e suporte a luta pela democracia e cidadania.
         </Typography>
       </AnimationSplitText>
-
-      <Box
-        p="32px"
-        display="flex"
-        flexDirection="column"
-        alignItems={'center'}
-        bgcolor="#FFF5E699"
-        gap="24px"
-        width="100%"
-        maxWidth={'800px'}
-      >
-        <AnimatedContent reverse>
-          <Typography
-            variant="h4"
-            color={'text.primary'}
-            textAlign={'center'}
-            lineHeight={'120%'}
-          >
-            Chave PIX aqui
-          </Typography>
+      {data?.map((item) => (
+        <AnimatedContent reverse key={item.id}>
+          <Box mt='40px' width={'100%'} display={'flex'} alignItems={'center'} flexDirection={'column'}>
+            <Box
+              p="32px"
+              display="flex"
+              flexDirection="column"
+              alignItems={'center'}
+              bgcolor="#FFF5E699"
+              gap="24px"
+              width="100%"
+              maxWidth={'800px'}
+              justifyContent={'center'}
+            >
+              <Box
+                width={96}
+                height={96}
+                sx={{
+                  backgroundImage: `url(${item.url_imagem})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  backgroundRepeat: 'no-repeat'
+                }}
+              />
+              <Typography
+                variant="h4"
+                color={'text.primary'}
+                textAlign={'center'}
+                lineHeight={'120%'}
+                py='16px'
+              >
+                Chave PIX aqui
+              </Typography>
+              <Box display={'flex'} flexDirection={'column'} alignItems={'center'}>
+                <Typography variant='overline' textTransform={'none'} lineHeight={'150%'}>Banco: {item.banco}</Typography>
+                <Typography variant='overline' textTransform={'none'} lineHeight={'150%'}>Agência: {item.agencia}</Typography>
+                <Typography variant='overline' textTransform={'none'} lineHeight={'150%'}>Titular da conta: {item.titular_conta}</Typography>
+              </Box>
+            </Box>
+          </Box>
         </AnimatedContent>
-      </Box>
+      ))}
     </Box>
   )
 }

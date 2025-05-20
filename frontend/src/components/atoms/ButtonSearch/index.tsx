@@ -7,6 +7,7 @@ import Image from 'next/image'
 import { useState } from 'react'
 import ButtonAction from '../ButtonAction'
 import CloseIcon from '@mui/icons-material/Close'
+import { useRouter } from 'next/navigation'
 
 export default function ButtonSearch() {
   const {
@@ -14,6 +15,7 @@ export default function ButtonSearch() {
   } = useTheme()
   const [modalSearch, setModalSearch] = useState<boolean>(false)
   const [inputText, setInputText] = useState<string>('')
+  const { push } = useRouter()
 
   const handleClose = () => {
     setModalSearch(false)
@@ -21,8 +23,8 @@ export default function ButtonSearch() {
   }
 
   const onSearch = () => {
-    console.log(inputText)
     handleClose()
+    push(`/resultados?${inputText}`)
   }
   return (
     <>

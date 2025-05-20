@@ -81,7 +81,16 @@ export default function NavbarDesktop() {
             aria-haspopup="true"
             onClick={() => handleNavigate(item.link)}
             size="small"
-            sx={{ color: text.primary, height: '34px' }}
+            sx={{
+              color: openMenuId === item.id ? primary.main : text.primary,
+              height: '34px',
+              backgroundColor: 'transparent',
+              transition: 'color 0.2s ease',
+              '&:hover': {
+                color: primary.main,
+                backgroundColor: 'transparent',
+              },
+            }}
           >
             <Typography variant="overline" textTransform="none">
               {item.label}
@@ -122,7 +131,6 @@ export default function NavbarDesktop() {
                       onClickAway={(e) => handleClose(e, item.id)}
                     >
                       <MenuList
-                        autoFocusItem={openMenuId === item.id}
                         id="menu-list"
                         aria-labelledby="menu-button"
                         onKeyDown={handleListKeyDown}
@@ -139,6 +147,10 @@ export default function NavbarDesktop() {
                             sx={{
                               borderBottom: '1px solid #00000030',
                               height: '46px',
+                              '&:hover': {
+                                backgroundColor: 'transparent',
+                                color: primary.main
+                              },
                             }}
                           >
                             <Typography

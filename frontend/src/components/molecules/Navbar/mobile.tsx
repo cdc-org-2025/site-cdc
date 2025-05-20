@@ -54,7 +54,7 @@ export default function NavbarMobile({ setOpen }: INavbarMobile) {
               onClick={() => handleNavigate(item.link)}
             >
               <Typography
-
+                textTransform={'capitalize'}
                 variant="overline"
                 fontWeight={700}
               >
@@ -62,7 +62,7 @@ export default function NavbarMobile({ setOpen }: INavbarMobile) {
               </Typography>
             </Button>
           ) : (
-            <Typography variant="overline" fontWeight={700} pb="20px" pl="8px">
+            <Typography variant="overline" textTransform={'capitalize'} fontWeight={700} pb="20px" pl="8px">
               {item.label}
             </Typography>
           )}

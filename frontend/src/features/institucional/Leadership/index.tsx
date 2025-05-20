@@ -9,37 +9,37 @@ import MenuAreas from './MenuAreas'
 import AnimationSplitText from '@/components/animations/splitText'
 import AnimetedSlide from '@/components/animations/slide'
 import { IArea, useAreasQuery } from '@/clients/api/areas'
-import { IColaborador, useColaboradoresQuery } from '@/clients/api/colaboradores'
+import { ILideranca, useLiderancasListQuery } from '@/clients/api/liderancas'
 
 export default function Leadership() {
   const { data: dataAreas } = useAreasQuery()
-  const { data: dataColaboradores } = useColaboradoresQuery()
-  const [listColaboradores, setListColaboradores] = useState<IColaborador[] | undefined>([])
+  const { data: dataLiderancas } = useLiderancasListQuery()
+  const [listColaboradores, setListColaboradores] = useState<ILideranca[] | undefined>([])
 
   const [areaSelect, setAreaSelect] = useState<IArea[]>([])
 
   useEffect(() => {
-    if (dataColaboradores) {
-      setListColaboradores(dataColaboradores)
+    if (dataLiderancas) {
+      setListColaboradores(dataLiderancas)
     }
-  }, [dataColaboradores])
+  }, [dataLiderancas])
 
   const handleAreaSelect = useCallback((newAreaList: IArea[]) => {
     setAreaSelect(newAreaList)
 
     if (!newAreaList.length) {
-      setListColaboradores(dataColaboradores)
+      setListColaboradores(dataLiderancas)
       return
     }
 
-    const areaIds = newAreaList.map(area => Number(area.id))
+    const selectedIds = newAreaList.map(area => Number(area.id))
 
-    const colabList = dataColaboradores?.filter(colaborador =>
-      areaIds.includes(colaborador.area_id)
+    const filtered = dataLiderancas?.filter(lideranca =>
+      lideranca.areas?.some(area => selectedIds.includes(Number(area.id)))
     )
 
-    setListColaboradores(colabList)
-  }, [dataColaboradores])
+    setListColaboradores(filtered)
+  }, [dataLiderancas])
 
   return (
     <>
@@ -64,19 +64,20 @@ export default function Leadership() {
       </Box>
 
       <MenuAreas
+        liderancas={true}
         areaSelect={areaSelect}
         setAreaSelect={handleAreaSelect}
         listAreasAvailable={dataAreas}
       />
 
       <Grid container spacing={4} pb="64px">
-        {listColaboradores?.map((item: IColaborador) => (
+        {listColaboradores?.map((item: ILideranca) => (
           <Grid item key={item.id} xs={12} sm={6} md={4} lg={3}>
             <AnimetedSlide>
               <CardTagDesc
                 info={{
                   id: item.id,
-                  tag: item.area_id,
+                  areas: item.areas,
                   description: item.nome,
                   image: item.url_imagem,
                   occupation: item.cargo,

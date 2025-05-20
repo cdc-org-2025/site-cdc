@@ -38,9 +38,10 @@ export default function ButtonAction({
         borderColor: borderColor,
         backgroundColor: backgroundColor,
         borderRadius: '32px',
-        color: 'text.primary',
+        color: "#222",
         '&:hover': {
-          color: 'primary.light',
+          color: "#222",
+          backgroundColor: '#cb7a01',
         },
       }}
       onClick={onClick}

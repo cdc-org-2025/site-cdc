@@ -1,10 +1,12 @@
 'use client'
 
+import { IParceiro } from '@/clients/api/parceiros'
+import { storageUrl } from '@/constants/storageDomain'
 import Box from '@mui/material/Box'
 import React from 'react'
 
 interface ScrollInfiniteHorizontalProps {
-  items: { id: number; image: string; altImage: string }[]
+  items?: IParceiro[]
   itemWidth?: number
   maxWidth?: string | number
   itemHeight?: number
@@ -30,7 +32,7 @@ export default function ScrollInfiniteHorizontal({
     item: {
       borderRadius: '6px',
       position: 'absolute',
-      left: `max(calc(${itemWidth}px * ${items.length}), 100%)`,
+      left: `max(calc(${itemWidth}px * ${items?.length}), 100%)`,
       animationName: 'scrollLeft',
       animationDuration: '30s',
       animationTimingFunction: 'linear',
@@ -40,19 +42,19 @@ export default function ScrollInfiniteHorizontal({
 
   return (
     <Box sx={styles.wrapper}>
-      {items.map((item, index) => (
+      {items?.map((item, index) => (
         <Box
           key={item.id}
           sx={{
             ...styles.item,
             width: `${itemWidth}px`,
             height: `100%`,
-            backgroundImage: `url(${item.image})`,
+            backgroundImage: `url(${storageUrl}/${item.url_imagem})`,
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
             animationDelay: `calc(30s / ${items.length} * (${items.length} - ${index + 1}) * -1)`,
           }}
-          aria-label={item.altImage}
+          aria-label={item.id.toString()}
         />
       ))}
 

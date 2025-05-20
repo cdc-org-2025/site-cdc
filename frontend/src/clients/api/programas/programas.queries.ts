@@ -2,7 +2,7 @@ import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { getListProgramas, getPrograma } from './programas.api';
 import { IPrograma } from './programas';
 
-export const useProgramasQuery = (options?: UseQueryOptions<IPrograma[], Error>) => {
+export const useProgramasListQuery = (options?: UseQueryOptions<IPrograma[], Error>) => {
   return useQuery<IPrograma[], Error>({
     queryKey: ['programas'],
     queryFn: getListProgramas,

@@ -55,9 +55,9 @@ export default function Transparency() {
                 <CardTagDesc
                   info={{
                     id: item.id,
-                    tag: item.area_id,
+                    tag: item.area,
                     description: item.titulo,
-                    image: item.imagem_url
+                    image: item.url_imagem
                   }}
                   personal
                 />

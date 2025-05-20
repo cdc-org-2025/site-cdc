@@ -1,0 +1,1 @@
+export const storageUrl = process.env.NEXT_PUBLIC_STORAGE;
