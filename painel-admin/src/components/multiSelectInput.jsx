@@ -107,16 +107,19 @@ const AreaMultiSelect = (props) => {
     console.log('record.params:', record.params)
 
     return (
-        <div>
-            <label><b>{property.label}</b></label>
-            <Select
-                options={options}
-                value={getSelectedOptions()}
-                onChange={handleChange}
-                isMulti
-                placeholder="Selecione uma ou mais áreas"
-            />
-        </div>
+        <>
+            <label style={{fontSize:"12px", lineHeight:"16px", fontFamily:"Roboto, sans-serif"}}>Área</label>
+
+            <div style={{ marginBottom: "25px", marginTop:"8px" }}>
+                <Select
+                    options={options}
+                    value={getSelectedOptions()}
+                    onChange={handleChange}
+                    isMulti
+                    placeholder="Selecione uma ou mais áreas"
+                />
+            </div>
+        </>
     )
 }
 
