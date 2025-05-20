@@ -196,7 +196,12 @@ export const adminJs = new AdminJS({
                 },
                 properties: {
                     titulo: { isTitle: true },
-                    conteudo: { type: 'richtext' },
+                    conteudo: {
+                        components: {
+                            edit: Components.EditorLinhaTempo,
+                            list: Components.NoticiaPreview,
+                        }
+                    },
                     ano: { type: 'number' },
                     uploadImagens: {
                         type: 'mixed',
@@ -204,7 +209,8 @@ export const adminJs = new AdminJS({
                         components: {
                             edit: Components.UploadMultiple
                         },
-                        custom: { multiple: true }
+                        custom: { multiple: true },
+                        isTitle: false
                     },
                     url_imagem: {
                         isVisible: { list: true, show: false, edit: false },
@@ -468,7 +474,6 @@ export const adminJs = new AdminJS({
                     areaDeAtuacao: {
                         reference: 'areas',
                         isVisible: { list: true, edit: true, filter: true, show: true },
-                        label: 'Área de Atuação',
                         isArray: true,
                         components: {
                             list: Components.AreaListDisplay, // 👈 mostrar os nomes das áreas na lista
@@ -672,7 +677,6 @@ export const adminJs = new AdminJS({
             labels: {
                 loginWelcome: 'Bem-vindo ao Painel',
                 Colaborador: 'Colaboradores',
-                // você pode adicionar mais se quiser
             },
             messages: {
                 loginWelcome: 'Seja bem-vindo! Por favor, entre para continuar.',
@@ -688,6 +692,9 @@ export const adminJs = new AdminJS({
                 noRecordsSelected: 'Nenhum registro selecionado',
                 theseRecordsWillBeRemoved: 'Os seguintes registros serão removidos:',
                 theseRecordsWillBeUpdated: 'Os seguintes registros serão atualizados:',
+                uploadDrop: 'Solte o arquivo aqui ou clique para escolher',
+                uploadMaxSize: 'Tamanho máximo: 5MB',
+                uploadAcceptedFormats: 'Formatos aceitos: PNG, JPG, JPEG, WEBP',
             },
             buttons: {
                 save: 'Salvar',
@@ -701,6 +708,8 @@ export const adminJs = new AdminJS({
                 login: 'Entrar',
                 submit: 'Enviar',
                 addNewProperty: 'Adicionar nova propriedade',
+                Dashboard: "Inicio",
+
             },
             properties: {
                 areaDeAtuacao: 'Área de Atuação',
@@ -716,6 +725,7 @@ export const adminJs = new AdminJS({
                 delete: 'Excluir',
                 bulkDelete: 'Excluir selecionados',
                 list: 'Lista',
+                Dashboard: "Inicio",
             },
         },
     },
