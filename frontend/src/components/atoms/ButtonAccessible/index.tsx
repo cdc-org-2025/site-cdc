@@ -1,13 +1,14 @@
 import React from 'react'
-import AccessibleIcon from '@mui/icons-material/Accessible'
 import Box from '@mui/material/Box'
+import LogoAcessibilidade from "@/assets/logo-acessibilidade-dominio-publico-300x300.png"
+import Image from 'next/image'
 
 export default function ButtonAccessible() {
   return (
     <Box
       width="58px"
       height="58px"
-      bgcolor="#4054b2"
+      bgcolor="#fff"
       borderRadius={'29px'}
       display="flex"
       justifyContent="center"
@@ -17,10 +18,10 @@ export default function ButtonAccessible() {
       right={0}
       marginBottom={'90px'}
       marginRight={'34px'}
-      border={'2px solid #fff'}
+      border={'2px solid #52c1ee'}
       sx={{ cursor: 'pointer' }}
     >
-      <AccessibleIcon htmlColor="#fff" fontSize="large" />
+      <Image src={LogoAcessibilidade} width={50} height={50} alt="logo-acessib" />
     </Box>
   )
 }

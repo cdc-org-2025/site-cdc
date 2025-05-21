@@ -1,4 +1,7 @@
 export interface ICardsInfo {
   id: number;
-  nome: string;
+  titulo: string;
+  tipo: string;
+  url_imagem: string;
+  descricao: string;
 }

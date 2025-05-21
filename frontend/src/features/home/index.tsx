@@ -1,3 +1,4 @@
+"use client"
 import Image from 'next/image'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
@@ -17,20 +18,25 @@ import LatestNews from '@/components/molecules/LastestNews'
 import FormContactMap from '@/components/templates/FormContactMap'
 import AnimationSplitText from '@/components/animations/splitText'
 import AnimetedSlide from '@/components/animations/slide'
+import { useCardsInformativosListQuery } from '@/clients/api/cards-informativos'
+import { storageUrl } from '@/constants/storageDomain'
+
 
 export default function HomePage() {
+  const { data: cardOption } = useCardsInformativosListQuery()
+  const cardVisao = cardOption?.find(item => item.titulo === "Visão")
+  const cardMissao = cardOption?.find(item => item.titulo === "Missão")
+
   const cardOptions = [
     {
-      image: MissionImage,
-      title: 'Missão',
-      description:
-        'O Centro de Desenvolvimento e Cidadania tem como missão tem como missão desenvolver ações que contribuam para a transformação social na promoção da cidadania.',
+      image: cardMissao?.url_imagem ? `${storageUrl}/${cardMissao?.url_imagem}` : MissionImage,
+      title: cardMissao?.titulo,
+      description: cardMissao?.descricao
     },
     {
-      image: VisionImage,
-      title: 'Visão',
-      description:
-        'Somos uma organização que desenvolve ações para reduzir desigualdades, promovendo cidadania e transformação social. Guiados por valores como ética, eficiência, respeito à diversidade, resiliência, sustentabilidade, solidariedade e transparência, buscamos construir um futuro mais justo, inclusivo e democrático.',
+      image: cardVisao?.url_imagem ? `${storageUrl}/${cardVisao?.url_imagem}` : VisionImage,
+      title: cardVisao?.titulo,
+      description: cardVisao?.descricao
     },
   ]
 

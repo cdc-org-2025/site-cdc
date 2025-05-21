@@ -1,4 +1,5 @@
-import { useRef, useEffect, useState, ReactNode } from 'react'
+'use client'
+import { useEffect, useState, ReactNode } from 'react'
 import { useSpring, animated, SpringConfig } from '@react-spring/web'
 
 interface AnimatedContentProps {
@@ -10,7 +11,6 @@ interface AnimatedContentProps {
   initialOpacity?: number
   animateOpacity?: boolean
   scale?: number
-  threshold?: number
   delay?: number
   fullScreen?: boolean
 }
@@ -24,33 +24,18 @@ const AnimatedContent: React.FC<AnimatedContentProps> = ({
   initialOpacity = 0,
   animateOpacity = true,
   scale = 1,
-  threshold = 0.1,
   delay = 0,
   fullScreen = false,
 }) => {
   const [inView, setInView] = useState(false)
-  const ref = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
-    const element = ref.current
-    if (!element) return
+    const timer = setTimeout(() => {
+      setInView(true)
+    }, delay)
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          observer.unobserve(element)
-          setTimeout(() => {
-            setInView(true)
-          }, delay)
-        }
-      },
-      { threshold }
-    )
-
-    observer.observe(element)
-
-    return () => observer.disconnect()
-  }, [threshold, delay])
+    return () => clearTimeout(timer)
+  }, [delay])
 
   const directions: Record<'vertical' | 'horizontal', string> = {
     vertical: 'Y',
@@ -58,23 +43,17 @@ const AnimatedContent: React.FC<AnimatedContentProps> = ({
   }
 
   const springProps = useSpring({
-    from: {
-      transform: `translate${directions[direction]}(${reverse ? `-${distance}px` : `${distance}px`
-        }) scale(${scale})`,
-      opacity: animateOpacity ? initialOpacity : 1,
+    to: {
+      transform: inView
+        ? `translate${directions[direction]}(0px) scale(1)`
+        : `translate${directions[direction]}(${reverse ? `-${distance}px` : `${distance}px`}) scale(${scale})`,
+      opacity: inView ? 1 : animateOpacity ? initialOpacity : 1,
     },
-    to: inView
-      ? {
-        transform: `translate${directions[direction]}(0px) scale(1)`,
-        opacity: 1,
-      }
-      : undefined,
     config,
   })
 
   return (
     <animated.div
-      ref={ref}
       style={{
         ...springProps,
         width: fullScreen ? '100vw' : '100%',

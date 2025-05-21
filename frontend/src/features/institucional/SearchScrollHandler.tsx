@@ -13,6 +13,14 @@ export default function SearchScrollHandler() {
   const retries = useRef(0)
 
   useEffect(() => {
+    if (scrollView) {
+      setHasScrolled(false)
+      retries.current = 0
+      lastHeight.current = null
+    }
+  }, [scrollView])
+
+  useEffect(() => {
     if (!scrollView || hasScrolled) return
 
     const interval = setInterval(() => {
