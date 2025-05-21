@@ -33,15 +33,7 @@ export const MenuOptions = [
   {
     id: 2,
     label: 'Programas',
-    subMenus: [
-      {
-        id: 20,
-        label: 'Programa de Promoção dos Direitos da Pessoa Idosa (PPDPI)',
-        link: '/',
-      },
-      { id: 21, label: 'Apoio Técnico aos Municípios (ATM)', link: '/' },
-      { id: 22, label: 'Programa Atitude', link: '/' },
-    ],
+    subMenus: [],
   },
   {
     id: 3,

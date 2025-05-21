@@ -1,5 +1,5 @@
-export const stripHtmlTags = (html: string): string => {
-  const div = document.createElement("div");
-  div.innerHTML = html;
-  return div.textContent || div.innerText || "";
-};
+import DOMPurify from 'dompurify'
+
+export const sanitizeHtml = (html: string): string => {
+  return DOMPurify.sanitize(html)
+}

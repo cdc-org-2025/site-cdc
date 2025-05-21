@@ -3,4 +3,5 @@ export interface ICandidatura {
   email: string
   mensagem: string
   anexo: File
+  tituloVaga: string
 }

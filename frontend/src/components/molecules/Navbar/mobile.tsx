@@ -1,20 +1,23 @@
 import ButtonSearch from '@/components/atoms/ButtonSearch'
-import { ISubMenu, MenuOptions } from '@/constants/menuNavigation'
+import { IMenu, ISubMenu } from '@/constants/menuNavigation'
 import { useTheme } from '@mui/material'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import { useNavigation } from '@/hooks/useNavigation'
+import { useRouter } from 'next/navigation'
 
 interface INavbarMobile {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  menuOptions: IMenu[]
 }
 
-export default function NavbarMobile({ setOpen }: INavbarMobile) {
+export default function NavbarMobile({ menuOptions, setOpen }: INavbarMobile) {
   const {
     palette: { secondary },
   } = useTheme()
-  const { handleNavigate, handleSubMenuClick } = useNavigation()
+  const { handleSubMenuClick } = useNavigation()
+  const { push } = useRouter()
 
   const handleSubMenu = (subItem: ISubMenu, labelItem: string) => {
     handleSubMenuClick(subItem, labelItem)
@@ -40,7 +43,7 @@ export default function NavbarMobile({ setOpen }: INavbarMobile) {
       <Box my={'48px'}>
         <ButtonSearch />
       </Box>
-      {MenuOptions.slice(1).map((item) => (
+      {menuOptions?.slice(1).map((item) => (
         <Box
           key={item.id}
         >
@@ -51,7 +54,7 @@ export default function NavbarMobile({ setOpen }: INavbarMobile) {
                 height: '34px',
                 mb: '20px',
               }}
-              onClick={() => handleNavigate(item.link)}
+              onClick={() => item.link && push(item.link)}
             >
               <Typography
                 textTransform={'capitalize'}

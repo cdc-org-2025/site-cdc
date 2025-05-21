@@ -9,6 +9,7 @@ export const postCandidatura = async (payload: ICandidatura): Promise<any> => {
   formData.append('email', payload.email);
   formData.append('mensagem', payload.mensagem);
   formData.append('anexo', payload.anexo);
+  formData.append('titulo_vaga', payload.tituloVaga);
 
   const { data } = await api.post('/candidatura', formData);
   return data;

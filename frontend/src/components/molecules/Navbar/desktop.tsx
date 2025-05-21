@@ -13,16 +13,18 @@ import Stack from '@mui/material/Stack'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import { useTheme } from '@mui/material'
-import { ISubMenu, MenuOptions } from '@/constants/menuNavigation'
+import { IMenu, ISubMenu } from '@/constants/menuNavigation'
+import { useRouter } from 'next/navigation'
 import { useNavigation } from '@/hooks/useNavigation'
 
-export default function NavbarDesktop() {
+export default function NavbarDesktop({ menuOption }: { menuOption: IMenu[] }) {
   const [openMenuId, setOpenMenuId] = React.useState<number | null>(null)
   const anchorRefs = React.useRef<(HTMLButtonElement | null)[]>([])
   const {
     palette: { primary, text },
   } = useTheme()
-  const { handleNavigate, handleSubMenuClick } = useNavigation()
+  const { push } = useRouter()
+  const { handleSubMenuClick } = useNavigation()
 
   const handleMouseEnter = (id: number) => {
     setOpenMenuId(id)
@@ -63,7 +65,7 @@ export default function NavbarDesktop() {
         lg: 'flex',
       }}
     >
-      {MenuOptions.map((item, index) => (
+      {menuOption?.map((item, index) => (
         <div
           key={item.id}
           onMouseEnter={() =>
@@ -79,7 +81,7 @@ export default function NavbarDesktop() {
             }}
             aria-controls={openMenuId === item.id ? 'menu-list' : undefined}
             aria-haspopup="true"
-            onClick={() => handleNavigate(item.link)}
+            onClick={() => { item?.link && push(item.link) }}
             size="small"
             sx={{
               color: openMenuId === item.id ? primary.main : text.primary,

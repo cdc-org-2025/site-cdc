@@ -56,7 +56,7 @@ const schema = yup
   })
   .required()
 
-export default function FormEnrollment() {
+export default function FormEnrollment({ tituloVaga }: { tituloVaga?: string }) {
   const {
     register,
     handleSubmit,
@@ -76,10 +76,14 @@ export default function FormEnrollment() {
   const { mutateAsync } = useCandidaturaMutation();
 
   const onSubmit = async (data: any) => {
-    const id = toast.loading("O formulário está sendo enviado");
+    const id = toast.loading("O formulário está sendo enviado", {
+      toastId: "custom-loading",
+      className: "toast-info-loading"
+    })
 
+    const payload = { ...data, tituloVaga }
     try {
-      await mutateAsync(data);
+      await mutateAsync(payload);
       toast.update(id, {
         render: "Formulário enviado com sucesso",
         type: "success",

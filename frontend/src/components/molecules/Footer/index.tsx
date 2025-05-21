@@ -1,5 +1,5 @@
 'use client'
-import { ISubMenu, MenuOptions } from '@/constants/menuNavigation'
+import { ISubMenu } from '@/constants/menuNavigation'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import React from 'react'
@@ -10,10 +10,13 @@ import InstagramLogo from '../../../assets/icons-socialmedia/instagram-logo.svg'
 import LinkedinLogo from '../../../assets/icons-socialmedia/linkedin-logo.svg'
 import Image from 'next/image'
 import { useNavigation } from '@/hooks/useNavigation'
+import { useMenuOptions } from '@/hooks/useMenuOption'
+import { useRouter } from 'next/navigation'
 
 export default function Footer() {
-  const menuOptionsSlice = MenuOptions.slice(1)
-  const { handleNavigate, handleSubMenuClick } = useNavigation()
+  const { handleSubMenuClick } = useNavigation()
+  const menuWithProgramas = useMenuOptions()
+  const { push } = useRouter()
 
   return (
     <Box
@@ -30,11 +33,11 @@ export default function Footer() {
         gap="40px"
         flexDirection={{ xs: 'column', md: 'row' }}
       >
-        {menuOptionsSlice.map((menu) => (
+        {menuWithProgramas?.slice(1)?.map((menu) => (
           <Box key={menu.id} display="flex" flexDirection="column" gap="16px">
             <Typography
               variant="body2"
-              onClick={() => handleNavigate(menu.link)}
+              onClick={() => menu.link && push(menu.link)}
               sx={{ cursor: 'pointer' }}
               fontWeight={700}
               color="text.primary"

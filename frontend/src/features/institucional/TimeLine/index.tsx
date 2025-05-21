@@ -9,8 +9,8 @@ import AnimationSplitText from '@/components/animations/splitText'
 import AnimetedSlide from '@/components/animations/slide'
 import AnimatedFade from '@/components/animations/fade'
 import { ILinhaTempo, useTimeLineQuery } from '@/clients/api/linha-tempo'
-import { stripHtmlTags } from '@/utils/stripHtmlTags'
 import { storageUrl } from '@/constants/storageDomain'
+import { sanitizeHtml } from '@/utils/stripHtmlTags'
 
 export default function Timeline() {
   const {
@@ -60,7 +60,7 @@ export default function Timeline() {
             color="text.primary"
             lineHeight="150%"
           >
-            {stripHtmlTags(item.conteudo)}
+            {item.conteudo && sanitizeHtml(item?.conteudo)}
           </Typography>
         </AnimationSplitText>
 

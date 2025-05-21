@@ -73,7 +73,6 @@ export default function ButtonUpload({
           '& label': {
             color: 'text.secondary',
             background: 'inherit',
-            px: '8px',
           },
           '& label.Mui-focused': {
             color: 'secondary.light',

@@ -4,10 +4,10 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Header from '@/components/molecules/Header'
 import Footer from '@/components/molecules/Footer'
-import { useNavigation } from '@/hooks/useNavigation'
+import { useRouter } from 'next/navigation'
 
 export default function NotFound() {
-  const { handleNavigate } = useNavigation()
+  const { push } = useRouter()
 
   return (
     <Box display="flex" flexDirection="column" height="100vh">
@@ -35,7 +35,7 @@ export default function NotFound() {
         >
           Sentimos muito, mas essa página não existe.{' '}
           <Typography
-            onClick={() => handleNavigate('/')}
+            onClick={() => push('/')}
             color="primary"
             lineHeight="150%"
             component={'a'}
@@ -47,7 +47,7 @@ export default function NotFound() {
           </Typography>{' '}
           ou{' '}
           <Typography
-            onClick={() => handleNavigate('/contato')}
+            onClick={() => push('/contato')}
             color="primary"
             lineHeight="150%"
             component={'a'}

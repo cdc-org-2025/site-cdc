@@ -4,7 +4,7 @@ import HeaderBannerUnique from '@/components/templates/HeaderBannerUnique'
 import { useParams } from 'next/navigation'
 import { useNoticiaQuery } from '@/clients/api/noticias'
 import { Box } from '@mui/material'
-import { stripHtmlTags } from '@/utils/stripHtmlTags'
+import { sanitizeHtml } from '@/utils/stripHtmlTags'
 
 export default function NoticiasUniquePage() {
   const { id } = useParams()
@@ -22,7 +22,11 @@ export default function NoticiasUniquePage() {
       {data?.html_original && (
         <Box width={'100%'} display='flex' justifyContent={'center'}>
           <Box width={'100%'} maxWidth={'800px'} p='16px'>
-            {stripHtmlTags(data.html_original)}
+            <Box
+              dangerouslySetInnerHTML={{
+                __html: sanitizeHtml(data.html_original),
+              }}
+            />
           </Box>
         </Box>
       )}

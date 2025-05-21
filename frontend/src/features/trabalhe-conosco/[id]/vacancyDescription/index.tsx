@@ -1,3 +1,4 @@
+import { sanitizeHtml } from '@/utils/stripHtmlTags';
 import React from 'react'
 
 interface IVacancyDescription {
@@ -9,7 +10,9 @@ export default function VacancyDescription({ description }: IVacancyDescription)
 
   return (
     <div
-      dangerouslySetInnerHTML={{ __html: description }}
+      dangerouslySetInnerHTML={{
+        __html: sanitizeHtml(description),
+      }}
     />
   )
 }

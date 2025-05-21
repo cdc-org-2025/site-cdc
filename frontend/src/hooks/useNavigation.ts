@@ -5,22 +5,21 @@ export function useNavigation() {
   const { push } = useRouter()
   const pathname = usePathname()
 
-  const handleNavigate = (link?: string) => {
-    if (link) {
-      push(link)
-    }
-  }
-
   const handleSubMenuClick = (subItem: ISubMenu, labelItem: string) => {
     if (labelItem === 'Institucional') {
       if (subItem.scrollView) {
-        return handleNavigate(`institucional/?scrollView=${subItem.scrollView}`);
+        return push(`/institucional/?scrollView=${subItem.scrollView}`);
       } else {
-        return handleNavigate(`${subItem.link}`);
+        return push(`/${subItem.link}`);
       }
     }
-    handleNavigate(`${subItem.link}`);
+    if (labelItem === "Programas") {
+      push(`${subItem.link}`);
+    }
+    if (labelItem === "Informe-se") {
+      push(`/${subItem.link}`);
+    }
   }
 
-  return { handleNavigate, pathname, handleSubMenuClick }
+  return { pathname, handleSubMenuClick }
 }

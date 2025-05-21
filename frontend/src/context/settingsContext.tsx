@@ -9,13 +9,11 @@ import {
   JSX,
 } from 'react'
 import Cookies from 'js-cookie'
-import { useNavigation } from '@/hooks/useNavigation'
 
 interface SettingsContextType {
   windowSize: IWindowProps
   theme: PaletteMode | undefined
   toggleTheme: () => void
-  handleNavigate: (_?: string) => void
 }
 
 interface IWindowProps {
@@ -30,8 +28,6 @@ interface Props {
 export const SettingsContext = createContext({} as SettingsContextType)
 
 export function SettingsProvider({ children }: Props) {
-  const { handleNavigate } = useNavigation()
-
   const [windowSize, setWindowSize] = useState<IWindowProps>({
     width: typeof window !== 'undefined' ? window.innerWidth : 0,
     height: typeof window !== 'undefined' ? window.innerHeight : 0,
@@ -75,9 +71,8 @@ export function SettingsProvider({ children }: Props) {
       windowSize,
       theme,
       toggleTheme,
-      handleNavigate,
     }),
-    [windowSize, theme, handleNavigate, toggleTheme]
+    [windowSize, theme, toggleTheme]
   )
 
   return (

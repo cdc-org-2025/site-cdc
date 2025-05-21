@@ -1,7 +1,8 @@
 import type { Metadata } from 'next'
-import HeaderBanner from '@/components/templates/HeaderBanner'
 import Footer from '@/components/molecules/Footer'
 import InstitucionalPage from '@/features/institucional'
+import HeaderBannerUnique from '@/components/templates/HeaderBannerUnique'
+import PPDI from '../../assets/banner/ppdi.svg'
 
 export const metadata: Metadata = {
   title: 'CDC - Institucional',
@@ -14,9 +15,15 @@ export const metadata: Metadata = {
 }
 
 export default function Institucional() {
+  const Banner = {
+    id: 1,
+    title: 'Institucional',
+    image: PPDI,
+  }
+
   return (
     <>
-      <HeaderBanner />
+      <HeaderBannerUnique Banner={Banner} />
       <InstitucionalPage />
       <Footer />
     </>

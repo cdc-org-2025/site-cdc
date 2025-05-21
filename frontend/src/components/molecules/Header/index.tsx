@@ -13,10 +13,12 @@ import Typography from '@mui/material/Typography'
 import CloseIcon from '@mui/icons-material/Close'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useRouter } from 'next/navigation'
+import { useMenuOptions } from '@/hooks/useMenuOption'
 
 export default function Header() {
   const [openMenuMobile, setOpenMenuMobile] = useState<boolean>(false)
   const { push } = useRouter()
+  const menuWithProgramas = useMenuOptions()
 
   return (
     <>
@@ -46,7 +48,7 @@ export default function Header() {
             src={LogoCDC}
             alt="Logo Centro de Desenvolvimento Social"
           />
-          <NavbarDesktop />
+          <NavbarDesktop menuOption={menuWithProgramas} />
         </Box>
         <Box
           justifyContent="space-between"
@@ -110,7 +112,7 @@ export default function Header() {
               Menu
             </ButtonAction>
           </Box>
-          {openMenuMobile && <NavbarMobile setOpen={setOpenMenuMobile} />}
+          {openMenuMobile && <NavbarMobile menuOptions={menuWithProgramas} setOpen={setOpenMenuMobile} />}
         </Box>
       </Box>
     </>

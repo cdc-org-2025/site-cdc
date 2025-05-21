@@ -30,8 +30,10 @@ export default function TrabalheConoscoVagaPage() {
         alignItems="center"
       >
         <Box maxWidth="802px">
-          <VacancyDescription description={data?.descricao} />
-          <FormEnrollment />
+          <VacancyDescription
+            description={data?.descricao}
+          />
+          <FormEnrollment tituloVaga={data?.titulo} />
         </Box>
       </Box>
     </>

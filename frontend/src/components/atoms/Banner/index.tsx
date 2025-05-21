@@ -8,11 +8,11 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import ButtonAction from '../ButtonAction'
 import CircleIcon from '@mui/icons-material/Circle'
-import { useNavigation } from '@/hooks/useNavigation'
 import BackDefault from '../../../assets/accordion-projects/default.svg'
+import { useRouter } from 'next/navigation'
 
 export default function Banner() {
-  const { handleNavigate } = useNavigation()
+  const { push } = useRouter()
   const {
     palette: { secondary },
   } = useTheme()
@@ -160,7 +160,7 @@ export default function Banner() {
               </Typography>
               <Box>
                 <ButtonAction
-                  onClick={() => handleNavigate(banner.link)}
+                  onClick={() => push(banner.link)}
                   endIcon={
                     <ArrowForwardIosIcon
                       sx={{ height: '14px', width: '20px' }}
