@@ -10,6 +10,7 @@ import AddIcon from '@mui/icons-material/Add'
 import AnimetedSlide from '@/components/animations/slide'
 import { IPrograma } from '@/clients/api/programas'
 import { storageUrl } from '@/constants/storageDomain'
+import { useRouter } from 'next/navigation'
 
 interface AccordionItemProps {
   item: IPrograma
@@ -28,6 +29,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 }) => {
   const contentRef = React.useRef<HTMLDivElement>(null)
   const [contentHeight, setContentHeight] = React.useState(0)
+  const { push } = useRouter()
 
   React.useEffect(() => {
     if (isExpanded && contentRef.current) {
@@ -100,7 +102,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
             {item.descricao}
           </Typography>
           <Box display="flex" justifyContent="flex-end" color="primary">
-            <Button size="small" onClick={() => console.log(item.id)}>
+            <Button size="small" onClick={() => push(`/programas/${item.id}`)}>
               <Typography
                 textTransform="none"
                 variant="subtitle1"

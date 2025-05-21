@@ -30,6 +30,7 @@ html {
   font-size: 18px;
 }
 
+/* TOASTFY */
 .custom-toast {
   font-family: 'Lato', sans-serif;
   font-size: 16px;
@@ -39,5 +40,11 @@ html {
 .toast-info-loading {
   background-color: #17a2b8;
   color: #fff;
+  font-weight: 500;
+}
+
+.toast-loading-gray {
+  background-color: #3498db !important;
+  color: #ffffff !important;
   font-weight: 500;
 }

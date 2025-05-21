@@ -78,7 +78,7 @@ export default function FormEnrollment({ tituloVaga }: { tituloVaga?: string }) 
   const onSubmit = async (data: any) => {
     const id = toast.loading("O formulário está sendo enviado", {
       toastId: "custom-loading",
-      className: "toast-info-loading"
+      className: 'toast-loading-gray',
     })
 
     const payload = { ...data, tituloVaga }

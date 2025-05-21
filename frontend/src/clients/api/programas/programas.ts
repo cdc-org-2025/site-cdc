@@ -5,6 +5,7 @@ export interface IPrograma {
   subtitulo: string
   titulo: string
   url_image_capa: string
+  conteudo: string
 }
 
 export interface IProgramList {

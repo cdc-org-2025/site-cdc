@@ -8,7 +8,7 @@ export const getListProgramas = async (): Promise<IProgramResponse> => {
   return data;
 };
 
-export const getPrograma = async (id: number): Promise<IPrograma> => {
+export const getPrograma = async (id: string | string[]): Promise<IPrograma> => {
   const { data } = await api.get(`/programas/${id}`);
   return data;
 };

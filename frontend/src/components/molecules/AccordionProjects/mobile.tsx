@@ -8,6 +8,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import AddIcon from '@mui/icons-material/Add'
 import AnimetedSlide from '@/components/animations/slide'
 import { IPrograma } from '@/clients/api/programas'
+import { useRouter } from 'next/navigation'
 
 export default function AccordionProjectsMobile({
   projectList,
@@ -24,6 +25,7 @@ export default function AccordionProjectsMobile({
 
   const contentRef = useRef<HTMLDivElement>(null)
   const [contentHeight, setContentHeight] = useState(0)
+  const { push } = useRouter()
 
   useEffect(() => {
     if (expandedAccordion?.id !== 0 && contentRef.current) {
@@ -143,7 +145,7 @@ export default function AccordionProjectsMobile({
                 >
                   <Button
                     size="small"
-                    onClick={() => console.log(expandedAccordion?.id)}
+                    onClick={() => push(`/programas/${expandedAccordion?.id}`)}
                   >
                     <Typography
                       textTransform="none"

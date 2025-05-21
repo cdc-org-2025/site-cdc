@@ -47,7 +47,11 @@ export default function FormContactMap() {
     mensagem?: string
   }>({ sucesso: undefined, mensagem: '' })
   const onSubmit = async (data: IPostContato) => {
-    const id = toast.loading("O formulário está sendo enviado");
+    const id = toast.loading("O formulário está sendo enviado", {
+      toastId: "custom-loading",
+      className: 'toast-loading-gray',
+    })
+
     try {
       await mutateAsync(data)
       toast.update(id, {

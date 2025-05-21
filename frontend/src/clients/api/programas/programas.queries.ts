@@ -10,7 +10,7 @@ export const useProgramasListQuery = (options?: UseQueryOptions<IProgramResponse
   });
 };
 
-export const useProgramaQuery = (id: number, options?: UseQueryOptions<IPrograma, Error>) => {
+export const useProgramaQuery = (id: string | string[], options?: UseQueryOptions<IPrograma, Error>) => {
   return useQuery<IPrograma, Error>({
     queryKey: ['programa', id],
     queryFn: () => getPrograma(id),
