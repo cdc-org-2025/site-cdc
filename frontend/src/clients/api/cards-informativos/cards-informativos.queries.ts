@@ -4,7 +4,7 @@ import { ICardsInfo } from './cards-informativos.types';
 
 export const useCardsInformativosListQuery = (options?: UseQueryOptions<ICardsInfo[], Error>) => {
   return useQuery<ICardsInfo[], Error>({
-    queryKey: ['categorias'],
+    queryKey: ['cards-informativos'],
     queryFn: getListCardsInformativos,
     ...options,
   });

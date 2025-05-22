@@ -12,7 +12,6 @@ import CardInformation from '@/components/molecules/CardInformation'
 import MissionImage from '../../assets/cards-information/mission.svg'
 import VisionImage from '../../assets/cards-information/vision.svg'
 import AccordionProjects from '@/components/molecules/AccordionProjects'
-import BackgroundImpacts from '../../assets/pages/home-page/background-impacts.svg'
 import Partners from '@/components/atoms/Partners'
 import LatestNews from '@/components/molecules/LastestNews'
 import FormContactMap from '@/components/templates/FormContactMap'
@@ -20,7 +19,7 @@ import AnimationSplitText from '@/components/animations/splitText'
 import AnimetedSlide from '@/components/animations/slide'
 import { useCardsInformativosListQuery } from '@/clients/api/cards-informativos'
 import { storageUrl } from '@/constants/storageDomain'
-
+import Indicadores from './Indicadores'
 
 export default function HomePage() {
   const { data: cardOption } = useCardsInformativosListQuery()
@@ -195,62 +194,7 @@ export default function HomePage() {
       </Box>
       <AccordionProjects />
       <Partners />
-      <Box
-        sx={{
-          backgroundColor: '#f3f2ed',
-          backgroundImage: `url(${BackgroundImpacts.src})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          height: 'calc(100vh - 94px)',
-        }}
-        borderRadius="32px"
-        display="flex"
-        justifyContent="space-between"
-        alignItems="flex-start"
-        p={{ xs: '96px 10px', sm: '96px 16px', md: '120px 80px' }}
-        gap={{ xs: '0px', md: '150px' }}
-      >
-        <Typography
-          sx={{
-            typography: { xs: 'h4', md: 'h3' },
-          }}
-          textTransform="none"
-          color={'#f6f6f6'}
-        >
-          Através dos seus programas, o CDC impactou e continua{' '}
-          <Typography
-            component="span"
-            sx={{
-              typography: { xs: 'h4', md: 'h3' },
-            }}
-            textTransform="none"
-            color="secondary.light"
-          >
-            impactando milhares de vidas
-          </Typography>
-        </Typography>
-        <Box
-          p="16px"
-          width="100%"
-          minHeight="200px"
-          bgcolor="background.paper"
-          borderRadius="32px"
-          maxWidth={{ xs: '100%', sm: '500px' }}
-          minWidth={{ xs: '148px', sm: '200px' }}
-        >
-          <Typography variant="h1" color="primary" pb="8px">
-            999
-          </Typography>
-          <Typography
-            variant="overline"
-            color="text.primary"
-            textTransform="none"
-          >
-            programas realizados
-          </Typography>
-        </Box>
-      </Box>
+      <Indicadores />
       <LatestNews />
       <FormContactMap />
     </>

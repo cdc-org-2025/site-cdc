@@ -4,7 +4,7 @@ import { getLideranca, getListLiderancas, getListLiderancasArea } from './lidera
 
 export const useLiderancasAreaQuery = (area_id: number, options?: UseQueryOptions<ILideranca[], Error>) => {
   return useQuery<ILideranca[], Error>({
-    queryKey: ['colaboradores', area_id],
+    queryKey: ['liderancas', area_id],
     queryFn: () => getListLiderancasArea(area_id),
     ...options,
   });
@@ -12,7 +12,7 @@ export const useLiderancasAreaQuery = (area_id: number, options?: UseQueryOption
 
 export const useLiderancasListQuery = (options?: UseQueryOptions<ILiderancaResponse, Error>) => {
   return useQuery<ILiderancaResponse, Error>({
-    queryKey: ['colaboradores'],
+    queryKey: ['liderancas'],
     queryFn: () => getListLiderancas(),
     ...options,
   });
@@ -20,7 +20,7 @@ export const useLiderancasListQuery = (options?: UseQueryOptions<ILiderancaRespo
 
 export const useLiderancasQuery = (id: number, options?: UseQueryOptions<ILideranca, Error>) => {
   return useQuery<ILideranca, Error>({
-    queryKey: ['colaborador', id],
+    queryKey: ['lideranca', id],
     queryFn: () => getLideranca(id),
     enabled: !!id,
     ...options,
