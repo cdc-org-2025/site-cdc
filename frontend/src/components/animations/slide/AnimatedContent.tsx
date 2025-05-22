@@ -13,6 +13,7 @@ interface AnimatedContentProps {
   scale?: number
   delay?: number
   fullScreen?: boolean
+  threshold?: number
 }
 
 const AnimatedContent: React.FC<AnimatedContentProps> = ({
