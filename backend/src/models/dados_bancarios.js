@@ -8,6 +8,7 @@ class DadosBancario extends Model {
       banco: DataTypes.STRING,
       agencia: DataTypes.STRING,
       titular_conta: DataTypes.STRING,
+      chave_pix: DataTypes.STRING
     }, {
       sequelize,
       tableName: "dados_bancarios",
