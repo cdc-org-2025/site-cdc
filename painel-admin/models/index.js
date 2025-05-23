@@ -10,6 +10,8 @@ import { LinhaDoTempo } from './linha_do_tempo.js';
 import { LinhaDoTempoImagem } from './linha_do_tempo_imagens.js';
 import { Noticia } from './noticia.js';
 import { Oportunidade } from './oportunidade.js';
+import { Organizacao } from './organizacao.js';
+import { OrganizacaoImagem } from './organizacao_imagens.js';
 import { Parceiro } from './parceiro.js';
 import { PerguntaFrequente } from './pergunta_frequente.js';
 import { Programa } from './programa.js';
@@ -38,6 +40,8 @@ export function initializeModels(sequelize) {
     CardInformativo: CardInformativo.init(sequelize),
     Email: Email.init(sequelize),
     Inidicador: Inidicador.init(sequelize),
+    Organizacao: Organizacao.init(sequelize),
+    OrganizacaoImagem: OrganizacaoImagem.init(sequelize)
   };
 
   Object.values(models).forEach(model => {

@@ -22,6 +22,8 @@ export class Programa extends Model {
           this.setDataValue('area_ids', value)
         }
       },
+      resumo: DataTypes.STRING,
+
 
       // uploadCapa: {
       //   type: DataTypes.VIRTUAL,

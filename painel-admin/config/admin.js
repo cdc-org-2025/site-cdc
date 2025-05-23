@@ -226,7 +226,7 @@ export const adminJs = new AdminJS({
         {
             resource: models.Lideranca,
             options: {
-                navigation: 'teste',
+                navigation: 'Institucional',
                 properties: {
                     areaDeAtuacao: {
                         reference: 'areas',
@@ -402,11 +402,76 @@ export const adminJs = new AdminJS({
                     folder: 'programa',
                     file: 'uploadCapa',
                     key: 'url_image_capa',
+                    filePath: 'filePathCapa',
+                    filesToDelete: 'filesToDeleteCapa',
                 }),
+                createUploadFeature({
+                    folder: 'programa',
+                    file: 'uploadImagens',
+                    key: 'url_imagem',
+                    filePath: 'filePathImagens',
+                    filesToDelete: 'filesToDeleteImagens',
+                    multiple: true,
+
+                }),
+
             ],
             options: {
                 navigation: 'Programas',
+                actions: {
+                    new: {
+                        after: async (response, request, context) => {
+                            const { record } = context
+                            if (!record || record.isValid() === false) return response
 
+                            const imagens = Object.entries(request.files || {})
+                                .filter(([key]) => key.startsWith('uploadImagens'))
+                                .map(([, file]) => file)
+
+                            const programaImagem = models.ProgramaImagens
+
+                            for (const imagem of imagens) {
+                                const filename = imagem?.name?.replace(/\s+/g, '_')
+                                const gcsPath = `programa/${record.id()}-${filename}`
+
+                                await programaImagem.create({
+                                    programa_id: record.id(),
+                                    url_imagem: gcsPath,
+                                })
+                            }
+
+                            return response
+                        }
+                    },
+                    list: {
+                        after: async (response) => {
+                            const imagens = await models.ProgramaImagens.findAll()
+
+                            const imagensMap = imagens.reduce((acc, img) => {
+                                const id = img.programa_id
+
+                                if (!acc[id]) {
+                                    acc[id] = []
+                                }
+
+                                acc[id].push(img.url_imagem) // 👉 guarda todas as imagens
+
+                                return acc
+                            }, {})
+
+                            for (const record of response.records) {
+                                const id = record.params.id
+                                const imagemArray = imagensMap[id]
+
+                                if (imagemArray) {
+                                    record.params.url_imagem = imagemArray
+                                }
+                            }
+
+                            return response
+                        }
+                    }
+                },
                 properties: {
 
                     area_ids: {
@@ -435,27 +500,52 @@ export const adminJs = new AdminJS({
                             show: Components.ImageListPreview,
                         },
                     },
+
+
+                    uploadImagens: {
+                        type: 'mixed',
+                        isVisible: { list: false, show: false, filter: false, edit: true },
+                        components: {
+                            edit: Components.UploadMultiple
+                        },
+                        custom: { multiple: true },
+                        isTitle: false
+                    },
+                    url_imagem: {
+                        isVisible: { list: true, show: false, edit: false },
+                        components: {
+                            list: Components.ImageListPreview
+                        }
+                    }
                 },
                 editProperties: [
                     'titulo',
                     'subtitulo',
+                    'resumo',
                     'descricao',
                     'areaDeAtuacao',
-                    'uploadCapa'
+                    'uploadCapa',
+                    'uploadImagens',
+
                 ],
                 showProperties: [
                     'titulo',
                     'subtitulo',
+                    'resumo',
                     'descricao',
                     'areaDeAtuacao',
-                    'url_image_capa'
+                    'url_image_capa',
+                    'url_imagem'
+
                 ],
                 listProperties: [
                     'titulo',
                     'subtitulo',
+                    'resumo',
                     'descricao',
                     'areaDeAtuacao',
-                    'url_image_capa'
+                    'url_image_capa',
+                    'url_imagem'
                 ]
             },
         },
@@ -540,12 +630,14 @@ export const adminJs = new AdminJS({
                     'titular_conta',
                     'agencia',
                     'banco',
+                    'chave_pix',
                     'uploadImagem' // usado para enviar imagem
                 ],
                 showProperties: [
                     'titular_conta',
                     'agencia',
                     'banco',
+                    'chave_pix',
                     'url_imagem'
                 ]
             },
@@ -622,6 +714,91 @@ export const adminJs = new AdminJS({
             }
         },
         { resource: models.Email, options: { navigation: 'Configurações' } },
+        {
+            resource: models.Organizacao,
+            features: [
+                createUploadFeature({
+                    folder: 'organizacao',
+                    file: 'uploadImagens',
+                    key: 'imagem_url',
+                    multiple: true,
+                }),
+            ],
+            options: {
+                navigation: 'Configurações',
+                actions: {
+                    new: {
+                        after: async (response, request, context) => {
+                            const { record } = context
+                            if (!record || record.isValid() === false) return response
+
+                            const imagens = Object.entries(request.files || {})
+                                .filter(([key]) => key.startsWith('uploadImagens'))
+                                .map(([, file]) => file)
+
+                            const organizacaoImagem = models.OrganizacaoImagem
+
+                            for (const imagem of imagens) {
+                                const filename = imagem?.name?.replace(/\s+/g, '_')
+                                const gcsPath = `organizacao/${record.id()}-${filename}`
+
+                                await organizacaoImagem.create({
+                                    organizacao_id: record.id(),
+                                    imagem_url: gcsPath,
+                                })
+                            }
+
+                            return response
+                        }
+                    },
+                    list: {
+                        after: async (response) => {
+                            const imagens = await models.OrganizacaoImagem.findAll()
+
+                            const imagensMap = imagens.reduce((acc, img) => {
+                                const id = img.organizacao_id
+
+                                if (!acc[id]) {
+                                    acc[id] = []
+                                }
+
+                                acc[id].push(img.imagem_url) // 👉 guarda todas as imagens
+
+                                return acc
+                            }, {})
+
+                            for (const record of response.records) {
+                                const id = record.params.id
+                                const imagemArray = imagensMap[id]
+
+                                if (imagemArray) {
+                                    record.params.imagem_url = imagemArray
+                                }
+                            }
+
+                            return response
+                        }
+                    }
+                },
+                properties: {
+                    uploadImagens: {
+                        type: 'mixed',
+                        isVisible: { list: false, show: false, filter: false, edit: true },
+                        components: {
+                            edit: Components.UploadMultiple
+                        },
+                        custom: { multiple: true },
+                        isTitle: false
+                    },
+                    imagem_url: {
+                        isVisible: { list: true, show: false, edit: false },
+                        components: {
+                            list: Components.ImageListPreview
+                        }
+                    }
+                }
+            }
+        },
         {
             resource: models.Inidicador,
             options: {
