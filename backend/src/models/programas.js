@@ -8,6 +8,7 @@ class Programa extends Model {
       titulo: DataTypes.STRING,
       subtitulo: DataTypes.STRING,
       descricao: DataTypes.STRING,
+      resumo: DataTypes.STRING,
       area_ids: {
         type: DataTypes.ARRAY(DataTypes.INTEGER),
         allowNull: true,

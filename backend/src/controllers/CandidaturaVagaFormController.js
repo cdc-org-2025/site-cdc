@@ -7,7 +7,7 @@ import path from 'path';
 class CandidaturaVagaFormController {
     static async index(req, res) {
         try {
-            const { nome, email, mensagem } = req.body;
+            const { nome, email, mensagem, titulo_vaga } = req.body;
             const anexo = req.file || null;
 
 
@@ -35,7 +35,7 @@ class CandidaturaVagaFormController {
                 to: destinatarios.map(d => d.email), // envia para todos do banco
                 subject: 'Nova Candidatura Recebida',
                 html: `
-                <h3>Nova Candidatura Recebida</h3>
+                <h3>Nova Candidatura Recebida - ${titulo_vaga}</h3>
                 <p><strong>Nome:</strong> ${nome}</p>
                 <p><strong>Email:</strong> ${email}</p>
                 <p><strong>Mensagem:</strong></p>

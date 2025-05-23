@@ -13,9 +13,10 @@ RUN npm install
 # Copia o restante
 COPY . .
 
+# Expõe porta 3000
 EXPOSE 3000
 
 # Comando para iniciar
-CMD [ "node", "index.js" ]
+CMD [ "node", "--max-old-space-size=3072", "index.js" ]
 
 
