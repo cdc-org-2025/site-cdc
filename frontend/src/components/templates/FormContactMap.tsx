@@ -37,7 +37,7 @@ export default function FormContactMap() {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isValid },
   } = useForm({
     resolver: yupResolver(schema),
   })
@@ -167,7 +167,7 @@ export default function FormContactMap() {
               rows={4}
             />
             <Box width="185px" mb="24px">
-              <ButtonAction type="submit" disabled={isSubmitting}>
+              <ButtonAction type="submit" disabled={!isValid || isSubmitting}>
                 {isSubmitting ? 'Enviando...' : 'Enviar'}
               </ButtonAction>
             </Box>

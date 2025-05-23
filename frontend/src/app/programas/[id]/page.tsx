@@ -32,14 +32,18 @@ export default function ProgramaUniquePage() {
       {data?.conteudo && (
         <Box width={'100%'} display='flex' justifyContent={'center'}>
           <Box width={'100%'} maxWidth={'800px'} p='16px'>
-            <Box
-              sx={{
-                fontFamily: `${lato.style.fontFamily}, "Source Sans Pro", sans-serif !important`,
-              }}
-              dangerouslySetInnerHTML={{
-                __html: sanitizeHtml(data.conteudo),
-              }}
-            />
+            {data.descricao ? (
+              <Box
+                sx={{
+                  fontFamily: `${lato.style.fontFamily}, "Source Sans Pro", sans-serif !important`,
+                }}
+                dangerouslySetInnerHTML={{
+                  __html: sanitizeHtml(data.descricao),
+                }}
+              />
+            ) : (
+              <>Sem descrição disponivel</>
+            )}
           </Box>
         </Box>
       )}

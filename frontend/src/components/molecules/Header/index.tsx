@@ -1,6 +1,6 @@
 'use client'
 import Image from 'next/image'
-import LogoCDC from '../../../assets/logo_cdc.svg'
+import LogoCDC from '../../../assets/logo_cdc.png'
 import ButtonAction from '@/components/atoms/ButtonAction'
 import ButtonSearch from '@/components/atoms/ButtonSearch'
 import MenuIcon from '@mui/icons-material/Menu'

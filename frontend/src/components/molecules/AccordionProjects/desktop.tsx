@@ -99,7 +99,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
             variant="subtitle1"
             lineHeight="150%"
           >
-            {item.descricao}
+            {item.resumo ?? 'Sem resumo disponível'}
           </Typography>
           <Box display="flex" justifyContent="flex-end" color="primary">
             <Button size="small" onClick={() => push(`/programas/${item.id}`)}>
