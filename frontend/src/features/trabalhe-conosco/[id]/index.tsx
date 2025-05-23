@@ -7,6 +7,7 @@ import VacancyDescription from './vacancyDescription'
 import Box from '@mui/material/Box'
 import FormEnrollment from './formEnrollment'
 import { useOportunidadeQuery } from '@/clients/api/oportunidades'
+import VectorRoundedLines from '@/components/atoms/VectorRoundedLines'
 
 export default function TrabalheConoscoVagaPage() {
   const { id } = useParams()
@@ -29,6 +30,7 @@ export default function TrabalheConoscoVagaPage() {
         flexDirection={'column'}
         alignItems="center"
       >
+        <VectorRoundedLines left={0} margin='10% 0 0 0' />
         <Box maxWidth="802px">
           <VacancyDescription
             description={data?.descricao}

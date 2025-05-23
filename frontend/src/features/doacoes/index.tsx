@@ -73,7 +73,7 @@ export default function Doacoes() {
                 lineHeight={'120%'}
                 py='16px'
               >
-                Chave PIX aqui
+                {item.chave_pix ?? "Aguardando informações..."}
               </Typography>
               <Box display={'flex'} flexDirection={'column'} alignItems={'center'}>
                 <Typography variant='overline' textTransform={'none'} lineHeight={'150%'}>Banco: {item.banco}</Typography>

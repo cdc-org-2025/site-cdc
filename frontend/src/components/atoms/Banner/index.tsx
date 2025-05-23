@@ -10,6 +10,7 @@ import ButtonAction from '../ButtonAction'
 import CircleIcon from '@mui/icons-material/Circle'
 import BackDefault from '../../../assets/accordion-projects/default.svg'
 import { useRouter } from 'next/navigation'
+import { storageUrl } from '@/constants/storageDomain'
 
 export default function Banner() {
   const { push } = useRouter()
@@ -94,7 +95,10 @@ export default function Banner() {
             width="100vw"
             height="100%"
             sx={{
-              backgroundImage: `url(${banner.image.src})`,
+              backgroundImage: `
+                linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+                url("${!banner?.image?.src ? `${storageUrl}/${banner?.image}` : banner?.image?.src}")
+              `,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat',

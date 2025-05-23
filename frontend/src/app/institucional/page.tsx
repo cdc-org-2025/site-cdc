@@ -3,6 +3,7 @@ import Footer from '@/components/molecules/Footer'
 import InstitucionalPage from '@/features/institucional'
 import HeaderBannerUnique from '@/components/templates/HeaderBannerUnique'
 import PPDI from '../../assets/banner/ppdi.svg'
+import { TypeBannerUnique } from '@/components/atoms/Banner/unique'
 
 export const metadata: Metadata = {
   title: 'CDC - Institucional',
@@ -15,9 +16,10 @@ export const metadata: Metadata = {
 }
 
 export default function Institucional() {
-  const Banner = {
+  const Banner: TypeBannerUnique = {
     id: 1,
-    title: 'Institucional',
+    title: 'O Centro de Desenvolvimento e Cidadania é uma OSC dedicada à',
+    highlight: "transformação social",
     image: PPDI,
   }
 

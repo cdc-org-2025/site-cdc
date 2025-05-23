@@ -3,12 +3,28 @@ import Footer from '@/components/molecules/Footer'
 import HeaderBannerUnique from '@/components/templates/HeaderBannerUnique'
 import { useParams } from 'next/navigation'
 import { useNoticiaQuery } from '@/clients/api/noticias'
-import { Box } from '@mui/material'
+import { Box, Grid, Typography, useTheme } from '@mui/material'
 import { sanitizeHtml } from '@/utils/stripHtmlTags'
+import dayjs from 'dayjs'
+import 'dayjs/locale/pt-br'
+import CardTagDesc from '@/components/atoms/CardTagDesc'
+import AnimetedSlide from '@/components/animations/slide'
+import { ITransparencia, useListTransparenciaQuery } from '@/clients/api/transparencia'
+import { Lato } from 'next/font/google'
+
+const lato = Lato({
+  subsets: ['latin'],
+  weight: '400',
+})
+dayjs.locale('pt-br')
 
 export default function NoticiasUniquePage() {
   const { id } = useParams()
   const { data } = useNoticiaQuery(id)
+  const { data: listTransparencia } = useListTransparenciaQuery()
+  const { palette: { primary: { main } } } = useTheme()
+
+  const dataFormatada = dayjs(data?.data_publicacao).format('D [de] MMMM [de] YYYY')
 
   const Banner = {
     id: 1,
@@ -22,11 +38,67 @@ export default function NoticiasUniquePage() {
       {data?.html_original && (
         <Box width={'100%'} display='flex' justifyContent={'center'}>
           <Box width={'100%'} maxWidth={'800px'} p='16px'>
+            <Box display={"flex"} gap="16px" pt={{ xs: "0px", sm: "0px", md: "0px" }}>
+              <Typography variant='body1' color="text.secondary" fontWeight={400}>
+                {dataFormatada}
+              </Typography>
+              <Typography variant='body1' color="text.secondary" fontWeight={400}>
+                {data?.tempo_leitura} min de leitura
+              </Typography>
+              <Typography variant='body1' display={{ xs: "none", sm: "none", md: "block" }} color="text.secondary" fontWeight={400}>
+                Aguardando definição do contéudo
+              </Typography>
+            </Box>
             <Box
+              sx={{
+                fontFamily: `${lato.style.fontFamily}, "Source Sans Pro", sans-serif !important`,
+              }}
               dangerouslySetInnerHTML={{
                 __html: sanitizeHtml(data.html_original),
               }}
             />
+            <Box
+              pt="64px"
+            >
+              <AnimetedSlide>
+                <Typography
+                  variant={"h4"}
+                  color="primary"
+                  textTransform="none"
+                >
+                  Leia também
+                </Typography>
+              </AnimetedSlide>
+              <Grid container spacing={2} pb={{ xs: "50px", md: "160px" }} pt="16px" >
+                {data.html_original && listTransparencia?.data?.slice(0, 3).map((item: ITransparencia) => (
+                  <Grid item key={item.id} xs={12} sm={6} md={4} lg={4}>
+                    <AnimetedSlide>
+                      <Box
+                        component={'a'}
+                        sx={{
+                          cursor: 'pointer', '&:hover': {
+                            span: {
+                              color: `${main} !important`
+                            }
+                          }
+                        }}
+                        href={item.documento_url}
+                        target='_blank'
+                      >
+                        <CardTagDesc
+                          info={{
+                            id: item.id,
+                            description: item.titulo,
+                            image: item.url_imagem
+                          }}
+                          leiaTambem
+                        />
+                      </Box>
+                    </AnimetedSlide>
+                  </Grid>
+                ))}
+              </Grid>
+            </Box>
           </Box>
         </Box>
       )}

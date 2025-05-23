@@ -12,6 +12,7 @@ import AnimationSplitText from '../animations/splitText'
 import AnimetedSlide from '../animations/slide'
 import { IPostContato, useContatoMutation } from '@/clients/api/contato'
 import { toast } from 'react-toastify'
+import ZoomOutOnView from '../animations/zoomOutOnView'
 
 const schema = yup
   .object({
@@ -185,20 +186,22 @@ export default function FormContactMap() {
         </Box>
         <Box
           width={{ xs: '100%', md: '40%' }}
-          height="400px"
+          height={!messageResponseForm.mensagem ? "400px" : "450px"}
           overflow={'hidden'}
           borderRadius='18px'
         >
-          <iframe
-            title="Google Maps Location"
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4716.891056847212!2d-34.884723699999995!3d-8.054413599999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7ab18a4e806175b%3A0xc362cf117c4f32b2!2sCentro%20de%20Desenvolvimento%20e%20Cidadania!5e0!3m2!1spt-BR!2sbr!4v1745449189839!5m2!1spt-BR!2sbr"
-            width="100%"
-            height="100%"
-            style={{ border: 0 }}
-            allowFullScreen
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-          />
+          <ZoomOutOnView delay={200} scaleFrom={1.3}>
+            <iframe
+              title="Google Maps Location"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4716.891056847212!2d-34.884723699999995!3d-8.054413599999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7ab18a4e806175b%3A0xc362cf117c4f32b2!2sCentro%20de%20Desenvolvimento%20e%20Cidadania!5e0!3m2!1spt-BR!2sbr!4v1745449189839!5m2!1spt-BR!2sbr"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+          </ZoomOutOnView>
         </Box>
       </Box>
     </Box>

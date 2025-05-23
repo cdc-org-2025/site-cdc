@@ -33,7 +33,10 @@ export default function BannerUnique({ Banner }: IBannerUnique) {
           width="100vw"
           height="100%"
           sx={{
-            backgroundImage: `url("${!Banner?.image?.src ? `${storageUrl}/${Banner?.image}` : Banner?.image?.src}")`,
+            backgroundImage: `
+              linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+              url("${!Banner?.image?.src ? `${storageUrl}/${Banner?.image}` : Banner?.image?.src}")
+            `,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
@@ -41,6 +44,7 @@ export default function BannerUnique({ Banner }: IBannerUnique) {
             justifyContent: 'space-between',
             alignItems: 'flex-start',
             flexShrink: 0,
+            position: 'relative',
           }}
         >
           <Box

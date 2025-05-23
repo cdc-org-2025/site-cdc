@@ -4,4 +4,5 @@ export interface IDadosBancarios {
   banco: string
   agencia: string
   titular_conta: string
+  chave_pix: string
 }

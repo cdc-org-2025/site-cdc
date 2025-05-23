@@ -6,12 +6,14 @@ interface ITextfieldSearch {
   value: string
   setValue: (_: string) => void
   placeholder?: string
+  onSearch?: (_: any) => void
 }
 
 export default function TextfieldSearch({
   value,
   setValue,
   placeholder = 'Pesquisar',
+  onSearch,
 }: ITextfieldSearch) {
   return (
     <Box
@@ -49,7 +51,7 @@ export default function TextfieldSearch({
         placeholder={placeholder}
         onChange={(e) => setValue(e.target.value)}
       />
-      <IconButton size="small">
+      <IconButton size="small" onClick={onSearch}>
         <SearchIcon fontSize="small" />
       </IconButton>
     </Box>

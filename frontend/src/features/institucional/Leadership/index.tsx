@@ -42,7 +42,7 @@ export default function Leadership() {
   return (
     <>
       <Box display="flex" flexDirection="column" gap="16px" id="leadership">
-        <AnimationSplitText>
+        <AnimationSplitText direction='down' threshold={0.6}>
           <Typography variant="h3" color="primary" width="100%">
             Lideranças
           </Typography>

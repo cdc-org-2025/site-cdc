@@ -71,7 +71,7 @@ export default function HomePage() {
               Uma organização pernambucana na luta pela transformação social
             </Typography>
           </AnimationSplitText>
-          <AnimationSplitText>
+          <AnimationSplitText delay={20}>
             <Typography
               color="text.primary"
               textTransform="none"
@@ -98,12 +98,12 @@ export default function HomePage() {
             md: '50%',
           }}
         >
-          <AnimetedSlide distance={100} tension={10} friction={5}>
+          <AnimetedSlide distance={100} tension={10} friction={5} threshold={0.8}>
             <Box width="100%" height="172px">
               <ImagesRounded url={Frame1} />
             </Box>
           </AnimetedSlide>
-          <AnimetedSlide distance={100} tension={10} friction={5}>
+          <AnimetedSlide distance={100} tension={10} friction={5} threshold={0.8}>
             <Box
               width="100%"
               display="flex"
@@ -153,7 +153,7 @@ export default function HomePage() {
       >
         {cardOptions.map((item) => (
           <Box width={{ xs: '100%', md: '50%' }} key={item.title}>
-            <AnimetedSlide distance={100} tension={10} friction={5}>
+            <AnimetedSlide distance={100} tension={10} friction={5} threshold={0.5}>
               <CardInformation item={item} />
             </AnimetedSlide>
           </Box>
@@ -168,7 +168,7 @@ export default function HomePage() {
         mt="48px"
         alignItems="center"
       >
-        <AnimationSplitText>
+        <AnimationSplitText >
           <Typography
             variant="h3"
             color="primary"

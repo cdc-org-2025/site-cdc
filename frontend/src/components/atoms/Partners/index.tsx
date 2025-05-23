@@ -4,6 +4,7 @@ import Box from '@mui/material/Box'
 import React from 'react'
 import ScrollInfiniteHorizontal from '@/components/animations/scrollInfinite/horizontal'
 import { useParceirosQuery } from '@/clients/api/parceiros'
+import AnimationSplitText from '@/components/animations/splitText'
 
 export default function Partners() {
   const { data } = useParceirosQuery()
@@ -18,14 +19,16 @@ export default function Partners() {
       mb="80px"
       mt="48px"
     >
-      <Typography
-        variant="h3"
-        textTransform="none"
-        color="primary"
-        textAlign="center"
-      >
-        Parceiros que confiam no nosso trabalho
-      </Typography>
+      <AnimationSplitText>
+        <Typography
+          variant="h3"
+          textTransform="none"
+          color="primary"
+          textAlign="center"
+        >
+          Parceiros que confiam no nosso trabalho
+        </Typography>
+      </AnimationSplitText>
       <ScrollInfiniteHorizontal
         items={data}
         itemWidth={210}
