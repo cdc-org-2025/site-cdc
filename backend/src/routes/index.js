@@ -21,6 +21,7 @@ import cardsInformativosRoutes from "./card_informativo.js";
 import candidaturaVagaForm from './candidaturaVagaForm.js'
 import indicadoresRoutes from "./indicadores.js";
 import contatoForm from './contatoForm.js'
+import organizacao from './organizacao.js'
 
 const router = Router();
 
@@ -42,6 +43,7 @@ router.use("/cards-informativos", cardsInformativosRoutes);
 router.use('/candidatura',  candidaturaVagaForm);
 router.use('/indicadores', indicadoresRoutes)
 router.use('/contato', contatoForm)
+router.use("/organizacao", organizacao )
 
 
 export default router;
