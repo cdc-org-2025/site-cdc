@@ -7,51 +7,55 @@ import { useTheme } from '@mui/material'
 import AccordionComponent from '@/components/atoms/Accordion'
 import AnimationSplitText from '@/components/animations/splitText'
 import { useRouter } from 'next/navigation'
+import { usePerguntasQuery } from '@/clients/api/perguntas'
 
 export default function Faq() {
   const {
     palette: { primary },
   } = useTheme()
   const { push } = useRouter()
+  const { data } = usePerguntasQuery()
 
   return (
     <>
-      <Box display="flex" flexDirection="column" gap="16px" pb="32px" id="faq">
-        <AnimationSplitText>
-          <Typography
-            variant="h3"
-            color="primary"
-            textAlign="center"
-            width="100%"
-          >
-            Perguntas frequentes
-          </Typography>
-        </AnimationSplitText>
+      {data && (
+        <Box display="flex" flexDirection="column" gap="16px" pb="32px" id="faq">
+          <AnimationSplitText threshold={0.8}>
+            <Typography
+              variant="h3"
+              color="primary"
+              textAlign="center"
+              width="100%"
+            >
+              Perguntas frequentes
+            </Typography>
+          </AnimationSplitText>
 
-        <Typography
-          textAlign="center"
-          variant="overline"
-          textTransform="none"
-          color="text.primary"
-          lineHeight="150%"
-          width="100%"
-          sx={{
-            '& span': {
-              color: primary.main,
-              textDecoration: 'underline',
-              textTransform: 'none',
-              cursor: 'pointer',
-            },
-          }}
-        >
-          Não encontrou o que queria? Entre em{' '}
-          <Box component="span" onClick={() => push('/contato')}>
-            contato
-          </Box>{' '}
-          com o CDC
-        </Typography>
-      </Box>
-      <AccordionComponent />
+          <Typography
+            textAlign="center"
+            variant="overline"
+            textTransform="none"
+            color="text.primary"
+            lineHeight="150%"
+            width="100%"
+            sx={{
+              '& span': {
+                color: primary.main,
+                textDecoration: 'underline',
+                textTransform: 'none',
+                cursor: 'pointer',
+              },
+            }}
+          >
+            Não encontrou o que queria? Entre em{' '}
+            <Box component="span" onClick={() => push('/contato')}>
+              contato
+            </Box>{' '}
+            com o CDC
+          </Typography>
+        </Box>
+      )}
+      <AccordionComponent listaPerguntas={data} />
     </>
   )
 }

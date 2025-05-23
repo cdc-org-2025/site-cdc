@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTheme } from '@mui/material'
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
@@ -20,6 +20,7 @@ interface IMenuAreas {
   valueInput: string
   setValueInput: (_: string) => void
   placeholderInput?: string
+  onSearch?: (_: any) => void
 }
 
 export default function MenuAreasWithSearchInput({
@@ -30,6 +31,7 @@ export default function MenuAreasWithSearchInput({
   valueInput,
   setValueInput,
   placeholderInput,
+  onSearch,
 }: IMenuAreas) {
   const {
     palette: {
@@ -56,6 +58,18 @@ export default function MenuAreasWithSearchInput({
   const handleCloseMenu = () => {
     setAnchorEl(null)
   }
+
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [open])
 
   return (
     <>
@@ -93,6 +107,7 @@ export default function MenuAreasWithSearchInput({
             value={valueInput}
             setValue={setValueInput}
             placeholder={placeholderInput}
+            onSearch={onSearch}
           />
         </Box>
         <Box display="flex" flexWrap="wrap" gap="16px">

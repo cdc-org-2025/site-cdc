@@ -10,7 +10,7 @@ export default function ImagesRounded({ url, borderRadius }: IImagesRounded) {
       width="100%"
       height="100%"
       sx={{
-        backgroundImage: `url(${url})`,
+        backgroundImage: `url("${url}")`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',

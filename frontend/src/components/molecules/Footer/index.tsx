@@ -5,13 +5,13 @@ import Typography from '@mui/material/Typography'
 import React from 'react'
 import LogoCDC from '../../../assets/logo_cdc.svg'
 import FacebookLogo from '../../../assets/icons-socialmedia/facebook-logo.svg'
-import XTwitterLogo from '../../../assets/icons-socialmedia/x-twitter-logo.svg'
 import InstagramLogo from '../../../assets/icons-socialmedia/instagram-logo.svg'
 import LinkedinLogo from '../../../assets/icons-socialmedia/linkedin-logo.svg'
 import Image from 'next/image'
 import { useNavigation } from '@/hooks/useNavigation'
 import { useMenuOptions } from '@/hooks/useMenuOption'
 import { useRouter } from 'next/navigation'
+import YouTubeIcon from '@mui/icons-material/YouTube';
 
 export default function Footer() {
   const { handleSubMenuClick } = useNavigation()
@@ -82,16 +82,16 @@ export default function Footer() {
             Redes sociais
           </Typography>
           <Box display="flex" gap="24px">
-            <a href="https://www.google.com/" target="_blank">
+            <a href="https://www.facebook.com/centrodesenvolvimentocidadania/" target="_blank" rel="noopener noreferrer">
               <Image priority src={FacebookLogo} alt="FacebookLogo" />
             </a>
-            <a href="https://www.google.com/" target="_blank">
-              <Image priority src={XTwitterLogo} alt="XTwitterLogo" />
+            <a href="https://www.youtube.com/@cdc_osc/featured" target="_blank" rel="noopener noreferrer">
+              <Box mt="-5px"><YouTubeIcon color='primary' /></Box>
             </a>
-            <a href="https://www.google.com/" target="_blank">
+            <a href="https://www.instagram.com/cdc_osc/" target="_blank" rel="noopener noreferrer">
               <Image priority src={InstagramLogo} alt="InstagramLogo" />
             </a>
-            <a href="https://www.google.com/" target="_blank">
+            <a href="https://www.linkedin.com/company/centro-de-desenvolvimento-e-cidadania/?originalSubdomain=br" target="_blank" rel="noopener noreferrer">
               <Image priority src={LinkedinLogo} alt="LinkedinLogo" />
             </a>
           </Box>

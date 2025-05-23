@@ -21,6 +21,7 @@ export const MenuOptions = [
   {
     id: 1,
     label: 'Institucional',
+    link: "/institucional",
     subMenus: [
       { id: 10, label: 'Linha do tempo', scrollView: 'timeline' },
       { id: 11, label: 'Organização do CDC', scrollView: 'organizationCdc' },

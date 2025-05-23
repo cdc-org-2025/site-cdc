@@ -3,13 +3,13 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useTheme } from '@mui/material'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import PPDI from '../../../assets/banner/ppdi.svg'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import ButtonAction from '../ButtonAction'
 import CircleIcon from '@mui/icons-material/Circle'
-import BackDefault from '../../../assets/accordion-projects/default.svg'
 import { useRouter } from 'next/navigation'
+import { storageUrl } from '@/constants/storageDomain'
+import { useNoticiasListQuery } from '@/clients/api/noticias'
 
 export default function Banner() {
   const { push } = useRouter()
@@ -18,28 +18,31 @@ export default function Banner() {
   } = useTheme()
   const [currentIndex, setCurrentIndex] = useState<number>(0)
   const [resetTimer, setResetTimer] = useState<boolean>(false)
+  const { data } = useNoticiasListQuery()
+  const sliceNoticias = data?.data?.slice(0, 3)
 
+  //É ESQUISITO MAS NÃO TROQUE, PODE SURGIR MUDANÇA DA FONTE DA NOTICIA
   const BannerOption = [
     {
-      id: 1,
-      title:
-        'Programa de Promoção dos Direitos da Pessoa Idosa (PPDI) realiza a III Jornada de Direitos Humanos em ILPIs',
-      image: PPDI,
-      link: '/',
+      id: sliceNoticias?.[0].id,
+      title: sliceNoticias?.[0].titulo,
+      image: sliceNoticias?.[0].imagem_capa,
+      link: `noticias/${sliceNoticias?.[0].id}`,
+      highlight: ""
     },
     {
-      id: 2,
-      title: 'O Centro de Desenvolvimento e Cidadania é uma OSC dedicada à',
-      highlight: 'transformação social',
-      image: BackDefault,
-      link: '/',
+      id: sliceNoticias?.[1].id,
+      title: sliceNoticias?.[1].titulo,
+      image: sliceNoticias?.[1].imagem_capa,
+      link: `noticias/${sliceNoticias?.[1].id}`,
+      highlight: ""
     },
     {
-      id: 3,
-      title: 'Programa de Promoção dos Direitos da Pessoa Idosa -',
-      highlight: 'PPDPI',
-      image: PPDI,
-      link: '/',
+      id: sliceNoticias?.[2].id,
+      title: sliceNoticias?.[2].titulo,
+      image: sliceNoticias?.[2].imagem_capa,
+      link: `noticias/${sliceNoticias?.[2].id}`,
+      highlight: ""
     },
   ]
 
@@ -63,7 +66,7 @@ export default function Banner() {
   useEffect(() => {
     const interval = setInterval(() => {
       handleNext()
-    }, 5000)
+    }, 6000)
 
     return () => clearInterval(interval)
   }, [handleNext, resetTimer])
@@ -94,7 +97,10 @@ export default function Banner() {
             width="100vw"
             height="100%"
             sx={{
-              backgroundImage: `url(${banner.image.src})`,
+              backgroundImage: `
+                linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+                url("${storageUrl}/${banner?.image}")
+              `,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat',
@@ -142,7 +148,7 @@ export default function Banner() {
                 color={'primary.light'}
               >
                 {banner.title}
-                {banner.highlight && (
+                {banner?.highlight && (
                   <Typography
                     variant="h2"
                     color="secondary.light"
@@ -154,7 +160,7 @@ export default function Banner() {
                     component="span"
                   >
                     {' '}
-                    {banner.highlight}
+                    {banner?.highlight}
                   </Typography>
                 )}
               </Typography>

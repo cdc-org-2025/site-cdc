@@ -99,7 +99,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
             variant="subtitle1"
             lineHeight="150%"
           >
-            {item.descricao}
+            {item.resumo ?? 'Sem resumo disponível'}
           </Typography>
           <Box display="flex" justifyContent="flex-end" color="primary">
             <Button size="small" onClick={() => push(`/programas/${item.id}`)}>
@@ -162,13 +162,12 @@ export default function AccordionProjectsDesktop({
           )
         })}
       </Box>
-
       <Box
         sx={{
           width: '50%',
           borderRadius: '32px',
           backgroundColor: '#f3f2ed',
-          backgroundImage: `url(${storageUrl}/${expandedAccordion?.url_image_capa ?? "https://support.heberjahiz.com/hc/article_attachments/21013076295570"} )`,
+          backgroundImage: `url("${storageUrl}/${expandedAccordion?.url_image_capa ?? "https://support.heberjahiz.com/hc/article_attachments/21013076295570"}")`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',

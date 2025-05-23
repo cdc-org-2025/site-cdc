@@ -1,6 +1,7 @@
 'use client'
-import { useEffect, useState, ReactNode } from 'react'
 import { useSpring, animated, SpringConfig } from '@react-spring/web'
+import { useInView } from 'react-intersection-observer'
+import { ReactNode } from 'react'
 
 interface AnimatedContentProps {
   children: ReactNode
@@ -16,7 +17,7 @@ interface AnimatedContentProps {
   threshold?: number
 }
 
-const AnimatedContent: React.FC<AnimatedContentProps> = ({
+const AnimatedContent = ({
   children,
   distance = 100,
   direction = 'vertical',
@@ -27,21 +28,17 @@ const AnimatedContent: React.FC<AnimatedContentProps> = ({
   scale = 1,
   delay = 0,
   fullScreen = false,
-}) => {
-  const [inView, setInView] = useState(false)
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setInView(true)
-    }, delay)
-
-    return () => clearTimeout(timer)
-  }, [delay])
-
-  const directions: Record<'vertical' | 'horizontal', string> = {
+  threshold = 0.2,
+}: AnimatedContentProps) => {
+  const directions = {
     vertical: 'Y',
     horizontal: 'X',
   }
+
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold,
+  })
 
   const springProps = useSpring({
     to: {
@@ -51,10 +48,12 @@ const AnimatedContent: React.FC<AnimatedContentProps> = ({
       opacity: inView ? 1 : animateOpacity ? initialOpacity : 1,
     },
     config,
+    delay,
   })
 
   return (
     <animated.div
+      ref={ref}
       style={{
         ...springProps,
         width: fullScreen ? '100vw' : '100%',

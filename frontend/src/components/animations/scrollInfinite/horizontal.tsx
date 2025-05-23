@@ -8,60 +8,68 @@ import React from 'react'
 interface ScrollInfiniteHorizontalProps {
   items?: IParceiro[]
   itemWidth?: number
-  maxWidth?: string | number
   itemHeight?: number
+  gap?: number
+  speed?: number
+  maxWidth?: string | number
 }
 
 export default function ScrollInfiniteHorizontal({
-  items,
+  items = [],
   itemWidth = 210,
   itemHeight = 100,
+  gap = 100,
+  speed = 40,
   maxWidth = 1536,
 }: ScrollInfiniteHorizontalProps) {
-  const styles = {
-    wrapper: {
-      width: '90%',
-      maxWidth: `${maxWidth}px`,
-      marginInline: 'auto',
-      position: 'relative',
-      height: `${itemHeight}px`,
-      overflow: 'hidden',
-      maskImage:
-        'linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 20%, rgba(0, 0, 0, 1) 80%, rgba(0, 0, 0, 0))',
-    },
-    item: {
-      borderRadius: '6px',
-      position: 'absolute',
-      left: `max(calc(${itemWidth}px * ${items?.length}), 100%)`,
-      animationName: 'scrollLeft',
-      animationDuration: '30s',
-      animationTimingFunction: 'linear',
-      animationIterationCount: 'infinite',
-    },
-  }
+  const totalWidth = (itemWidth + gap) * items.length
 
   return (
-    <Box sx={styles.wrapper}>
-      {items?.map((item, index) => (
-        <Box
-          key={item.id}
-          sx={{
-            ...styles.item,
-            width: `${itemWidth}px`,
-            height: `100%`,
-            backgroundImage: `url("${storageUrl}/${item.url_imagem}")`,
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-            animationDelay: `calc(30s / ${items.length} * (${items.length} - ${index + 1}) * -1)`,
-          }}
-          aria-label={item.id.toString()}
-        />
-      ))}
+    <Box
+      sx={{
+        width: '90%',
+        maxWidth: `${maxWidth}px`,
+        marginInline: 'auto',
+        overflow: 'hidden',
+        position: 'relative',
+        height: `${itemHeight}px`,
+        maskImage:
+          'linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,1) 20%, rgba(0,0,0,1) 80%, rgba(0,0,0,0))',
+      }}
+    >
+      <Box
+        sx={{
+          display: 'flex',
+          gap: `${gap}px`,
+          width: `${totalWidth * 2}px`, // porque duplicamos
+          animation: `scrollLeft ${speed}s linear infinite`,
+        }}
+      >
+        {[...items, ...items].map((item, index) => (
+          <Box
+            key={`${item.id}-${index}`}
+            sx={{
+              width: `${itemWidth}px`,
+              height: `${itemHeight}px`,
+              borderRadius: '6px',
+              backgroundImage: `url("${storageUrl}/${item.url_imagem}")`,
+              backgroundSize: 'contain',
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'center',
+              flexShrink: 0,
+            }}
+            aria-label={item.id.toString()}
+          />
+        ))}
+      </Box>
 
       <style>{`
         @keyframes scrollLeft {
-          to {
-            left: -${itemWidth}px;
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(-${totalWidth}px);
           }
         }
       `}</style>

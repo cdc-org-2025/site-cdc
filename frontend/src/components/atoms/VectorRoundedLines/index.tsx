@@ -10,6 +10,7 @@ interface IVectorRoundedLines {
   bottom?: number
   top?: number
   rotate?: boolean
+  zIndex?: number
 }
 
 export default function VectorRoundedLines({
@@ -19,6 +20,7 @@ export default function VectorRoundedLines({
   bottom,
   top,
   rotate = false,
+  zIndex = -1,
 }: IVectorRoundedLines) {
   return (
     <Box
@@ -28,7 +30,7 @@ export default function VectorRoundedLines({
       bottom={bottom}
       right={right}
       m={margin}
-      zIndex={-1}
+      zIndex={zIndex}
       display={{
         xs: 'none',
         md: 'block',

@@ -1,12 +1,5 @@
 'use client'
-
-import React, {
-  useEffect,
-  useRef,
-  useState,
-  ReactElement,
-  cloneElement,
-} from 'react'
+import React, { useEffect, useRef, useState, ReactElement, cloneElement } from 'react'
 import { TypographyProps } from '@mui/material'
 
 interface SplitTextProps {
@@ -14,15 +7,17 @@ interface SplitTextProps {
   delay?: number
   threshold?: number
   rootMargin?: string
+  direction?: 'up' | 'down' // novo
 }
 
 const AnimationSplitText: React.FC<SplitTextProps> = ({
   children,
   delay = 80,
-  threshold = 0.2,
-  rootMargin = '-50px',
+  threshold = 0.6,
+  rootMargin = '0px',
+  direction = 'up',
 }) => {
-  const ref = useRef<HTMLSpanElement>(null)
+  const markerRef = useRef<HTMLSpanElement>(null)
   const [inView, setInView] = useState(false)
 
   useEffect(() => {
@@ -35,7 +30,7 @@ const AnimationSplitText: React.FC<SplitTextProps> = ({
       },
       { threshold, rootMargin }
     )
-    if (ref.current) observer.observe(ref.current)
+    if (markerRef.current) observer.observe(markerRef.current)
     return () => observer.disconnect()
   }, [threshold, rootMargin])
 
@@ -49,17 +44,18 @@ const AnimationSplitText: React.FC<SplitTextProps> = ({
 
   const content = extractText(children)
   const words = content.split(' ')
+  const initialTranslate = direction === 'up' ? 'translateY(20px)' : 'translateY(-20px)'
 
   return cloneElement(children, {
-    ref,
     children: (
       <>
+        <span ref={markerRef} style={{ display: 'inline-block', width: 1, height: 1 }} />
         <style>
           {`
-            @keyframes fadeUp {
+            @keyframes fadeMove {
               0% {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: ${initialTranslate};
               }
               100% {
                 opacity: 1;
@@ -70,8 +66,8 @@ const AnimationSplitText: React.FC<SplitTextProps> = ({
             .word {
               display: inline-block;
               opacity: 0;
-              transform: translateY(20px);
-              animation: fadeUp 0.4s ease forwards;
+              transform: ${initialTranslate};
+              animation: fadeMove 0.4s ease forwards;
               white-space: nowrap;
             }
           `}
@@ -82,6 +78,7 @@ const AnimationSplitText: React.FC<SplitTextProps> = ({
             className="word"
             style={{
               animationDelay: inView ? `${index * delay}ms` : '0ms',
+              animationPlayState: inView ? 'running' : 'paused',
               marginRight: '0.25em',
               color: 'inherit',
             }}

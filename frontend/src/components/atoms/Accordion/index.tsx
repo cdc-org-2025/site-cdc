@@ -7,14 +7,13 @@ import AccordionDetails from '@mui/material/AccordionDetails'
 import Typography from '@mui/material/Typography'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import Divider from '@mui/material/Divider'
-import { usePerguntasQuery } from '@/clients/api/perguntas'
+import { IPerguntas } from '@/clients/api/perguntas'
 
-const AccordionComponent = () => {
-  const { data } = usePerguntasQuery()
+const AccordionComponent = ({ listaPerguntas }: { listaPerguntas?: IPerguntas[] }) => {
 
   return (
     <>
-      {data?.map((item, index) => (
+      {listaPerguntas?.map((item, index) => (
         <div key={item.id}>
           <Accordion
             disableGutters
@@ -52,7 +51,7 @@ const AccordionComponent = () => {
             </AccordionDetails>
           </Accordion>
 
-          {index < data.length - 1 && <Divider />}
+          {index < listaPerguntas?.length - 1 && <Divider />}
         </div>
       ))}
     </>

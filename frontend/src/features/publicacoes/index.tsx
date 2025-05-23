@@ -14,6 +14,19 @@ export default function Publicacoes() {
   const [listPublicacoes, setListPublicacoes] = useState<IPublicacao[]>([])
   const [areasFiltro, setAreasFiltro] = useState<{ id: number, nome: string }[]>([])
 
+  const onSearch = () => {
+    if (fieldSearch !== "") {
+      const listFilter = listPublicacoes.filter(item => item.titulo?.toLocaleLowerCase()?.includes(fieldSearch.toLocaleLowerCase()))
+      setListPublicacoes(listFilter)
+    } else {
+      if (data) {
+        setListPublicacoes(data?.data)
+      } else {
+        setListPublicacoes([])
+      }
+    }
+  }
+
   useEffect(() => {
     if (data?.data && areaSelect.length > 0) {
       const filtradas = data.data.filter((publicacao: IPublicacao) =>
@@ -52,6 +65,7 @@ export default function Publicacoes() {
           areaSelect={areaSelect}
           setAreaSelect={setAreaSelect}
           listAreasAvailable={areasFiltro}
+          onSearch={onSearch}
         />
       </Box>
       <ListCards list={listPublicacoes} page='/publicacoes' />

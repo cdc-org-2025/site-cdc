@@ -9,6 +9,7 @@ interface IAnimetedSlide {
   fullScreen?: boolean
   tension?: number
   friction?: number
+  threshold?: number
 }
 
 export default function AnimetedSlide({
@@ -19,6 +20,7 @@ export default function AnimetedSlide({
   fullScreen,
   tension = 50,
   friction = 25,
+  threshold = 0.2
 }: IAnimetedSlide) {
   return (
     <AnimatedContent
@@ -29,7 +31,7 @@ export default function AnimetedSlide({
       initialOpacity={0}
       animateOpacity
       scale={1}
-      threshold={0.2}
+      threshold={threshold}
       fullScreen={fullScreen}
     >
       {children}
