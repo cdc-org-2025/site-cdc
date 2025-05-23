@@ -17,8 +17,6 @@ import AreaListDisplay from '../src/components/areaListDisplay'
 AdminJS.UserComponents.AreaListDisplay = AreaListDisplay
 import NoticiaPreview from '../src/components/noticiasPreview'
 AdminJS.UserComponents.NoticiaPreview = NoticiaPreview
-import ImageListEditPreview from '../src/components/imageListEditPreview'
-AdminJS.UserComponents.ImageListEditPreview = ImageListEditPreview
 import EditorLinhaTempo from '../src/components/editorlinhaTempo'
 AdminJS.UserComponents.EditorLinhaTempo = EditorLinhaTempo
 import UploadEditComponent from '../node_modules/@adminjs/upload/build/features/upload-file/components/UploadEditComponent'

@@ -226,7 +226,7 @@ export const adminJs = new AdminJS({
         {
             resource: models.Lideranca,
             options: {
-                navigation: 'Institucional',
+                navigation: 'teste',
                 properties: {
                     areaDeAtuacao: {
                         reference: 'areas',

@@ -11,7 +11,7 @@ const Components = {
   MultiSelectInput: componentLoader.add("MultiSelectInput", "./components/multiSelectInput.jsx"),
   AreaListDisplay: componentLoader.add("AreaListDisplay", "./components/areaListDisplay.jsx"),
   NoticiaPreview: componentLoader.add("NoticiaPreview", "./components/noticiasPreview.jsx"),
-  ImageListEditPreview: componentLoader.add("ImageListEditPreview", "./components/imageListEditPreview.jsx"),
+  // ImageListEditPreview: componentLoader.add("ImageListEditPreview", "./components/imageListEditPreview.jsx"),
   EditorLinhaTempo: componentLoader.add("EditorLinhaTempo", "./components/editorlinhaTempo.jsx"),
 
 };
