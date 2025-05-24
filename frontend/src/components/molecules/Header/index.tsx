@@ -25,7 +25,7 @@ export default function Header() {
 
   return (
     <>
-      <Box height="94px" width="100%" />
+      <Box height="94px" width="100%" maxWidth="100vw" />
       <Box
         display="flex"
         justifyContent="space-between"
@@ -35,6 +35,7 @@ export default function Header() {
         position="fixed"
         top={0}
         left={0}
+        maxWidth="100vw"
         width="100%"
         zIndex={9}
         bgcolor={'primary.light'}
@@ -43,7 +44,7 @@ export default function Header() {
           display="flex"
           justifyContent="space-between"
           alignItems="center"
-          gap={isMobile ? "0px" : "56px"}
+          gap={isMobile ? "20px" : "56px"}
         >
           <Image
             priority

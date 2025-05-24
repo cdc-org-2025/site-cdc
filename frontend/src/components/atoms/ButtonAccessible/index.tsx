@@ -34,8 +34,8 @@ export default function ButtonAccessible() {
         justifyContent="center"
         alignItems="center"
         position="fixed"
-        bottom={0}
-        right={0}
+        bottom={90}
+        right={34}
         marginBottom="90px"
         marginRight="34px"
         border="2px solid #52c1ee"
@@ -49,6 +49,7 @@ export default function ButtonAccessible() {
       </Box>
 
       <Menu
+        disableScrollLock
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
