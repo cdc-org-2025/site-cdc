@@ -55,7 +55,7 @@ export default function Noticias() {
       bgcolor="background.default"
     >
       <ZoomOutOnView>
-        <Box display={{ xs: 'flex', sm: 'none' }}>
+        <Box display={{ xs: 'flex', sm: 'none' }} pb="32px" >
           <Typography variant="h3" color="primary">
             Notícias
           </Typography>

@@ -50,6 +50,7 @@ export default function TextfieldSearch({
         type="text"
         placeholder={placeholder}
         onChange={(e) => setValue(e.target.value)}
+        style={{ width: "100%" }}
       />
       <IconButton size="small" onClick={onSearch}>
         <SearchIcon fontSize="small" />

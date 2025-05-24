@@ -9,16 +9,15 @@ import ButtonAction from '../ButtonAction'
 import CircleIcon from '@mui/icons-material/Circle'
 import { useRouter } from 'next/navigation'
 import { storageUrl } from '@/constants/storageDomain'
-import { useNoticiasListQuery } from '@/clients/api/noticias'
+import { INoticiasResponse } from '@/clients/api/noticias'
 
-export default function Banner() {
+export default function Banner({ data }: { data?: INoticiasResponse }) {
   const { push } = useRouter()
   const {
     palette: { secondary },
   } = useTheme()
   const [currentIndex, setCurrentIndex] = useState<number>(0)
   const [resetTimer, setResetTimer] = useState<boolean>(false)
-  const { data } = useNoticiasListQuery()
   const sliceNoticias = data?.data?.slice(0, 3)
 
   //É ESQUISITO MAS NÃO TROQUE, PODE SURGIR MUDANÇA DA FONTE DA NOTICIA

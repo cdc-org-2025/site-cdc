@@ -12,7 +12,12 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 
 export default function ButtonAccessible() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  const { increaseFont, decreaseFont } = useContext(SettingsContext)
+  const {
+    increaseFont,
+    decreaseFont,
+    increaseFontWeight,
+    decreaseFontWeight,
+  } = useContext(SettingsContext)
   const open = Boolean(anchorEl)
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -102,7 +107,7 @@ export default function ButtonAccessible() {
             </IconButton>
           </Box>
         </Tooltip>
-        <Tooltip title="Peso da fonte (EM CONSTRUÇÃO)" placement="left-start">
+        <Tooltip title="Peso da fonte" placement="left-start">
           <Box
             display={"flex"}
             alignItems={"center"}
@@ -116,7 +121,7 @@ export default function ButtonAccessible() {
               style={{ width: "30px", height: "30px" }}
               onClick={(e) => {
                 e.stopPropagation()
-                increaseFont()
+                increaseFontWeight()
               }}
             >
               <AddCircleOutlineIcon style={{ width: 25 }} htmlColor='#52c1ee' />
@@ -127,7 +132,7 @@ export default function ButtonAccessible() {
               style={{ width: "30px", height: "30px" }}
               onClick={(e) => {
                 e.stopPropagation()
-                decreaseFont()
+                decreaseFontWeight()
               }}
             >
               <RemoveCircleOutlineIcon style={{ width: 25 }} htmlColor='#52c1ee' />

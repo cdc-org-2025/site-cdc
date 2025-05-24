@@ -11,6 +11,8 @@ import { useNavigation } from '@/hooks/useNavigation'
 import { useMenuOptions } from '@/hooks/useMenuOption'
 import { useRouter } from 'next/navigation'
 import YouTubeIcon from '@mui/icons-material/YouTube';
+import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
+import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 
 export default function Footer() {
   const { handleSubMenuClick } = useNavigation()
@@ -103,6 +105,8 @@ export default function Footer() {
             <Image priority src={LinkedinLogo} alt="LinkedinLogo" />
           </a>
         </Box>
+        <Typography display={"flex"} alignItems={"center"} variant="body2"> <LocalPhoneOutlinedIcon style={{ height: 20 }} color="primary" />(81) 3224-6963</Typography>
+        <Typography display={"flex"} alignItems={"center"} variant="body2"> <AccessTimeOutlinedIcon style={{ height: 20 }} color="primary" />08h às 17h</Typography>
       </Box>
     </Box>
   )

@@ -8,7 +8,11 @@ const lato = Lato({
   weight: '400',
 })
 
-const getTheme = (mode: PaletteMode | undefined, fontScale: number = 1) =>
+const getTheme = (
+  mode: PaletteMode | undefined,
+  fontScale: number = 1,
+  fontWeightScale: number = 1
+) =>
   createTheme({
     palette: {
       mode: mode,
@@ -34,16 +38,16 @@ const getTheme = (mode: PaletteMode | undefined, fontScale: number = 1) =>
     typography: {
       fontFamily: `${lato.style.fontFamily}, "Source Sans Pro", sans-serif`,
       fontSize: 18 * fontScale,
-      h1: { fontSize: `${48 * fontScale}px`, fontWeight: 700 },
-      h2: { fontSize: `${40 * fontScale}px`, fontWeight: 700 },
-      h3: { fontSize: `${35 * fontScale}px`, fontWeight: 700 },
-      h4: { fontSize: `${28 * fontScale}px`, fontWeight: 700 },
-      h5: { fontSize: `${23 * fontScale}px`, fontWeight: 700 },
-      body1: { fontSize: `${16 * fontScale}px`, fontWeight: 500 },
-      body2: { fontSize: `${14 * fontScale}px`, fontWeight: 500 },
-      subtitle1: { fontSize: `${16 * fontScale}px` },
-      subtitle2: { fontSize: `${14 * fontScale}px` },
-      overline: { fontSize: `${18 * fontScale}px` },
+      h1: { fontSize: `${48 * fontScale}px`, fontWeight: 700 * fontWeightScale },
+      h2: { fontSize: `${40 * fontScale}px`, fontWeight: 700 * fontWeightScale },
+      h3: { fontSize: `${35 * fontScale}px`, fontWeight: 700 * fontWeightScale },
+      h4: { fontSize: `${28 * fontScale}px`, fontWeight: 700 * fontWeightScale },
+      h5: { fontSize: `${23 * fontScale}px`, fontWeight: 700 * fontWeightScale },
+      body1: { fontSize: `${16 * fontScale}px`, fontWeight: 500 * fontWeightScale },
+      body2: { fontSize: `${14 * fontScale}px`, fontWeight: 500 * fontWeightScale },
+      subtitle1: { fontSize: `${16 * fontScale}px`, fontWeight: 500 * fontWeightScale },
+      subtitle2: { fontSize: `${14 * fontScale}px`, fontWeight: 500 * fontWeightScale },
+      overline: { fontSize: `${18 * fontScale}px`, fontWeight: 500 * fontWeightScale },
     },
     breakpoints: {
       values: { xs: 0, sm: 480, md: 834, lg: 1280, xl: 1920 },
