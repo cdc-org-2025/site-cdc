@@ -14,11 +14,14 @@ import CloseIcon from '@mui/icons-material/Close'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useRouter } from 'next/navigation'
 import { useMenuOptions } from '@/hooks/useMenuOption'
+import { useMediaQuery, useTheme } from '@mui/material'
 
 export default function Header() {
   const [openMenuMobile, setOpenMenuMobile] = useState<boolean>(false)
   const { push } = useRouter()
   const menuWithProgramas = useMenuOptions()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
   return (
     <>
@@ -40,11 +43,11 @@ export default function Header() {
           display="flex"
           justifyContent="space-between"
           alignItems="center"
-          gap="56px"
+          gap={isMobile ? "0px" : "56px"}
         >
           <Image
             priority
-            height={62}
+            height={isMobile ? 44 : 62}
             src={LogoCDC}
             alt="Logo Centro de Desenvolvimento Social"
           />

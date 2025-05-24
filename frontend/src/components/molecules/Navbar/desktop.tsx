@@ -1,18 +1,20 @@
 'use client'
 
 import * as React from 'react'
-import Button from '@mui/material/Button'
-import ClickAwayListener from '@mui/material/ClickAwayListener'
-import Grow from '@mui/material/Grow'
-import Paper from '@mui/material/Paper'
-import Popper from '@mui/material/Popper'
-import MenuItem from '@mui/material/MenuItem'
-import MenuList from '@mui/material/MenuList'
-import Typography from '@mui/material/Typography'
-import Stack from '@mui/material/Stack'
+import {
+  Button,
+  ClickAwayListener,
+  Grow,
+  Paper,
+  Popper,
+  MenuItem,
+  MenuList,
+  Typography,
+  Stack,
+  useTheme,
+} from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
-import { useTheme } from '@mui/material'
 import { IMenu, ISubMenu } from '@/constants/menuNavigation'
 import { useRouter } from 'next/navigation'
 import { useNavigation } from '@/hooks/useNavigation'
@@ -26,13 +28,8 @@ export default function NavbarDesktop({ menuOption }: { menuOption: IMenu[] }) {
   const { push } = useRouter()
   const { handleSubMenuClick } = useNavigation()
 
-  const handleMouseEnter = (id: number) => {
-    setOpenMenuId(id)
-  }
-
-  const handleMouseLeave = () => {
-    setOpenMenuId(null)
-  }
+  const handleMouseEnter = (id: number) => setOpenMenuId(id)
+  const handleMouseLeave = () => setOpenMenuId(null)
 
   const handleClose = (event: Event | React.SyntheticEvent, id: number) => {
     if (
@@ -60,6 +57,8 @@ export default function NavbarDesktop({ menuOption }: { menuOption: IMenu[] }) {
       direction="row"
       spacing={1}
       alignItems="center"
+      minWidth={0}
+      overflow="hidden"
       display={{
         xs: 'none',
         lg: 'flex',
@@ -68,9 +67,7 @@ export default function NavbarDesktop({ menuOption }: { menuOption: IMenu[] }) {
       {menuOption?.map((item, index) => (
         <div
           key={item.id}
-          onMouseEnter={() =>
-            item.subMenus ? handleMouseEnter(item.id) : undefined
-          }
+          onMouseEnter={() => item.subMenus && handleMouseEnter(item.id)}
           onMouseLeave={handleMouseLeave}
         >
           <Button
@@ -81,13 +78,14 @@ export default function NavbarDesktop({ menuOption }: { menuOption: IMenu[] }) {
             }}
             aria-controls={openMenuId === item.id ? 'menu-list' : undefined}
             aria-haspopup="true"
-            onClick={() => { item?.link && push(item.link) }}
+            onClick={() => item?.link && push(item.link)}
             size="small"
             sx={{
               color: openMenuId === item.id ? primary.main : text.primary,
               height: '34px',
               backgroundColor: 'transparent',
-              transition: 'color 0.2s ease',
+              whiteSpace: 'nowrap',
+              minWidth: 0,
               '&:hover': {
                 color: primary.main,
                 backgroundColor: 'transparent',
@@ -113,7 +111,7 @@ export default function NavbarDesktop({ menuOption }: { menuOption: IMenu[] }) {
               placement="bottom"
               transition
               disablePortal
-              sx={{ zIndex: 1 }}
+              sx={{ zIndex: 1, overflowX: 'hidden' }}
             >
               {({ TransitionProps, placement }) => (
                 <Grow
@@ -129,9 +127,7 @@ export default function NavbarDesktop({ menuOption }: { menuOption: IMenu[] }) {
                       backgroundColor: primary.light,
                     }}
                   >
-                    <ClickAwayListener
-                      onClickAway={(e) => handleClose(e, item.id)}
-                    >
+                    <ClickAwayListener onClickAway={(e) => handleClose(e, item.id)}>
                       <MenuList
                         id="menu-list"
                         aria-labelledby="menu-button"
@@ -142,7 +138,7 @@ export default function NavbarDesktop({ menuOption }: { menuOption: IMenu[] }) {
                           marginTop: '16px',
                         }}
                       >
-                        {item.subMenus?.map((subItem: ISubMenu) => (
+                        {item?.subMenus?.map((subItem: ISubMenu) => (
                           <MenuItem
                             key={subItem.id}
                             onClick={() => handleSubMenu(subItem, item.label)}
@@ -151,7 +147,7 @@ export default function NavbarDesktop({ menuOption }: { menuOption: IMenu[] }) {
                               height: '46px',
                               '&:hover': {
                                 backgroundColor: 'transparent',
-                                color: primary.main
+                                color: primary.main,
                               },
                             }}
                           >
