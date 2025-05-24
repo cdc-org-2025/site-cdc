@@ -8,7 +8,7 @@ export default function HeaderBanner() {
   return (
     <>
       <Header />
-      <AnimetedSlide distance={700}>
+      <AnimetedSlide distance={500} threshold={0.1}>
         <Box
           sx={{
             height: 'calc(100vh - 94px)',
