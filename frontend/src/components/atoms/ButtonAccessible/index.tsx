@@ -12,7 +12,7 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 
 export default function ButtonAccessible() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  const { increaseFont, decreaseFont, resetFont } = useContext(SettingsContext)
+  const { increaseFont, decreaseFont } = useContext(SettingsContext)
   const open = Boolean(anchorEl)
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {

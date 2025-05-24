@@ -50,5 +50,4 @@ const getTheme = (mode: PaletteMode | undefined, fontScale: number = 1) =>
     },
   });
 
-
 export default getTheme
