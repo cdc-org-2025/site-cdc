@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import Footer from '@/components/molecules/Footer'
 import HeaderBannerUnique from '@/components/templates/HeaderBannerUnique'
-import PPDI from '../../assets/banner/ppdi.svg'
 
 export const metadata: Metadata = {
   title: 'CDC - Resultados',
@@ -17,7 +16,7 @@ export default function PublicacoesPage() {
   const Banner = {
     id: 1,
     title: 'Resultados',
-    image: PPDI,
+    image: '/ppdi.svg',
   }
 
   return (

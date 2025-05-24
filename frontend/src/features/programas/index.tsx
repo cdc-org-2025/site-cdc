@@ -4,44 +4,44 @@ import { Box, Typography } from '@mui/material'
 import MenuAreasWithSearchInput from '@/components/molecules/MenuAreaWithSearchInput'
 import ListCards from '@/components/molecules/ListCards'
 import { useScrollToTop } from '@/hooks/useScroll'
-import { INoticias, useNoticiasListQuery } from '@/clients/api/noticias'
 import ZoomOutOnView from '@/components/animations/zoomOutOnView'
+import { IPrograma, useProgramasListQuery } from '@/clients/api/programas'
 
-export default function Noticias() {
+export default function Programas() {
   useScrollToTop()
   const [fieldSearch, setFieldSearch] = useState('')
   const [areaSelect, setAreaSelect] = useState<string[]>([])
-  const { data } = useNoticiasListQuery()
-  const [listNoticias, setListNoticias] = useState<INoticias[]>([])
+  const { data } = useProgramasListQuery()
+  const [listProgramas, setListProgramas] = useState<IPrograma[]>([])
   const [areasFiltro, setAreasFiltro] = useState<{ id: number, nome: string }[]>([])
 
   const onSearch = () => {
     if (fieldSearch !== "") {
-      const listFilter = listNoticias.filter(item => item.titulo?.toLocaleLowerCase()?.includes(fieldSearch.toLocaleLowerCase()))
-      setListNoticias(listFilter)
+      const listFilter = listProgramas.filter(item => item.titulo?.toLocaleLowerCase()?.includes(fieldSearch.toLocaleLowerCase()))
+      setListProgramas(listFilter)
     } else {
       if (data) {
-        setListNoticias(data?.data)
+        setListProgramas(data?.data)
       } else {
-        setListNoticias([])
+        setListProgramas([])
       }
     }
   }
 
   useEffect(() => {
     if (data?.data && areaSelect.length > 0) {
-      const filtradas = data.data.filter((noticia: INoticias) =>
-        noticia.areas?.some(area => areaSelect.includes(area.nome))
+      const filtradas = data.data.filter((programa: IPrograma) =>
+        programa.areas?.some(area => areaSelect.includes(area.nome))
       )
-      setListNoticias(filtradas)
+      setListProgramas(filtradas)
     } else if (data?.data) {
-      setListNoticias(data.data)
+      setListProgramas(data.data)
     }
   }, [areaSelect, data])
 
   useEffect(() => {
     if (data) {
-      setListNoticias(data?.data)
+      setListProgramas(data?.data)
       setAreasFiltro(data?.areas_filtro)
     }
   }, [data])
@@ -55,7 +55,7 @@ export default function Noticias() {
       bgcolor="background.default"
     >
       <ZoomOutOnView>
-        <Box display={{ xs: 'flex', sm: 'none' }} pb="32px" >
+        <Box display={{ xs: 'flex', sm: 'none' }}>
           <Typography variant="h3" color="primary">
             Notícias
           </Typography>
@@ -71,7 +71,7 @@ export default function Noticias() {
           />
         </Box>
       </ZoomOutOnView>
-      <ListCards page="/noticias" list={listNoticias} />
+      <ListCards page="/programas" list={listProgramas} />
     </Box>
   )
 }

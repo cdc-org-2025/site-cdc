@@ -2,7 +2,6 @@
 import React from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import { storageUrl } from '@/constants/storageDomain'
 
 export interface IBannerUnique {
   Banner: TypeBannerUnique
@@ -18,7 +17,8 @@ export interface TypeBannerUnique {
 export default function BannerUnique({ Banner }: IBannerUnique) {
   return (
     <Box
-      width="100vw"
+      width="100%"
+      maxWidth="100vw"
       height="100%"
       sx={{
         backgroundColor: '#f3f2ed',
@@ -27,7 +27,7 @@ export default function BannerUnique({ Banner }: IBannerUnique) {
         position: 'relative',
       }}
     >
-      <Box display="flex" width={`100vw`} height="100%">
+      <Box display="flex" width="100%" maxWidth="100vw" height="100%">
         <Box
           key={Banner.id}
           width="100vw"
@@ -35,7 +35,7 @@ export default function BannerUnique({ Banner }: IBannerUnique) {
           sx={{
             backgroundImage: `
               linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
-              url("${!Banner?.image?.src ? `${storageUrl}/${Banner?.image}` : Banner?.image?.src}")
+              url("${Banner.image}")
             `,
             backgroundSize: 'cover',
             backgroundPosition: 'center',

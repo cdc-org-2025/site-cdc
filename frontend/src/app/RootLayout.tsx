@@ -29,10 +29,10 @@ function InnerRootLayout({
   children: React.ReactNode;
   locale: string;
 }) {
-  const { theme } = useContext(SettingsContext);
+  const { theme, fontScale, fontWeightScale } = useContext(SettingsContext)
 
   return (
-    <ThemeProvider theme={getTheme(theme)}>
+    <ThemeProvider theme={getTheme(theme, fontScale, fontWeightScale)}>
       <html lang={locale}>
         <body>
           {children}

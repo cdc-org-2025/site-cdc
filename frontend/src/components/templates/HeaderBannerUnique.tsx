@@ -16,7 +16,7 @@ export default function HeaderBannerUnique({
   return (
     <>
       <Header />
-      <AnimetedSlide distance={700}>
+      <AnimetedSlide distance={500} threshold={0.1}>
         <Box
           display={{ xs: noneMobile ? 'none' : 'flex', sm: 'flex' }}
           sx={{

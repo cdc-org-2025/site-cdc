@@ -1,7 +1,6 @@
 'use client'
 import HeaderBannerUnique from '@/components/templates/HeaderBannerUnique'
 import React from 'react'
-import PPDI from '../../../assets/banner/ppdi.svg'
 import { useParams } from 'next/navigation'
 import VacancyDescription from './vacancyDescription'
 import Box from '@mui/material/Box'
@@ -16,7 +15,7 @@ export default function TrabalheConoscoVagaPage() {
   const Banner = {
     id: Number(id),
     title: data?.titulo,
-    image: PPDI,
+    image: '/ppdi.svg',
   }
 
   return (

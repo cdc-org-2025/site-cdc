@@ -1,7 +1,7 @@
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import React from 'react'
+import React, { useMemo } from 'react'
 import DirectorImage from '../../../assets/cards-information/institutional-board.svg'
 import CoordinatorImage from '../../../assets/cards-information/institutional-coordinator.svg'
 import AssemblyImage from '../../../assets/cards-information/general-assembly.svg'
@@ -10,58 +10,56 @@ import ProgramImage from '../../../assets/cards-information/program-coordination
 import CardInformation from '@/components/molecules/CardInformation'
 import AnimationSplitText from '@/components/animations/splitText'
 import AnimetedSlide from '@/components/animations/slide'
-// import { useCardsInformativosListQuery } from '@/clients/api/cards-informativos'
+import { useCardsInformativosListQuery } from '@/clients/api/cards-informativos'
 
 export default function OrganizationCdcCards() {
-  // const { data: listCards } = useCardsInformativosListQuery()
+  const { data: listCards } = useCardsInformativosListQuery()
 
-  const cardOptions = [
+  const cardsMap = useMemo(() => {
+    const map: Record<string, { titulo: string; descricao: string }> = {}
+
+    listCards?.forEach((item) => {
+      map[item.titulo] = item
+    })
+
+    return map
+  }, [listCards])
+
+  const cardOptions = useMemo(() => [
     {
       image: DirectorImage,
-      title: 'Diretoria Institucional',
-      description:
-        'A direção do Centro de Desenvolvimento e Cidadania lidera a organização, define a visão, toma decisões estratégicas, gerencia recursos, motiva a equipe, mantém relações externas, assegura a transparência e capta recursos, garantindo que o CDC cumpra sua missão com eficácia e responsabilidade.',
-      xs: 12,
-      md: 6,
-      lg: 6,
+      titulo: 'Diretoria Institucional',
+      xs: 12, md: 6, lg: 6,
     },
     {
       image: CoordinatorImage,
-      title: 'Coordenação Institucional',
-      description:
-        'A Coordenação Institucional do CDC transforma estratégias da direção em ações, gerencia operações, facilita a comunicação, monitora o progresso e apoia decisões. Conecta a direção à equipe, assegura a execução eficaz dos projetos, aloca recursos com eficiência, promove o desenvolvimento da equipe e contribui para o cumprimento da missão da organização.',
-      xs: 12,
-      md: 6,
-      lg: 6,
+      titulo: 'Coordenação Institucional',
+      xs: 12, md: 6, lg: 6,
     },
     {
       image: AssemblyImage,
-      title: 'Assembleia Geral',
-      description:
-        'A Assembleia Geral do CDC toma decisões estratégicas, elege diretorias, supervisiona a gestão, define prioridades e promove a prestação de contas. Também delibera sobre questões importantes, aprova mudanças estatutárias e representa os membros. Como instância máxima de governança, garante alinhamento à missão, atendimento às necessidades da comunidade e transparência nas atividades.',
-      xs: 12,
-      md: 6,
-      lg: 4,
+      titulo: 'Assembleia Geral',
+      xs: 12, md: 6, lg: 4,
     },
     {
       image: AuditImage,
-      title: 'Conselho Fiscal',
-      description:
-        'O Conselho Fiscal do CDC supervisiona as finanças e controla a gestão, revisando contas, orçamentos e realizando auditorias. Elabora relatórios para a Assembleia Geral, emite recomendações estratégicas, garante transparência, conformidade legal e identifica riscos financeiros, assegurando o uso responsável dos recursos e contribuindo para a saúde financeira e integridade da organização.',
-      xs: 12,
-      md: 6,
-      lg: 4,
+      titulo: 'Conselho Fiscal',
+      xs: 12, md: 6, lg: 4,
     },
     {
       image: ProgramImage,
-      title: 'Coordenação de Projetos e Programas',
-      description:
-        'As Coordenações de Projetos e Programas do CDC implementam e avaliam iniciativas, planejam estrategicamente, supervisionam equipes, estabelecem parcerias e monitoram o progresso. Também atuam na defesa de direitos, garantem conformidade legal, promovem conscientização pública e documentam atividades, assegurando o sucesso dos programas e o cumprimento da missão da organização.',
-      xs: 12,
-      md: 12,
-      lg: 4,
+      titulo: 'Coordenação de Projetos e Programas',
+      xs: 12, md: 12, lg: 4,
     },
-  ]
+  ].map(({ titulo, image, ...sizes }) => {
+    const data = cardsMap[titulo]
+    return {
+      image,
+      title: data?.titulo ?? `Título ainda não cadastrado para (${titulo})`,
+      description: data?.descricao ?? `Descrição ainda não cadastrada para (${titulo})`,
+      ...sizes,
+    }
+  }), [cardsMap])
 
   return (
     <>

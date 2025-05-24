@@ -9,7 +9,7 @@ export default function ListCards({ list, page }: { list: any[], page: string })
   const { push } = useRouter()
 
   const handlePushPage = (id: number, documento_url: string) => {
-    if (page === "/noticias") {
+    if (page === "/noticias" || page === "/programas") {
       push(`${page}/${id}`)
     } else {
       window.open(documento_url, '_blank', 'noopener,noreferrer');

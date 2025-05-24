@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
 import Footer from '@/components/molecules/Footer'
 import HeaderBannerUnique from '@/components/templates/HeaderBannerUnique'
-import Publicacoes from '@/features/publicacoes'
+import Programas from '@/features/programas'
 
 export const metadata: Metadata = {
-  title: 'CDC - Publicações',
+  title: 'CDC - Programas',
   description:
     'É uma Organização da Sociedade Civil, sem fins lucrativos, com atuação em âmbito local e nacional. Tem como missão contribuir para a transformação social na promoção da cidadania, por meio de atividades formativas, articulação, incidência em políticas públicas e assessoria técnica, tendo suas ações voltadas à promoção de atividades de relevância pública e social que fortaleçam a democracia e beneficiem a humanidade.',
   authors: {
@@ -13,17 +13,17 @@ export const metadata: Metadata = {
   },
 }
 
-export default function PublicacoesPage() {
+export default function ProgramasPage() {
   const Banner = {
     id: 1,
-    title: 'Publicações',
+    title: 'Programas',
     image: '/ppdi.svg',
   }
 
   return (
     <>
       <HeaderBannerUnique noneMobile Banner={Banner} />
-      <Publicacoes />
+      <Programas />
       <Footer />
     </>
   )

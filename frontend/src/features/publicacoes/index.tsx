@@ -52,13 +52,17 @@ export default function Publicacoes() {
       flexDirection="column"
       gap={{ xs: '32px', md: '24px' }}
       bgcolor="background.default"
+      width={"100%"}
+      maxWidth={"100vw"}
     >
-      <Box display={{ xs: 'flex', sm: 'none' }}>
-        <Typography variant="h3" color="primary">
+      <Box display={{ xs: 'flex', sm: 'none' }} pb="32px">
+        <Typography variant="h3" color="primary" >
           Publicações
         </Typography>
       </Box>
-      <Box display="flex" gap="24px" alignItems={'center'}>
+      <Box display="flex" gap="24px" alignItems={'center'}
+        width={"100%"}
+        maxWidth={"100vw"}>
         <MenuAreasWithSearchInput
           valueInput={fieldSearch}
           setValueInput={setFieldSearch}

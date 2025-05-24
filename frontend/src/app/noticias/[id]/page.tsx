@@ -11,6 +11,7 @@ import CardTagDesc from '@/components/atoms/CardTagDesc'
 import AnimetedSlide from '@/components/animations/slide'
 import { ITransparencia, useListTransparenciaQuery } from '@/clients/api/transparencia'
 import { Lato } from 'next/font/google'
+import { storageUrl } from '@/constants/storageDomain'
 
 const lato = Lato({
   subsets: ['latin'],
@@ -29,7 +30,7 @@ export default function NoticiasUniquePage() {
   const Banner = {
     id: 1,
     title: data?.titulo,
-    image: data?.imagem_capa,
+    image: `${storageUrl}/${data?.imagem_capa}`,
   }
 
   return (
@@ -45,9 +46,11 @@ export default function NoticiasUniquePage() {
               <Typography variant='body1' color="text.secondary" fontWeight={400}>
                 {data?.tempo_leitura} min de leitura
               </Typography>
-              <Typography variant='body1' display={{ xs: "none", sm: "none", md: "block" }} color="text.secondary" fontWeight={400}>
-                Aguardando definição do contéudo
-              </Typography>
+              {data?.areas?.map(area => (
+                <Typography key={area.id} variant='body1' display={{ xs: "none", sm: "none", md: "block" }} color="text.secondary" fontWeight={400}>
+                  {area.nome}
+                </Typography>
+              ))}
             </Box>
             <Box
               sx={{
