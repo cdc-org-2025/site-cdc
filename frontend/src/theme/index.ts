@@ -8,7 +8,7 @@ const lato = Lato({
   weight: '400',
 })
 
-const getTheme = (mode: PaletteMode | undefined) =>
+const getTheme = (mode: PaletteMode | undefined, fontScale: number = 1) =>
   createTheme({
     palette: {
       mode: mode,
@@ -20,13 +20,11 @@ const getTheme = (mode: PaletteMode | undefined) =>
         light: mode === 'dark' ? '#000' : '#fff',
         main: mode === 'dark' ? '#000' : '#a7181d',
         dark: mode === 'dark' ? '#000' : '#992600',
-        // contrastText: mode === 'dark' ? '#' : '#',
       },
       secondary: {
         light: mode === 'dark' ? '#000' : '#fe9a03',
         main: mode === 'dark' ? '#000' : '#cb7a01',
         dark: mode === 'dark' ? '#fff' : '#000',
-        // contrastText: mode === 'dark' ? '#' : '#',
       },
       text: {
         primary: mode === 'dark' ? '#000' : '#222',
@@ -35,63 +33,22 @@ const getTheme = (mode: PaletteMode | undefined) =>
     },
     typography: {
       fontFamily: `${lato.style.fontFamily}, "Source Sans Pro", sans-serif`,
-      fontSize: 18,
-      h1: {
-        fontFamily: `${lato.style.fontFamily}, "Source Sans Pro", sans-serif`,
-        fontSize: '2.67rem', // 48px
-        fontWeight: 700,
-      },
-      h2: {
-        fontFamily: `${lato.style.fontFamily}, "Source Sans Pro", sans-serif`,
-        fontSize: '2.22rem', // 40px
-        fontWeight: 700,
-      },
-      h3: {
-        fontFamily: `${lato.style.fontFamily}, "Source Sans Pro", sans-serif`,
-        fontSize: '1.94rem', // 35px
-        fontWeight: 700,
-      },
-      h4: {
-        fontFamily: `${lato.style.fontFamily}, "Source Sans Pro", sans-serif`,
-        fontSize: '1.55rem', // 28px
-        fontWeight: 700,
-      },
-      h5: {
-        fontFamily: `${lato.style.fontFamily}, "Source Sans Pro", sans-serif`,
-        fontSize: '1.28rem', // 23px
-        fontWeight: 700,
-      },
-      overline: {
-        fontSize: '1rem', //18px
-      },
-      body1: {
-        fontFamily: `${lato.style.fontFamily}, "Source Sans Pro", sans-serif`,
-        fontSize: '0.89rem', // 16px
-        fontWeight: 500,
-      },
-      body2: {
-        fontFamily: `${lato.style.fontFamily}, "Source Sans Pro", sans-serif`,
-        fontSize: '0.78rem', // 14px
-        fontWeight: 500,
-      },
-      subtitle1: {
-        fontFamily: `${lato.style.fontFamily}, "Source Sans Pro", sans-serif`,
-        fontSize: '0.89rem', // 16px
-      },
-      subtitle2: {
-        fontFamily: `${lato.style.fontFamily}, "Source Sans Pro", sans-serif`,
-        fontSize: '0.78rem', // 14px
-      },
+      fontSize: 18 * fontScale,
+      h1: { fontSize: `${48 * fontScale}px`, fontWeight: 700 },
+      h2: { fontSize: `${40 * fontScale}px`, fontWeight: 700 },
+      h3: { fontSize: `${35 * fontScale}px`, fontWeight: 700 },
+      h4: { fontSize: `${28 * fontScale}px`, fontWeight: 700 },
+      h5: { fontSize: `${23 * fontScale}px`, fontWeight: 700 },
+      body1: { fontSize: `${16 * fontScale}px`, fontWeight: 500 },
+      body2: { fontSize: `${14 * fontScale}px`, fontWeight: 500 },
+      subtitle1: { fontSize: `${16 * fontScale}px` },
+      subtitle2: { fontSize: `${14 * fontScale}px` },
+      overline: { fontSize: `${18 * fontScale}px` },
     },
     breakpoints: {
-      values: {
-        xs: 0,
-        sm: 480,
-        md: 834,
-        lg: 1280,
-        xl: 1920,
-      },
+      values: { xs: 0, sm: 480, md: 834, lg: 1280, xl: 1920 },
     },
-  })
+  });
+
 
 export default getTheme
