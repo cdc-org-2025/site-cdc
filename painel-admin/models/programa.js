@@ -7,7 +7,7 @@ export class Programa extends Model {
       descricao: DataTypes.TEXT,
       // area_id: DataTypes.INTEGER,
       url_image_capa: DataTypes.STRING,
-      subtitulo: DataTypes.STRING,
+      subtitulo: DataTypes.TEXT,
       area_ids: {
         type: DataTypes.ARRAY(DataTypes.INTEGER), // array de inteiros
         allowNull: true
@@ -22,7 +22,7 @@ export class Programa extends Model {
           this.setDataValue('area_ids', value)
         }
       },
-      resumo: DataTypes.STRING,
+      resumo: DataTypes.TEXT,
 
 
       // uploadCapa: {
