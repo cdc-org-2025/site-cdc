@@ -55,7 +55,6 @@ export function SettingsProvider({ children }: Props) {
     if (savedWeight) setFontWeightScale(parseFloat(savedWeight))
   }, [])
 
-
   // 🧠 Responsividade
   useEffect(() => {
     const handleResize = () => {
@@ -130,7 +129,6 @@ export function SettingsProvider({ children }: Props) {
     Cookies.set('font-scale', '1')
     setFontScale(1)
   }, [])
-
 
   const contextValue = useMemo(
     () => ({
