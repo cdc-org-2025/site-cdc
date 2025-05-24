@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import Footer from '@/components/molecules/Footer'
 import HeaderBannerUnique from '@/components/templates/HeaderBannerUnique'
-import PPDI from '../../assets/banner/ppdi.svg'
 import Doacoes from '@/features/doacoes'
 
 export const metadata: Metadata = {
@@ -19,7 +18,7 @@ export default function DoacoesPage() {
     id: 1,
     title: 'Seu apoio é fundamental para manter o',
     highlight: 'CDC ativo e lutando pela democracia.',
-    image: PPDI,
+    image: '/ppdi.svg',
   }
   return (
     <>

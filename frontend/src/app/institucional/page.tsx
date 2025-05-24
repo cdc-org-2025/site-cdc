@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import Footer from '@/components/molecules/Footer'
 import InstitucionalPage from '@/features/institucional'
 import HeaderBannerUnique from '@/components/templates/HeaderBannerUnique'
-import PPDI from '../../assets/banner/ppdi.svg'
 import { TypeBannerUnique } from '@/components/atoms/Banner/unique'
 
 export const metadata: Metadata = {
@@ -20,7 +19,7 @@ export default function Institucional() {
     id: 1,
     title: 'O Centro de Desenvolvimento e Cidadania é uma OSC dedicada à',
     highlight: "transformação social",
-    image: PPDI,
+    image: '/ppdi.svg',
   }
 
   return (

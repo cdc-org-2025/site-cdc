@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import Footer from '@/components/molecules/Footer'
 import HeaderBannerUnique from '@/components/templates/HeaderBannerUnique'
-import PPDI from '../../assets/banner/ppdi.svg'
 import Programas from '@/features/programas'
 
 export const metadata: Metadata = {
@@ -18,7 +17,7 @@ export default function ProgramasPage() {
   const Banner = {
     id: 1,
     title: 'Programas',
-    image: PPDI,
+    image: '/ppdi.svg',
   }
 
   return (
