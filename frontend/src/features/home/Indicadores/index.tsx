@@ -63,7 +63,8 @@ export default function Indicadores() {
             typography: { xs: 'h4', sm: "h4", md: 'h3', lg: "h3" },
             color: '#f6f6f6',
             textAlign: 'left',
-            paddingBottom: "500px"
+            paddingBottom: "500px",
+            fontSize: "32px"
           }}
           textTransform="none"
         >
@@ -118,6 +119,7 @@ export default function Indicadores() {
                 variant="overline"
                 color="text.primary"
                 textTransform="none"
+                lineHeight={"150%"}
               >
                 {item.descricao}
               </Typography>

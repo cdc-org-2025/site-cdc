@@ -34,23 +34,31 @@ const schema = yup
         'fileFormat',
         'Apenas arquivos PDF ou Word (.pdf, .doc, .docx) são permitidos.',
         (file) => {
-          if (!file) return false;
+          if (!file) return false
 
           const allowedTypes = [
             'application/pdf',
             'application/msword',
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-          ];
+          ]
 
-          const allowedExtensions = ['.pdf', '.doc', '.docx'];
+          const allowedExtensions = ['.pdf', '.doc', '.docx']
 
-          const fileType = (file as File).type;
-          const fileName = (file as File).name.toLowerCase();
+          const fileType = (file as File).type
+          const fileName = (file as File).name.toLowerCase()
 
-          const isValidType = allowedTypes.includes(fileType);
-          const isValidExtension = allowedExtensions.some(ext => fileName.endsWith(ext));
+          const isValidType = allowedTypes.includes(fileType)
+          const isValidExtension = allowedExtensions.some(ext => fileName.endsWith(ext))
 
-          return isValidType && isValidExtension;
+          return isValidType && isValidExtension
+        }
+      )
+      .test(
+        'fileSize',
+        'O arquivo deve ter no máximo 5MB.',
+        (file) => {
+          if (!file) return false
+          return (file as File).size <= 5 * 1024 * 1024 // 5MB
         }
       )
   })

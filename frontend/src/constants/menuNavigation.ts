@@ -34,6 +34,7 @@ export const MenuOptions = [
   {
     id: 2,
     label: 'Programas',
+    link: "/programas",
     subMenus: [],
   },
   {

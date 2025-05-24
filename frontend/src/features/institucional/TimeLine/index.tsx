@@ -9,8 +9,8 @@ import AnimationSplitText from '@/components/animations/splitText'
 import AnimetedSlide from '@/components/animations/slide'
 import AnimatedFade from '@/components/animations/fade'
 import { ILinhaTempo, useTimeLineQuery } from '@/clients/api/linha-tempo'
-import { storageUrl } from '@/constants/storageDomain'
 import { sanitizeHtml } from '@/utils/stripHtmlTags'
+import { isStorage } from '@/helpers/isStorage'
 
 export default function Timeline() {
   const {
@@ -19,14 +19,6 @@ export default function Timeline() {
     },
   } = useTheme()
   const { data } = useTimeLineQuery()
-
-  const isStorage = (url: string) => {
-    if (storageUrl?.includes(url)) {
-      return url
-    } else {
-      return `${storageUrl}/${url}`
-    }
-  }
 
   return data?.map((item: ILinhaTempo, index: number) => (
     <Box

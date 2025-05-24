@@ -7,6 +7,7 @@ export interface IPrograma {
   url_image_capa: string
   conteudo: string
   resumo: string
+  areas: { id: number, nome: string }[]
 }
 
 export interface IProgramList {
@@ -15,5 +16,5 @@ export interface IProgramList {
 
 export interface IProgramResponse {
   data: IPrograma[]
-  areas_filtro: { id: number, nome: string }
+  areas_filtro: { id: number, nome: string }[]
 }
