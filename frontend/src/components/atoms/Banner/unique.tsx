@@ -35,7 +35,7 @@ export default function BannerUnique({ Banner }: IBannerUnique) {
           sx={{
             backgroundImage: `
               linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
-              url("${!Banner?.image?.src ? `${storageUrl}/${Banner?.image}` : Banner?.image?.src}")
+              url("${Banner.image}")
             `,
             backgroundSize: 'cover',
             backgroundPosition: 'center',

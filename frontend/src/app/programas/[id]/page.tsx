@@ -9,6 +9,7 @@ import LatestNews from '@/components/molecules/LastestNews'
 import Transparency from '@/features/institucional/Transparency'
 import Faq from '@/features/institucional/Faq'
 import { Lato } from 'next/font/google'
+import { storageUrl } from '@/constants/storageDomain'
 
 const lato = Lato({
   subsets: ['latin'],
@@ -22,7 +23,7 @@ export default function ProgramaUniquePage() {
   const Banner = {
     id: 1,
     title: `${data?.titulo} -`,
-    image: data?.url_image_capa,
+    image: `${storageUrl}/${data?.url_image_capa}`,
     highlight: data?.subtitulo
   }
 

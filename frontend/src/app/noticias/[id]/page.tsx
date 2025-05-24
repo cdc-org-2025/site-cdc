@@ -11,6 +11,7 @@ import CardTagDesc from '@/components/atoms/CardTagDesc'
 import AnimetedSlide from '@/components/animations/slide'
 import { ITransparencia, useListTransparenciaQuery } from '@/clients/api/transparencia'
 import { Lato } from 'next/font/google'
+import { storageUrl } from '@/constants/storageDomain'
 
 const lato = Lato({
   subsets: ['latin'],
@@ -29,7 +30,7 @@ export default function NoticiasUniquePage() {
   const Banner = {
     id: 1,
     title: data?.titulo,
-    image: data?.imagem_capa,
+    image: `${storageUrl}/${data?.imagem_capa}`,
   }
 
   return (
