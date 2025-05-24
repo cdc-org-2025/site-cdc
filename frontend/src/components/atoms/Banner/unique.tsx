@@ -2,7 +2,6 @@
 import React from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import { storageUrl } from '@/constants/storageDomain'
 
 export interface IBannerUnique {
   Banner: TypeBannerUnique
