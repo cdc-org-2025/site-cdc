@@ -84,14 +84,14 @@ export default function Banner() {
     >
       <Box
         display="flex"
-        width={`${BannerOption.length * 100}vw`}
+        width={`${BannerOption?.length * 100}vw`}
         height="100%"
         sx={{
           transition: 'transform 0.5s ease-in-out',
           transform: `translateX(-${currentIndex * 100}vw)`,
         }}
       >
-        {BannerOption.map((banner) => (
+        {BannerOption?.map((banner) => (
           <Box
             key={banner.id}
             width="100vw"
@@ -147,7 +147,7 @@ export default function Banner() {
                 }}
                 color={'primary.light'}
               >
-                {banner.title}
+                {banner?.title}
                 {banner?.highlight && (
                   <Typography
                     variant="h2"
@@ -166,7 +166,7 @@ export default function Banner() {
               </Typography>
               <Box>
                 <ButtonAction
-                  onClick={() => push(banner.link)}
+                  onClick={() => push(banner?.link)}
                   endIcon={
                     <ArrowForwardIosIcon
                       sx={{ height: '14px', width: '20px' }}
@@ -203,13 +203,13 @@ export default function Banner() {
         left="50%"
         sx={{ display: 'flex', gap: '8px', transform: 'translateX(-50%)' }}
       >
-        {BannerOption.map((_, index) => (
+        {BannerOption?.map((banner, index) => (
           <CircleIcon
-            key={index}
+            key={banner.id}
             onClick={() => handleDotClick(index)}
             sx={{
               width: '10px',
-              color: index === currentIndex ? secondary.light : '#ccc',
+              color: index === currentIndex ? secondary?.light : '#ccc',
               transition: 'color 0.3s ease-in-out',
               cursor: 'pointer',
             }}
