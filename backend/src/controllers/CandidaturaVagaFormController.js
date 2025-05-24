@@ -54,7 +54,11 @@ class CandidaturaVagaFormController {
                 fs.unlinkSync(path.resolve(anexo.path));
             }
 
-            return res.json({ message: 'Formulário enviado com sucesso!' });
+            return res.status(201).json({
+                success: true,
+                message: 'Formulário enviado com sucesso!'
+            });
+
 
         } catch (error) {
             console.error(error);
