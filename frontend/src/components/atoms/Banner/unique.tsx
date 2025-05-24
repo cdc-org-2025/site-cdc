@@ -17,7 +17,8 @@ export interface TypeBannerUnique {
 export default function BannerUnique({ Banner }: IBannerUnique) {
   return (
     <Box
-      width="100vw"
+      width="100%"
+      maxWidth="100vw"
       height="100%"
       sx={{
         backgroundColor: '#f3f2ed',
@@ -26,7 +27,7 @@ export default function BannerUnique({ Banner }: IBannerUnique) {
         position: 'relative',
       }}
     >
-      <Box display="flex" width={`100vw`} height="100%">
+      <Box display="flex" width="100%" maxWidth="100vw" height="100%">
         <Box
           key={Banner.id}
           width="100vw"

@@ -1,7 +1,7 @@
 import React from 'react'
 import Header from '../molecules/Header'
 import Box from '@mui/material/Box'
-import AnimetedSlide from '../animations/slide'
+// import AnimetedSlide from '../animations/slide'
 import BannerUnique, { TypeBannerUnique } from '../atoms/Banner/unique'
 
 interface IHeaderBannerUnique {
@@ -16,18 +16,18 @@ export default function HeaderBannerUnique({
   return (
     <>
       <Header />
-      <AnimetedSlide distance={700}>
-        <Box
-          display={{ xs: noneMobile ? 'none' : 'flex', sm: 'flex' }}
-          sx={{
-            height: 'calc(100vh - 94px)',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <BannerUnique Banner={Banner} />
-        </Box>
-      </AnimetedSlide>
+      {/* <AnimetedSlide distance={700}> */}
+      <Box
+        display={{ xs: noneMobile ? 'none' : 'flex', sm: 'flex' }}
+        sx={{
+          height: 'calc(100vh - 94px)',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <BannerUnique Banner={Banner} />
+      </Box>
+      {/* </AnimetedSlide> */}
     </>
   )
 }
