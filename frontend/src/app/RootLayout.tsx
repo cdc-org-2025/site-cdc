@@ -29,11 +29,11 @@ function InnerRootLayout({
 
   return (
     <ThemeProvider theme={getTheme(theme, fontScale, fontWeightScale)}>
-      <html lang="pt-BR">
+      <html lang={"pt-BR"}>
         <body>
           {children}
         </body>
       </html>
-    </ThemeProvider >
+    </ThemeProvider>
   );
 }

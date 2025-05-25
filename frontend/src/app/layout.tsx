@@ -24,7 +24,7 @@ export default async function LocalePageLayout({
 }) {
 
   return (
-    <RootLayout>
+    <RootLayout  >
       {children}
       <ToastContainer
         theme="colored"
