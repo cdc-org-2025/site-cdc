@@ -32,7 +32,6 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
   const [contentHeight, setContentHeight] = React.useState(0)
   const { push } = useRouter()
 
-
   React.useEffect(() => {
     if (isExpanded && contentRef.current) {
       setContentHeight(contentRef.current.scrollHeight)

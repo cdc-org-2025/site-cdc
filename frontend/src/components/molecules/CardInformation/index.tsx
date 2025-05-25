@@ -16,7 +16,6 @@ export default function CardInformation({ item }: ICardInformation) {
   const { description, image, title } = item
   const { palette: { background } } = useTheme()
 
-
   return (
     <Box
       width="100%"

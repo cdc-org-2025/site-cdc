@@ -31,7 +31,6 @@ export default function MenuAreas({
       background,
       primary,
       secondary: { light },
-      text
     },
   } = useTheme()
 
