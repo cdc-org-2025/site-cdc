@@ -1,7 +1,6 @@
 'use client'
 import { useProgramasListQuery } from '@/clients/api/programas'
-import { MenuOptions } from '@/constants/menuNavigation'
-import { IMenu, ISubMenu } from '@/constants/menuNavigation'
+import { MenuOptions, IMenu, ISubMenu } from '@/constants/menuNavigation'
 
 export const useMenuOptions = (): IMenu[] => {
   const { data } = useProgramasListQuery()

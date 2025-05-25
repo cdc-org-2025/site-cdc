@@ -28,11 +28,13 @@ export default function HomePage() {
 
   const cardOptions = [
     {
+      id: 0,
       image: cardMissao?.url_imagem ? `${storageUrl}/${cardMissao?.url_imagem}` : MissionImage,
       title: cardMissao?.titulo,
       description: cardMissao?.descricao
     },
     {
+      id: 1,
       image: cardVisao?.url_imagem ? `${storageUrl}/${cardVisao?.url_imagem}` : VisionImage,
       title: cardVisao?.titulo,
       description: cardVisao?.descricao
@@ -149,7 +151,7 @@ export default function HomePage() {
         px={{ xs: '16px', md: '24px' }}
       >
         {cardOptions.map((item) => (
-          <Box width={{ xs: '100%', md: '50%' }} key={item.title}>
+          <Box width={{ xs: '100%', md: '50%' }} key={item.id}>
             <AnimetedSlide distance={100} tension={10} friction={5} threshold={0.5}>
               <CardInformation item={item} />
             </AnimetedSlide>

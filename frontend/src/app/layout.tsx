@@ -19,14 +19,12 @@ export const metadata: Metadata = {
 
 export default async function LocalePageLayout({
   children,
-  params: { locale },
 }: {
   children: React.ReactNode
-  params: { locale: string }
 }) {
 
   return (
-    <RootLayout locale={locale} >
+    <RootLayout>
       {children}
       <ToastContainer
         theme="colored"

@@ -200,6 +200,11 @@ export default function FormEnrollment({ tituloVaga }: { tituloVaga?: string }) 
                 error={!!errors.anexo}
                 helperText={errors.anexo?.message}
               />
+              {!errors.anexo?.message && (
+                <Typography style={{ opacity: 0.5 }} fontSize={"12px"}>
+                  O arquivo é obrigatório, deve ter no máximo 5MB e apenas os formatos PDF ou Word(.pdf, .doc, .docx) são permitidos.
+                </Typography>
+              )}
             </Box>
 
             <Box

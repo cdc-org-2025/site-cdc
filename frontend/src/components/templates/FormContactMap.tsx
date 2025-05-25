@@ -13,6 +13,8 @@ import AnimetedSlide from '../animations/slide'
 import { IPostContato, useContatoMutation } from '@/clients/api/contato'
 import { toast } from 'react-toastify'
 import ZoomOutOnView from '../animations/zoomOutOnView'
+import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
+import MailOutlineIcon from '@mui/icons-material/MailOutline';
 
 const schema = yup
   .object({
@@ -87,6 +89,7 @@ export default function FormContactMap() {
       mb={{ xs: '40px', md: '80px' }}
       px={{ xs: '16px', md: '32px' }}
       width="100%"
+      maxWidth={"100vw"}
     >
       <AnimationSplitText>
         <Typography
@@ -97,21 +100,34 @@ export default function FormContactMap() {
           pb="24px"
           fontSize={{ xs: '27px', md: '1.94rem' }}
         >
-          Entre em contato conosco
+          Contato
         </Typography>
       </AnimationSplitText>
 
-      <AnimationSplitText>
-        <Typography
-          width="100%"
-          variant="overline"
-          color="#222"
-          textTransform="none"
-          lineHeight={"150%"}
-        >
-          O Centro de Democracia e Cidadania está disponível para contato, tanto por e-mail, WhatsApp, como presencialmente.</Typography>
-      </AnimationSplitText>
+      <Box width="100%" maxWidth={"605px"} pb="16px">
+        <AnimationSplitText>
+          <Typography
+            width="100%"
+            variant="overline"
+            color="text.primary"
+            textTransform="none"
+            lineHeight={"150%"}
+          >
+            O Centro de Democracia e Cidadania está disponível para contato, tanto por e-mail, WhatsApp, como presencialmente.</Typography>
+        </AnimationSplitText>
+      </Box>
 
+      <Box display="flex" gap="16px" alignItems={"center"}>
+        <Typography color="text.primary" display={"flex"} alignItems={"center"} variant="overline" textTransform={"none"}>
+          <MailOutlineIcon style={{ height: 20 }} color="primary" />
+          cdc@cdc.org.br
+        </Typography>
+        <Typography color="text.primary" display={"flex"} alignItems={"center"} variant="overline" textTransform={"none"}>
+          <LocalPhoneOutlinedIcon style={{ height: 20 }} color="primary" />
+          (81) 3224-6963
+        </Typography>
+      </Box>
+      <Typography color="text.primary" display={"flex"} alignItems={"center"} variant="overline" textTransform={"none"}> Aberto das 08h00 às 17h00</Typography>
       <Box
         mt="32px"
         display="flex"

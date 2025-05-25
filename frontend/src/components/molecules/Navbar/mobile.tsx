@@ -48,36 +48,24 @@ export default function NavbarMobile({ menuOptions, setOpen }: INavbarMobile) {
 
       {menuOptions?.slice(1).map((item) => (
         <Box key={item.id} sx={{ maxWidth: '100%', overflowX: 'hidden' }}>
-          {!item.subMenus ? (
-            <Button
-              sx={{
-                color: secondary.dark,
-                height: '34px',
-                mb: '20px',
-                width: '100%',
-                justifyContent: 'flex-start',
-              }}
-              onClick={() => item.link && push(item.link)}
-            >
-              <Typography
-                textTransform="capitalize"
-                variant="overline"
-                fontWeight={700}
-              >
-                {item.label}
-              </Typography>
-            </Button>
-          ) : (
+          <Button
+            sx={{
+              color: secondary.dark,
+              height: '34px',
+              mb: '20px',
+              width: '100%',
+              justifyContent: 'flex-start',
+            }}
+            onClick={() => item.link && push(item.link)}
+          >
             <Typography
-              variant="overline"
               textTransform="capitalize"
+              variant="overline"
               fontWeight={700}
-              pb="20px"
-              pl="8px"
             >
               {item.label}
             </Typography>
-          )}
+          </Button>
 
           {item.subMenus && (
             <Box

@@ -53,6 +53,7 @@ export default function Noticias() {
       flexDirection="column"
       gap={{ xs: '32px', md: '24px' }}
       bgcolor="background.default"
+      overflow={"hidden"} width={"100%"} maxWidth={"100vw"}
     >
       <ZoomOutOnView>
         <Box display={{ xs: 'flex', sm: 'none' }} pb="32px" >

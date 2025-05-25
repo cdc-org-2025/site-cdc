@@ -41,8 +41,8 @@ export default function ButtonAccessible() {
         position="fixed"
         bottom={90}
         right={34}
-        marginBottom="90px"
-        marginRight="34px"
+        marginBottom={{ xs: "0px", sm: "90px" }}
+        marginRight={{ xs: "0px", sm: "34px" }}
         border="2px solid #52c1ee"
         sx={{ cursor: 'pointer' }}
         onClick={handleClick}

@@ -10,34 +10,30 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export default function RootLayout({
   children,
-  locale,
 }: {
   children: React.ReactNode;
-  locale: string;
 }) {
   return (
     <ContextProviders>
-      <InnerRootLayout locale={locale}>{children}</InnerRootLayout>
+      <InnerRootLayout >{children}</InnerRootLayout>
     </ContextProviders>
   );
 }
 
 function InnerRootLayout({
   children,
-  locale,
 }: {
   children: React.ReactNode;
-  locale: string;
 }) {
   const { theme, fontScale, fontWeightScale } = useContext(SettingsContext)
 
   return (
     <ThemeProvider theme={getTheme(theme, fontScale, fontWeightScale)}>
-      <html lang={locale}>
+      <html lang="pt-BR">
         <body>
           {children}
         </body>
       </html>
-    </ThemeProvider>
+    </ThemeProvider >
   );
 }

@@ -17,7 +17,7 @@ export default function LatestNews({ programa }: { programa?: boolean }) {
   const { push } = useRouter()
 
   return (
-    <Box px={{ xs: '16px', md: '32px' }} mt="64px" pb="40px" width="100%">
+    <Box px={{ xs: '16px', md: '32px' }} mt="64px" pb="40px" width="100%" maxWidth={"100vw"}>
       {programa && (
         <VectorRoundedLines right={0} rotate margin="60px 0px 0px 0px" />
       )}
@@ -51,18 +51,20 @@ export default function LatestNews({ programa }: { programa?: boolean }) {
           </Typography>
         </Box>
       )}
-      <ZoomOutOnView delay={200} scaleFrom={1.3}>
-        <Grid container spacing={{ xs: '35px', md: 4 }} >
-          {dataset?.map((news) => (
-            <Grid item key={news.id} xs={12} sm={4} md={4}>
-              <CardTagDesc
-                info={news}
-                onclick={() => push(`/noticias/${news.id}`)}
-              />
-            </Grid>
-          ))}
-        </Grid>
-      </ZoomOutOnView>
+      <Box overflow={"hidden"} width={"100%"} maxWidth={"100vw"}>
+        <ZoomOutOnView delay={200} scaleFrom={1.3}>
+          <Grid container spacing={{ xs: '35px', md: 4 }} >
+            {dataset?.map((news) => (
+              <Grid item key={news.id} xs={12} sm={4} md={4}>
+                <CardTagDesc
+                  info={news}
+                  onclick={() => push(`/noticias/${news.id}`)}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        </ZoomOutOnView>
+      </Box>
     </Box>
   )
 }
