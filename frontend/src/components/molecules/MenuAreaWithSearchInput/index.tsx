@@ -35,6 +35,7 @@ export default function MenuAreasWithSearchInput({
 }: IMenuAreas) {
   const {
     palette: {
+      background,
       secondary: { light },
     },
   } = useTheme()
@@ -157,7 +158,7 @@ export default function MenuAreasWithSearchInput({
                 <ButtonTag
                   key={item.id}
                   backgroundColor={
-                    areaSelect.includes(item.nome) ? light : '#fff5e6'
+                    areaSelect.includes(item.nome) ? light : background.paper
                   }
                   startIcon={
                     areaSelect.includes(item.nome) && (

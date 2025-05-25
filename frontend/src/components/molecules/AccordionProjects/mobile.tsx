@@ -20,7 +20,7 @@ export default function AccordionProjectsMobile({
   }) {
 
   const {
-    palette: { secondary, text },
+    palette: { secondary, text, background },
   } = useTheme()
 
   const contentRef = useRef<HTMLDivElement>(null)
@@ -165,7 +165,7 @@ export default function AccordionProjectsMobile({
               width: '100%',
               height: '480px',
               borderRadius: '32px',
-              backgroundColor: '#f3f2ed',
+              backgroundColor: background.default,
               backgroundImage: `url(${expandedAccordion?.url_image_capa ?? "https://support.heberjahiz.com/hc/article_attachments/21013076295570"} )`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',

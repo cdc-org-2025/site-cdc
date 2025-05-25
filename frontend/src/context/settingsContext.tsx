@@ -19,14 +19,25 @@ interface SettingsContextType {
   windowSize: IWindowProps
   theme: PaletteMode | undefined
   toggleTheme: () => void
+
   fontScale: number
   increaseFont: () => void
   decreaseFont: () => void
   resetFont: () => void
+
   fontWeightScale: number
   increaseFontWeight: () => void
   decreaseFontWeight: () => void
   resetFontWeight: () => void
+
+  grayscale: boolean
+  toggleGrayscale: () => void
+
+  highContrast: boolean
+  toggleHighContrast: () => void
+
+  negativeContrast: boolean
+  toggleNegativeContrast: () => void
 }
 
 interface Props {
@@ -40,6 +51,14 @@ export function SettingsProvider({ children }: Props) {
     width: typeof window !== 'undefined' ? window.innerWidth : 0,
     height: typeof window !== 'undefined' ? window.innerHeight : 0,
   })
+
+  const [grayscale, setGrayscale] = useState(false)
+  const [highContrast, setHighContrast] = useState(false)
+  const [negativeContrast, setNegativeContrast] = useState(false)
+
+  const toggleGrayscale = () => setGrayscale(prev => !prev)
+  const toggleHighContrast = () => setHighContrast(prev => !prev)
+  const toggleNegativeContrast = () => setNegativeContrast(prev => !prev)
 
   const [theme, setTheme] = useState<PaletteMode | undefined>('light')
   const [fontScale, setFontScale] = useState<number>(1)
@@ -130,22 +149,29 @@ export function SettingsProvider({ children }: Props) {
     setFontScale(1)
   }, [])
 
-  const contextValue = useMemo(
-    () => ({
-      windowSize,
-      theme,
-      toggleTheme,
-      fontScale,
-      increaseFont,
-      decreaseFont,
-      resetFont,
-      fontWeightScale,
-      increaseFontWeight,
-      decreaseFontWeight,
-      resetFontWeight,
-    }),
-    [windowSize, theme, toggleTheme, fontScale, increaseFont, decreaseFont, resetFont, fontWeightScale, increaseFontWeight, decreaseFontWeight, resetFontWeight]
-  )
+  const contextValue = useMemo(() => ({
+    windowSize,
+    theme,
+    toggleTheme,
+    fontScale,
+    increaseFont,
+    decreaseFont,
+    resetFont,
+    fontWeightScale,
+    increaseFontWeight,
+    decreaseFontWeight,
+    resetFontWeight,
+    grayscale,
+    toggleGrayscale,
+    highContrast,
+    toggleHighContrast,
+    negativeContrast,
+    toggleNegativeContrast,
+  }), [
+    windowSize, theme, toggleTheme, fontScale, increaseFont, decreaseFont, resetFont,
+    fontWeightScale, increaseFontWeight, decreaseFontWeight, resetFontWeight,
+    grayscale, highContrast, negativeContrast
+  ])
 
   return (
     <SettingsContext.Provider value={contextValue}>

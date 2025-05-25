@@ -14,7 +14,7 @@ interface INavbarMobile {
 
 export default function NavbarMobile({ menuOptions, setOpen }: INavbarMobile) {
   const {
-    palette: { secondary },
+    palette: { secondary, background },
   } = useTheme()
   const { handleSubMenuClick } = useNavigation()
   const { push } = useRouter()
@@ -33,7 +33,7 @@ export default function NavbarMobile({ menuOptions, setOpen }: INavbarMobile) {
       maxWidth="100vw"
       height="calc(100vh - 94px)"
       sx={{
-        backgroundColor: '#f3f2ed',
+        backgroundColor: background.default,
         zIndex: 20,
         overflowY: 'auto',
         overflowX: 'hidden',

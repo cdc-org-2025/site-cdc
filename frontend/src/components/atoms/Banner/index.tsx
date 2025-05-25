@@ -14,7 +14,7 @@ import { INoticiasResponse } from '@/clients/api/noticias'
 export default function Banner({ data }: { data?: INoticiasResponse }) {
   const { push } = useRouter()
   const {
-    palette: { secondary },
+    palette: { secondary, background },
   } = useTheme()
   const [currentIndex, setCurrentIndex] = useState<number>(0)
   const [resetTimer, setResetTimer] = useState<boolean>(false)
@@ -75,7 +75,7 @@ export default function Banner({ data }: { data?: INoticiasResponse }) {
       width="100vw"
       height="100%"
       sx={{
-        backgroundColor: '#f3f2ed',
+        backgroundColor: background.default,
         borderRadius: '0 0 16px 16px',
         overflow: 'hidden',
         position: 'relative',

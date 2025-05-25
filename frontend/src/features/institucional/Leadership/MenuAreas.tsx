@@ -28,7 +28,10 @@ export default function MenuAreas({
 }: IMenuAreas) {
   const {
     palette: {
+      background,
+      primary,
       secondary: { light },
+      text
     },
   } = useTheme()
 
@@ -105,7 +108,7 @@ export default function MenuAreas({
           },
         }}
       >
-        <Box p="24px" bgcolor={liderancas ? '#fff' : 'inherit'}>
+        <Box p="24px" bgcolor={liderancas ? primary.light : 'inherit'}>
           <Box
             display="flex"
             justifyContent="space-between"
@@ -118,7 +121,7 @@ export default function MenuAreas({
               onClick={handleCloseMenu}
               aria-label="Fechar menu de áreas"
             >
-              <CloseIcon sx={{ width: 16, height: 16, color: '#333' }} />
+              <CloseIcon sx={{ width: 16, height: 16, color: '#222' }} />
             </IconButton>
           </Box>
 
@@ -127,7 +130,7 @@ export default function MenuAreas({
               <ButtonTag
                 key={area.id}
                 backgroundColor={
-                  areaSelect.some((a) => a.id === area.id) ? light : liderancas ? '#fff' : '#fff5e6'
+                  areaSelect.some((a) => a.id === area.id) ? light : liderancas ? primary.light : background.paper
                 }
                 startIcon={
                   areaSelect?.includes(area) && (

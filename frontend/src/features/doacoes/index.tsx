@@ -6,9 +6,11 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import React from 'react'
 import { storageUrl } from '@/constants/storageDomain'
+import { useTheme } from '@mui/material'
 
 export default function Doacoes() {
   const { data } = useDadosBancariosQuery()
+  const { palette: { background } } = useTheme()
 
   return (
     <Box
@@ -50,7 +52,7 @@ export default function Doacoes() {
               display="flex"
               flexDirection="column"
               alignItems={'center'}
-              bgcolor="#FFF5E699"
+              bgcolor={background.paper}
               gap="24px"
               width="100%"
               maxWidth={'800px'}

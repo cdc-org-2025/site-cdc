@@ -104,7 +104,7 @@ export default function Header() {
               },
             }}
           >
-            <Typography whiteSpace={'nowrap'} color='#A7181D' fontWeight={400} textTransform="none" >Doe agora</Typography>
+            <Typography whiteSpace={'nowrap'} color="primary" fontWeight={400} textTransform="none" >Doe agora</Typography>
           </Button>
           <Box
             width={{ xs: '110px', md: '140px' }}

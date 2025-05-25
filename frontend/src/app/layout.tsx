@@ -1,5 +1,4 @@
 import RootLayout from './RootLayout'
-import ButtonAccessible from '@/components/atoms/ButtonAccessible'
 import { Metadata } from 'next'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -30,7 +29,6 @@ export default async function LocalePageLayout({
         theme="colored"
         className="custom-toast"
       />
-      <ButtonAccessible />
     </RootLayout>
   )
 }

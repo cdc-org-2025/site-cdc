@@ -1,3 +1,4 @@
+import { useTheme } from '@mui/material'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { StaticImport } from 'next/dist/shared/lib/get-img-props'
@@ -13,6 +14,8 @@ interface ICardInformation {
 
 export default function CardInformation({ item }: ICardInformation) {
   const { description, image, title } = item
+  const { palette: { background } } = useTheme()
+
 
   return (
     <Box
@@ -23,7 +26,7 @@ export default function CardInformation({ item }: ICardInformation) {
       alignItems="center"
       justifyContent="flex-start"
       p="32px"
-      bgcolor="#FFF5E6"
+      bgcolor={background.paper}
       boxShadow=" 0px 15px 38.2px 0px #0000001F"
       borderRadius="32px"
       color="text.primary"

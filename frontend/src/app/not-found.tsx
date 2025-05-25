@@ -5,9 +5,11 @@ import Typography from '@mui/material/Typography'
 import Header from '@/components/molecules/Header'
 import Footer from '@/components/molecules/Footer'
 import { useRouter } from 'next/navigation'
+import { useTheme } from '@mui/material'
 
 export default function NotFound() {
   const { push } = useRouter()
+  const { palette: { background } } = useTheme()
 
   return (
     <Box display="flex" flexDirection="column" height="100vh">
@@ -21,7 +23,7 @@ export default function NotFound() {
         justifyContent="center"
         alignItems={'center'}
         gap="16px"
-        bgcolor={'#f3f2ed'}
+        bgcolor={background.default}
       >
         <Typography variant="h3" lineHeight={'120%'} textAlign={'center'}>
           Eita, página não encontrada!

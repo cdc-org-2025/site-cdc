@@ -104,7 +104,6 @@ export default function Timeline() {
         display={{ xs: 'none', lg: 'block' }}
         width="45%"
         height="100%"
-        bgcolor="red"
       />
     </Box>
   ))

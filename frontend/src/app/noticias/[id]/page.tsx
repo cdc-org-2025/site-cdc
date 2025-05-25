@@ -39,7 +39,7 @@ export default function NoticiasUniquePage() {
       {data?.html_original && (
         <Box width={'100%'} display='flex' justifyContent={'center'} maxWidth={"100vw"}>
           <Box width={'100%'} maxWidth={'800px'} p='16px'>
-            <Box display={"flex"} gap="16px" pt={{ xs: "0px", sm: "0px", md: "0px" }}>
+            <Box display={"flex"} gap="16px" pt={{ xs: "8px", sm: "8px", md: "38px" }} pb="16px">
               <Typography variant='body1' color="text.secondary" fontWeight={400}>
                 {dataFormatada}
               </Typography>

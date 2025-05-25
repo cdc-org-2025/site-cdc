@@ -11,6 +11,7 @@ import AnimetedSlide from '@/components/animations/slide'
 import { IPrograma } from '@/clients/api/programas'
 import { storageUrl } from '@/constants/storageDomain'
 import { useRouter } from 'next/navigation'
+import { useTheme } from '@mui/material'
 
 interface AccordionItemProps {
   item: IPrograma
@@ -30,6 +31,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
   const contentRef = React.useRef<HTMLDivElement>(null)
   const [contentHeight, setContentHeight] = React.useState(0)
   const { push } = useRouter()
+
 
   React.useEffect(() => {
     if (isExpanded && contentRef.current) {
@@ -127,6 +129,9 @@ export default function AccordionProjectsDesktop({
     expandedAccordion: IPrograma | undefined,
     setExpandedAccordion: React.Dispatch<React.SetStateAction<IPrograma | undefined>>
   }) {
+  const {
+    palette: { background },
+  } = useTheme()
 
   const handleExpandAccordionImage = useCallback(
     (item: IPrograma) => {
@@ -166,7 +171,7 @@ export default function AccordionProjectsDesktop({
         sx={{
           width: '50%',
           borderRadius: '32px',
-          backgroundColor: '#f3f2ed',
+          backgroundColor: background.default,
           backgroundImage: `url("${storageUrl}/${expandedAccordion?.url_image_capa ?? "https://support.heberjahiz.com/hc/article_attachments/21013076295570"}")`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
