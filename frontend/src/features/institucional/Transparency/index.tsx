@@ -6,12 +6,11 @@ import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Grid'
 import CardTagDesc from '@/components/atoms/CardTagDesc'
 import AnimationSplitText from '@/components/animations/splitText'
-import { ITransparencia, useListTransparenciaQuery } from '@/clients/api/transparencia'
+import { ITransparencia, ITransparenciaResponse } from '@/clients/api/transparencia'
 import { useTheme } from '@mui/material'
 import ZoomOutOnView from '@/components/animations/zoomOutOnView'
 
-export default function Transparency() {
-  const { data: listTransparencia } = useListTransparenciaQuery()
+export default function Transparency({ listTransparencia }: { listTransparencia?: ITransparenciaResponse }) {
   const { palette: { primary: { main } } } = useTheme()
 
   return (

@@ -9,11 +9,24 @@ import Faq from './Faq'
 import VectorRoundedLines from '@/components/atoms/VectorRoundedLines'
 import { Suspense } from 'react'
 import SearchScrollHandler from './SearchScrollHandler'
+import { useTimeLineQuery } from '@/clients/api/linha-tempo'
+import { useCardsInformativosListQuery } from '@/clients/api/cards-informativos'
+import { useLiderancasListQuery } from '@/clients/api/liderancas'
+import { useListTransparenciaQuery } from '@/clients/api/transparencia'
+import { usePerguntasQuery } from '@/clients/api/perguntas'
 
 export default function InstitucionalPage() {
+  const { data: listTimeLine } = useTimeLineQuery()
+  const { data: listCards } = useCardsInformativosListQuery()
+  const { data: listLiderancas } = useLiderancasListQuery()
+  const { data: listTransparencia } = useListTransparenciaQuery()
+  const { data: listPerguntas } = usePerguntasQuery()
+
   return (
     <Suspense fallback={null}>
-      <SearchScrollHandler />
+      {listTimeLine && listCards && listLiderancas && listTransparencia && listPerguntas && (
+        <SearchScrollHandler />
+      )}
       <Box
         width="100%"
         p={{
@@ -25,11 +38,11 @@ export default function InstitucionalPage() {
       >
         <VectorRoundedLines left={0} margin="400px 0px 0px 0px" />
         <VectorRoundedLines rotate={true} right={0} margin="1200px 0px 0px 0px" />
-        <Timeline />
-        <OrganizationCdcCards />
-        <Leadership />
-        <Transparency />
-        <Faq />
+        <Timeline listTimeLine={listTimeLine} />
+        <OrganizationCdcCards listCards={listCards} />
+        <Leadership listLiderancas={listLiderancas} />
+        <Transparency listTransparencia={listTransparencia} />
+        <Faq listPerguntas={listPerguntas} />
       </Box>
     </Suspense>
 

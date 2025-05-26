@@ -9,35 +9,34 @@ import MenuAreas from './MenuAreas'
 import AnimationSplitText from '@/components/animations/splitText'
 import AnimetedSlide from '@/components/animations/slide'
 import { IArea } from '@/clients/api/areas'
-import { ILideranca, useLiderancasListQuery } from '@/clients/api/liderancas'
+import { ILideranca, ILiderancaResponse } from '@/clients/api/liderancas'
 
-export default function Leadership() {
-  const { data: dataLiderancas } = useLiderancasListQuery()
+export default function Leadership({ listLiderancas }: { listLiderancas?: ILiderancaResponse }) {
   const [listColaboradores, setListColaboradores] = useState<ILideranca[] | undefined>([])
   const [areaSelect, setAreaSelect] = useState<IArea[]>([])
 
   useEffect(() => {
-    if (dataLiderancas?.data) {
-      setListColaboradores(dataLiderancas?.data)
+    if (listLiderancas?.data) {
+      setListColaboradores(listLiderancas?.data)
     }
-  }, [dataLiderancas?.data])
+  }, [listLiderancas?.data])
 
   const handleAreaSelect = useCallback((newAreaList: IArea[]) => {
     setAreaSelect(newAreaList)
 
     if (!newAreaList.length) {
-      setListColaboradores(dataLiderancas?.data)
+      setListColaboradores(listLiderancas?.data)
       return
     }
 
     const selectedIds = newAreaList.map(area => Number(area.id))
 
-    const filtered = dataLiderancas?.data?.filter(lideranca =>
+    const filtered = listLiderancas?.data?.filter(lideranca =>
       lideranca.areas?.some(area => selectedIds.includes(Number(area.id)))
     )
 
     setListColaboradores(filtered)
-  }, [dataLiderancas])
+  }, [listLiderancas])
 
   return (
     <>
@@ -65,7 +64,7 @@ export default function Leadership() {
         liderancas={true}
         areaSelect={areaSelect}
         setAreaSelect={handleAreaSelect}
-        listAreasAvailable={dataLiderancas?.areas_filtro}
+        listAreasAvailable={listLiderancas?.areas_filtro}
       />
 
       <Grid container spacing={4} pb="64px">

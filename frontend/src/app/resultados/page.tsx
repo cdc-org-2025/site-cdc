@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Footer from '@/components/molecules/Footer'
 import HeaderBannerUnique from '@/components/templates/HeaderBannerUnique'
+import { Typography } from '@mui/material'
 
 export const metadata: Metadata = {
   title: 'CDC - Resultados',
@@ -22,7 +23,7 @@ export default function PublicacoesPage() {
   return (
     <>
       <HeaderBannerUnique noneMobile Banner={Banner} />
-      RESULTADOS
+      <Typography py="40px" textAlign={"center"} variant='h1' color="primary">AGUARDANDO O BACKEND DE RESULTADOS</Typography>
       <Footer />
     </>
   )

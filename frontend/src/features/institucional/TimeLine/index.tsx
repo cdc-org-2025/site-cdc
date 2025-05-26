@@ -8,19 +8,18 @@ import Circle from '@/components/atoms/Circle'
 import AnimationSplitText from '@/components/animations/splitText'
 import AnimetedSlide from '@/components/animations/slide'
 import AnimatedFade from '@/components/animations/fade'
-import { ILinhaTempo, useTimeLineQuery } from '@/clients/api/linha-tempo'
+import { ILinhaTempo } from '@/clients/api/linha-tempo'
 import { sanitizeHtml } from '@/utils/stripHtmlTags'
 import { isStorage } from '@/helpers/isStorage'
 
-export default function Timeline() {
+export default function Timeline({ listTimeLine }: { listTimeLine?: ILinhaTempo[] }) {
   const {
     palette: {
       secondary: { light },
     },
   } = useTheme()
-  const { data } = useTimeLineQuery()
 
-  return data?.map((item: ILinhaTempo, index: number) => (
+  return listTimeLine?.map((item: ILinhaTempo, index: number) => (
     <Box
       display="flex"
       width="100%"
@@ -97,7 +96,7 @@ export default function Timeline() {
         <Box
           width="1.35px"
           height="100%"
-          bgcolor={data.length === index + 1 ? 'transparent' : light}
+          bgcolor={listTimeLine.length === index + 1 ? 'transparent' : light}
         />
       </Box>
       <Box
