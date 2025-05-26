@@ -17,7 +17,7 @@ export default function ListCards({ list, page }: { list: any[], page: string })
   }
 
   return (
-    <Grid container spacing={4}>
+    <Grid container spacing={4} overflow={"hidden"} width={"100%"} maxWidth={"100vw"}>
       <VectorRoundedLines zIndex={0} margin='250px 0 0 0' />
       {list?.map((news) => (
         <Grid key={news.id} item xs={12} md={4} lg={4} xl={4}>

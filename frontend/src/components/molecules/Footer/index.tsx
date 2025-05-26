@@ -11,8 +11,7 @@ import { useNavigation } from '@/hooks/useNavigation'
 import { useMenuOptions } from '@/hooks/useMenuOption'
 import { useRouter } from 'next/navigation'
 import YouTubeIcon from '@mui/icons-material/YouTube';
-import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
-import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
+import LogoCDC from '../../../assets/logo_cdc.png'
 
 export default function Footer() {
   const { handleSubMenuClick } = useNavigation()
@@ -23,39 +22,87 @@ export default function Footer() {
     <Box
       bgcolor="background.paper"
       component="footer"
-      p={{ xs: '44px 0px 44px 30px', md: '44px 32px' }}
+      p={{ xs: '44px 0px 44px 30px', md: '44px 16px', lg: '44px 80px' }}
       width="100%"
+      maxWidth={"100vw"}
       display="flex"
       gap="40px"
-      flexDirection={{ xs: 'column', md: 'row' }}
+      flexDirection={{ xs: "column-reverse", sm: 'column-reverse', md: "row" }}
     >
-      <Box display="flex" flexDirection="column" gap="16px" maxWidth={{ xs: '100%', md: '290px' }}>
+      <Box display="flex" flexDirection="column" gap="8px" maxWidth={{ xs: '100%', md: "200px", lg: '316px' }}>
+        <Image
+          priority
+          height={62}
+          src={LogoCDC}
+          alt="Logo Centro de Desenvolvimento Social"
+        />
         <Typography
           variant="body2"
-          color="text.primary"
+          color="secondary.dark"
         >
           Centro de Desenvolvimento e Cidadania - CDC
         </Typography>
         <Typography
           variant="body2"
-          color="text.primary"
+          color="secondary.dark"
         >
           Rua Bispo Cardoso Ayres, 440 - Santo Amaro, Recife - PE, 50050-135
         </Typography>
         <Typography
           variant="body2"
-          color="text.primary"
+          color="secondary.dark"
+        >
+          Telefone: (81) 3224-6963
+        </Typography>
+        <Typography
+          variant="body2"
+          color="secondary.dark"
+          pb="6px"
+        >
+          Horário de Funcionamento: 08h às 17h
+        </Typography>
+        <Typography
+          variant="body2"
+          color="secondary.dark"
+          style={{ opacity: "0.5" }}
+          pb="30px"
         >
           CNPJ 03.970.166/0001-29
         </Typography>
+
+        <Box
+          height="100%"
+          display="flex"
+          flexDirection="column"
+          justifyContent="space-between"
+          gap="16px"
+        >
+          <Typography variant="body2" color="text.primary" fontWeight={400}>
+            Redes sociais
+          </Typography>
+          <Box display="flex" gap="24px">
+            <a aria-label="Acessar facebook do CDC" title="Acessar facebook do CDC" href="https://web.facebook.com/cdc.osc/" target="_blank" rel="noopener noreferrer">
+              <Image priority src={FacebookLogo} alt="FacebookLogo" />
+            </a>
+            <a aria-label="Acessar canal do YouTube CDC" title="Acessar canal do YouTube CDC" href="https://www.youtube.com/@cdc_osc" target="_blank" rel="noopener noreferrer">
+              <Box mt="-5px"><YouTubeIcon color='primary' /></Box>
+            </a>
+            <a aria-label="Acessar instagram do CDC" title="Acessar instagram do CDC" href="https://www.instagram.com/cdc_osc/" target="_blank" rel="noopener noreferrer">
+              <Image priority src={InstagramLogo} alt="InstagramLogo" />
+            </a>
+            <a aria-label="Acessar linkedin do CDC" title="Acessar linkedin do CDC" href="https://www.linkedin.com/company/centro-de-desenvolvimento-e-cidadania/" target="_blank" rel="noopener noreferrer">
+              <Image priority src={LinkedinLogo} alt="LinkedinLogo" />
+            </a>
+          </Box>
+        </Box>
       </Box>
       <Box
         display="flex"
         gap="40px"
-        flexDirection={{ xs: 'column', md: 'row' }}
+        flexDirection={{ xs: "column", md: 'row', lg: "row" }}
       >
         {menuWithProgramas?.slice(1)?.map((menu) => (
-          <Box key={menu.id} display="flex" flexDirection="column" gap="16px" maxWidth={{ xs: '100%', md: '290px' }}>
+          <Box key={menu.id} display="flex" flexDirection="column" gap="16px" maxWidth={{ sm: '100%', md: "100%", lg: '225px' }}>
             <Typography
               variant="body2"
               onClick={() => menu.link && push(menu.link)}
@@ -79,34 +126,6 @@ export default function Footer() {
             ))}
           </Box>
         ))}
-      </Box>
-
-      <Box
-        height="100%"
-        display="flex"
-        flexDirection="column"
-        justifyContent="space-between"
-        gap="16px"
-      >
-        <Typography variant="body2" color="text.primary" fontWeight={700}>
-          Redes sociais
-        </Typography>
-        <Box display="flex" gap="24px">
-          <a href="https://web.facebook.com/cdc.osc/" target="_blank" rel="noopener noreferrer">
-            <Image priority src={FacebookLogo} alt="FacebookLogo" />
-          </a>
-          <a href="https://www.youtube.com/@cdc_osc" target="_blank" rel="noopener noreferrer">
-            <Box mt="-5px"><YouTubeIcon color='primary' /></Box>
-          </a>
-          <a href="https://www.instagram.com/cdc_osc/" target="_blank" rel="noopener noreferrer">
-            <Image priority src={InstagramLogo} alt="InstagramLogo" />
-          </a>
-          <a href="https://www.linkedin.com/company/centro-de-desenvolvimento-e-cidadania/" target="_blank" rel="noopener noreferrer">
-            <Image priority src={LinkedinLogo} alt="LinkedinLogo" />
-          </a>
-        </Box>
-        <Typography display={"flex"} alignItems={"center"} variant="body2"> <LocalPhoneOutlinedIcon style={{ height: 20 }} color="primary" />(81) 3224-6963</Typography>
-        <Typography display={"flex"} alignItems={"center"} variant="body2"> <AccessTimeOutlinedIcon style={{ height: 20 }} color="primary" />08h às 17h</Typography>
       </Box>
     </Box>
   )

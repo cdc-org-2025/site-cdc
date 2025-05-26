@@ -53,11 +53,12 @@ export default function Programas() {
       flexDirection="column"
       gap={{ xs: '32px', md: '24px' }}
       bgcolor="background.default"
+      overflow={"hidden"} width={"100%"} maxWidth={"100vw"}
     >
       <ZoomOutOnView>
-        <Box display={{ xs: 'flex', sm: 'none' }}>
+        <Box display={{ xs: 'flex', sm: 'none' }} pb="32px">
           <Typography variant="h3" color="primary">
-            Notícias
+            Programas
           </Typography>
         </Box>
         <Box display="flex" gap="24px" alignItems={'center'}>

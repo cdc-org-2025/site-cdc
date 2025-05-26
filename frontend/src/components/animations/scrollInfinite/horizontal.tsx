@@ -58,7 +58,6 @@ export default function ScrollInfiniteHorizontal({
               backgroundPosition: 'center',
               flexShrink: 0,
             }}
-            aria-label={item.id.toString()}
           />
         ))}
       </Box>

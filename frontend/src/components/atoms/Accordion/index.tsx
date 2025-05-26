@@ -8,8 +8,10 @@ import Typography from '@mui/material/Typography'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import Divider from '@mui/material/Divider'
 import { IPerguntas } from '@/clients/api/perguntas'
+import { useTheme } from '@mui/material'
 
 const AccordionComponent = ({ listaPerguntas }: { listaPerguntas?: IPerguntas[] }) => {
+  const { palette: { primary, secondary } } = useTheme()
 
   return (
     <>
@@ -33,19 +35,19 @@ const AccordionComponent = ({ listaPerguntas }: { listaPerguntas?: IPerguntas[] 
               id={`panel-header-${item.id}`}
               sx={{
                 '& .MuiTypography-root': {
-                  color: '#000',
+                  color: secondary.dark,
                 },
                 '&.Mui-expanded .MuiTypography-root': {
-                  color: '#a7181d',
+                  color: primary.main,
                 },
               }}
             >
-              <Typography color='#000' component="span" fontWeight={400}>
+              <Typography color={"secondary.dark"} component="span" fontWeight={400}>
                 {item.pergunta}
               </Typography>
             </AccordionSummary>
             <AccordionDetails sx={{ pb: 4 }}>
-              <Typography color='#000' component="span" fontWeight={400} lineHeight="150%">
+              <Typography color={"secondary.dark"} component="span" fontWeight={400} lineHeight="150%">
                 {item.resposta}
               </Typography>
             </AccordionDetails>

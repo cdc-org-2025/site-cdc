@@ -15,7 +15,7 @@ export default function Transparency() {
   const { palette: { primary: { main } } } = useTheme()
 
   return (
-    <>
+    <Box overflow={"hidden"} width={"100%"} maxWidth={"100vw"}>
       {listTransparencia?.data && (
         <Box display="flex" flexDirection="column" gap="16px" pb="24px" id="transparent">
           <AnimationSplitText direction='down'>
@@ -37,7 +37,7 @@ export default function Transparency() {
           </AnimationSplitText>
         </Box>
       )}
-      <Grid container spacing={4} pb="64px">
+      <Grid container spacing={4} pb="64px" >
         {listTransparencia?.data?.map((item: ITransparencia) => (
           <Grid item key={item.id} xs={12} sm={6} md={4} lg={3}>
             <ZoomOutOnView delay={200} scaleFrom={1.3}>
@@ -67,6 +67,6 @@ export default function Transparency() {
           </Grid>
         ))}
       </Grid>
-    </>
+    </Box>
   )
 }

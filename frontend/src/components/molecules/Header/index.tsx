@@ -45,12 +45,14 @@ export default function Header() {
           justifyContent="space-between"
           alignItems="center"
           gap={isMobile ? "20px" : "56px"}
+          sx={{ cursor: "pointer" }}
         >
           <Image
             priority
             height={isMobile ? 44 : 62}
             src={LogoCDC}
             alt="Logo Centro de Desenvolvimento Social"
+            onClick={() => push("/")}
           />
           <NavbarDesktop menuOption={menuWithProgramas} />
         </Box>
@@ -102,7 +104,7 @@ export default function Header() {
               },
             }}
           >
-            <Typography whiteSpace={'nowrap'} color='#A7181D' fontWeight={400} textTransform="none" >Doe agora</Typography>
+            <Typography whiteSpace={'nowrap'} color="primary" fontWeight={400} textTransform="none" >Doe agora</Typography>
           </Button>
           <Box
             width={{ xs: '110px', md: '140px' }}

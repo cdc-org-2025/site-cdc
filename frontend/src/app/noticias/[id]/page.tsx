@@ -1,15 +1,14 @@
 'use client'
 import Footer from '@/components/molecules/Footer'
 import HeaderBannerUnique from '@/components/templates/HeaderBannerUnique'
-import { useParams } from 'next/navigation'
-import { useNoticiaQuery } from '@/clients/api/noticias'
+import { useParams, useRouter } from 'next/navigation'
+import { INoticias, useNoticiaQuery, useNoticiasAreaQuery } from '@/clients/api/noticias'
 import { Box, Grid, Typography, useTheme } from '@mui/material'
 import { sanitizeHtml } from '@/utils/stripHtmlTags'
 import dayjs from 'dayjs'
 import 'dayjs/locale/pt-br'
 import CardTagDesc from '@/components/atoms/CardTagDesc'
 import AnimetedSlide from '@/components/animations/slide'
-import { ITransparencia, useListTransparenciaQuery } from '@/clients/api/transparencia'
 import { Lato } from 'next/font/google'
 import { storageUrl } from '@/constants/storageDomain'
 
@@ -22,8 +21,9 @@ dayjs.locale('pt-br')
 export default function NoticiasUniquePage() {
   const { id } = useParams()
   const { data } = useNoticiaQuery(id)
-  const { data: listTransparencia } = useListTransparenciaQuery()
+  const { data: listNoticias } = useNoticiasAreaQuery({ area_id: data?.areas?.[0]?.id })
   const { palette: { primary: { main } } } = useTheme()
+  const { push } = useRouter()
 
   const dataFormatada = dayjs(data?.data_publicacao).format('D [de] MMMM [de] YYYY')
 
@@ -37,9 +37,9 @@ export default function NoticiasUniquePage() {
     <>
       <HeaderBannerUnique noneMobile Banner={Banner} />
       {data?.html_original && (
-        <Box width={'100%'} display='flex' justifyContent={'center'}>
+        <Box width={'100%'} display='flex' justifyContent={'center'} maxWidth={"100vw"}>
           <Box width={'100%'} maxWidth={'800px'} p='16px'>
-            <Box display={"flex"} gap="16px" pt={{ xs: "0px", sm: "0px", md: "0px" }}>
+            <Box display={"flex"} gap="16px" pt={{ xs: "8px", sm: "8px", md: "38px" }} pb="16px">
               <Typography variant='body1' color="text.secondary" fontWeight={400}>
                 {dataFormatada}
               </Typography>
@@ -73,11 +73,10 @@ export default function NoticiasUniquePage() {
                 </Typography>
               </AnimetedSlide>
               <Grid container spacing={2} pb={{ xs: "50px", md: "160px" }} pt="16px" >
-                {data.html_original && listTransparencia?.data?.slice(0, 3).map((item: ITransparencia) => (
+                {data.html_original && listNoticias?.data?.slice(0, 3).map((item: INoticias) => (
                   <Grid item key={item.id} xs={12} sm={6} md={4} lg={4}>
                     <AnimetedSlide>
                       <Box
-                        component={'a'}
                         sx={{
                           cursor: 'pointer', '&:hover': {
                             span: {
@@ -85,14 +84,13 @@ export default function NoticiasUniquePage() {
                             }
                           }
                         }}
-                        href={item.documento_url}
-                        target='_blank'
+                        onClick={() => push(`/noticias/${item.id}`)}
                       >
                         <CardTagDesc
                           info={{
                             id: item.id,
                             description: item.titulo,
-                            image: item.url_imagem
+                            image: item.imagem_capa
                           }}
                           leiaTambem
                         />

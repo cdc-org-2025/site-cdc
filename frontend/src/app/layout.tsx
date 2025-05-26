@@ -1,5 +1,4 @@
 import RootLayout from './RootLayout'
-import ButtonAccessible from '@/components/atoms/ButtonAccessible'
 import { Metadata } from 'next'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -19,20 +18,17 @@ export const metadata: Metadata = {
 
 export default async function LocalePageLayout({
   children,
-  params: { locale },
 }: {
   children: React.ReactNode
-  params: { locale: string }
 }) {
 
   return (
-    <RootLayout locale={locale} >
+    <RootLayout  >
       {children}
       <ToastContainer
         theme="colored"
         className="custom-toast"
       />
-      <ButtonAccessible />
     </RootLayout>
   )
 }

@@ -1,5 +1,5 @@
 import apiData from '@/clients/axiosClient/apiData';
-import { INoticiaArea, INoticias, INoticiasResponse, INoticiasShowNews } from './noticias';
+import { INoticiaArea, INoticias, INoticiasResponse } from './noticias';
 import { buildQueryParams } from '@/utils/buildQueryParams';
 
 const api = apiData()
@@ -21,9 +21,9 @@ export const getNoticiaArea = async (area: number): Promise<INoticiaArea[]> => {
   return data;
 };
 
-export const getShowNews = async (id?: number, area_id?: number): Promise<INoticiasShowNews[]> => {
-  const params = buildQueryParams({ id, area_id });
+export const getNoticiasArea = async (area_id?: number): Promise<INoticiasResponse> => {
+  const params = buildQueryParams({ area_id });
 
-  const { data } = await api.get('/noticias/show-news', { params });
+  const { data } = await api.get('/noticias', { params });
   return data;
 };

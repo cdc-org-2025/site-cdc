@@ -2,6 +2,7 @@
 import React from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
+import { useTheme } from '@mui/material'
 
 export interface IBannerUnique {
   Banner: TypeBannerUnique
@@ -15,13 +16,17 @@ export interface TypeBannerUnique {
 }
 
 export default function BannerUnique({ Banner }: IBannerUnique) {
+  const {
+    palette: { background },
+  } = useTheme()
+
   return (
     <Box
       width="100%"
       maxWidth="100vw"
       height="100%"
       sx={{
-        backgroundColor: '#f3f2ed',
+        backgroundColor: background.default,
         borderRadius: '0 0 16px 16px',
         overflow: 'hidden',
         position: 'relative',
