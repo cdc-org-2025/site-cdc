@@ -1,5 +1,6 @@
 
 import { Area } from './area.js';
+import { Banners } from './banners.js';
 import { CardInformativo } from './card_informativo.js';
 import { Categoria } from './categoria.js';
 import { DadosBancario } from './dados_bancarios.js';
@@ -41,7 +42,8 @@ export function initializeModels(sequelize) {
     Email: Email.init(sequelize),
     Inidicador: Inidicador.init(sequelize),
     Organizacao: Organizacao.init(sequelize),
-    OrganizacaoImagem: OrganizacaoImagem.init(sequelize)
+    OrganizacaoImagem: OrganizacaoImagem.init(sequelize),
+    Banners: Banners.init(sequelize)
   };
 
   Object.values(models).forEach(model => {

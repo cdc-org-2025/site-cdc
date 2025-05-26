@@ -817,6 +817,47 @@ export const adminJs = new AdminJS({
                 ]
             }
         },
+        {
+            resource: models.Banners,
+            features: [
+                createUploadFeature({
+                    folder: 'banners',
+                    file: 'uploadImagens',
+                    key: 'url_img',
+                }),
+            ],
+            options: {
+                navigation: 'Configurações',
+
+                properties: {
+                    uploadImagem: {
+                        type: 'file',
+                        isVisible: { edit: true, list: false, show: false, filter: false },
+                        isArray: false, // 👈 isso força o AdminJS a usar `uploadImagem` ao invés de `uploadImagem.0`
+                    },
+                    url_img: {
+                        isVisible: { list: true, show: false, edit: false },
+                        components: {
+                            list: Components.ImageListPreview
+                        }
+                    }
+                },
+                editProperties: [
+                    'pagina',
+                    'uploadImagens' // usado para enviar imagem
+                ],
+                showProperties: [
+                    'pagina',
+                    'url_img'
+                ],
+                listProperties: [
+                    'pagina',
+                    'url_img'
+                ],
+
+            }
+        },
+
 
 
 
