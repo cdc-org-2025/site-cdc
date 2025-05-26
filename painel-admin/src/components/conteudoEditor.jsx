@@ -36,6 +36,15 @@ function convertStylesToInline(html) {
     el.style.lineHeight = '1.6';
   });
 
+  tempDiv.querySelectorAll('iframe').forEach(el => {
+    el.style.width = '800px';
+    el.style.height = '400px';
+    el.style.display = 'block';
+    el.style.margin = '20px auto';
+    el.setAttribute('width', '800');   // redundante, mas pode ajudar
+    el.setAttribute('height', '400');
+  });
+
   return tempDiv.innerHTML;
 }
 
@@ -80,7 +89,7 @@ const ConteudoEditor = (props) => {
     const uploadPromises = Array.from(files).map(async (file) => {
       const imageUrl = await uploadImageToGCP(file);
       if (imageUrl) {
-        return `<img src="${imageUrl}" style="display: inline-block; margin: 0 5px; max-width: 100%; height: auto;" />`;
+        return `<img src="${imageUrl}" style="display: inline-block; margin: 0 5px; max-width: 100%;" />`;
       }
       return '';
     });
@@ -123,10 +132,13 @@ const ConteudoEditor = (props) => {
     onChange('titulo', newTitulo);
   };
 
+
   const handleEditorChange = (newHtml) => {
     const styledHtml = convertStylesToInline(newHtml);
-    onChange('html_original', styledHtml); // salva com estilos inline
+
+    onChange('html_original', styledHtml); // Isso envia para o AdminJS ou backend
   };
+
 
   return (
     <Box>
@@ -151,7 +163,7 @@ const ConteudoEditor = (props) => {
         <SunEditor
           getSunEditorInstance={handleSetInstance}
           placeholder="Digite algo aqui..."
-          height="600px"
+          // height="600px"
           onImageUploadBefore={onImageUploadBefore}
           onChange={handleEditorChange}
           defaultValue={initialData}
@@ -166,7 +178,10 @@ const ConteudoEditor = (props) => {
               ["link", "image", "video"],
               ["fullScreen", "showBlocks", "codeView"],
             ],
-            imageWidth: "150px",
+            imageWidth: "800px",
+            imageHeight: "400px",
+            videoHeight:"400px",
+            videoWidth:"771px",
             addTagsWhitelist: "div,img,span",
             mediaAutoSelect: false,
             imageMultipleFile: true,
