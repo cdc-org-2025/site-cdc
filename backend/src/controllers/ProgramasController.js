@@ -3,7 +3,7 @@ import db from "../models/index.js";
 class ProgramasController {
   static async index(req, res) {
     const programas = await db.Programa.findAll({
-      attributes: ['id', 'url_image_capa', 'titulo', 'subtitulo', 'descricao', 'area_ids'],
+      attributes: ['id', 'url_image_capa', 'titulo', 'subtitulo', 'resumo','descricao', 'area_ids' ],
       include: [{
         model: db.ProgramaImagens,
         as: 'imagens',
@@ -39,6 +39,7 @@ class ProgramasController {
         titulo: prog.titulo,
         subtitulo: prog.subtitulo,
         descricao: prog.descricao,
+        resumo: prog.resumo,
         areas: areas,
         imagens: prog.imagens || []
       };
@@ -64,7 +65,7 @@ class ProgramasController {
 
   static async show(req, res) {
     const programa = await db.Programa.findByPk(req.params.id, {
-      attributes: ['id', 'url_image_capa', 'titulo', 'subtitulo', 'descricao', 'area_ids'],
+      attributes: ['id', 'url_image_capa', 'titulo', 'subtitulo', 'resumo','descricao', 'area_ids'],
       include: [{
         model: db.ProgramaImagens,
         as: 'imagens',

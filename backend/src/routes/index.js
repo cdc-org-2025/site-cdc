@@ -22,6 +22,7 @@ import candidaturaVagaForm from './candidaturaVagaForm.js'
 import indicadoresRoutes from "./indicadores.js";
 import contatoForm from './contatoForm.js'
 import organizacao from './organizacao.js'
+import banners from './banners.js'
 
 const router = Router();
 
@@ -44,6 +45,7 @@ router.use('/candidatura',  candidaturaVagaForm);
 router.use('/indicadores', indicadoresRoutes)
 router.use('/contato', contatoForm)
 router.use("/organizacao", organizacao )
+router.use("/banner", banners)
 
 
 export default router;
