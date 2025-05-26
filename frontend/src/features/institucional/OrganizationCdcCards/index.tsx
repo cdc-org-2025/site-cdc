@@ -10,10 +10,9 @@ import ProgramImage from '../../../assets/cards-information/program-coordination
 import CardInformation from '@/components/molecules/CardInformation'
 import AnimationSplitText from '@/components/animations/splitText'
 import AnimetedSlide from '@/components/animations/slide'
-import { useCardsInformativosListQuery } from '@/clients/api/cards-informativos'
+import { ICardsInfo } from '@/clients/api/cards-informativos'
 
-export default function OrganizationCdcCards() {
-  const { data: listCards } = useCardsInformativosListQuery()
+export default function OrganizationCdcCards({ listCards }: { listCards?: ICardsInfo[] }) {
 
   const cardsMap = useMemo(() => {
     const map: Record<string, { titulo: string; descricao: string }> = {}

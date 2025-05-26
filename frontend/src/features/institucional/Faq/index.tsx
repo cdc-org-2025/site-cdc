@@ -7,18 +7,17 @@ import { useTheme } from '@mui/material'
 import AccordionComponent from '@/components/atoms/Accordion'
 import AnimationSplitText from '@/components/animations/splitText'
 import { useRouter } from 'next/navigation'
-import { usePerguntasQuery } from '@/clients/api/perguntas'
+import { IPerguntas } from '@/clients/api/perguntas'
 
-export default function Faq() {
+export default function Faq({ listPerguntas }: { listPerguntas?: IPerguntas[] }) {
   const {
     palette: { primary },
   } = useTheme()
   const { push } = useRouter()
-  const { data } = usePerguntasQuery()
 
   return (
     <>
-      {data && (
+      {listPerguntas && (
         <Box display="flex" flexDirection="column" gap="16px" pb="32px" id="faq">
           <AnimationSplitText threshold={0.8}>
             <Typography
@@ -55,7 +54,7 @@ export default function Faq() {
           </Typography>
         </Box>
       )}
-      <AccordionComponent listaPerguntas={data} />
+      <AccordionComponent listaPerguntas={listPerguntas} />
     </>
   )
 }

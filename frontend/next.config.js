@@ -1,13 +1,21 @@
-const storageDomain = process.env.NEXT_PUBLIC_STORAGE?.replace(/^https?:\/\//, '') || ''
+const storageDomain = process.env.NEXT_PUBLIC_STORAGE?.replace(/^https?:\/\//, '') || '';
 
 module.exports = {
   reactStrictMode: true,
   env: {
     baseUrlDomain: process.env.NEXT_PUBLIC_API_URL,
-    baseStorage: process.env.NEXT_PUBLIC_STORAGE
+    baseStorage: process.env.NEXT_PUBLIC_STORAGE,
   },
   images: {
-    domains: [storageDomain]
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: storageDomain,
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+      },
+    ],
   },
 };
-
