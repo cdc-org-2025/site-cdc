@@ -20,7 +20,7 @@ export const useNoticiaQuery = (id: string | string[], options?: UseQueryOptions
 };
 
 export const useNoticiasAreaQuery = (
-  params: { area_id?: number },
+  params: { area_id?: string },
   options?: UseQueryOptions<INoticiasResponse, Error>
 ) => {
   return useQuery<INoticiasResponse, Error>({
