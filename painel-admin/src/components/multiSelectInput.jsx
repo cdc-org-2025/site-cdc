@@ -82,8 +82,23 @@ const AreaMultiSelect = (props) => {
         .map(([, value]) => String(value))
 
 
+    // useEffect(() => {
+    //     axios.get('/admin/api/resources/areas/actions/list').then((res) => {
+    //         const values = res.data.records.map((area) => ({
+    //             value: String(area.params.id),
+    //             label: area.params.nome,
+    //         }))
+    //         setOptions(values)
+    //     })
+    // }, [])
+
     useEffect(() => {
-        axios.get('/admin/api/resources/areas/actions/list').then((res) => {
+        axios.get('/admin/api/resources/areas/actions/search', {
+            params: {
+                query: '',
+                perPage: 9999,
+            },
+        }).then((res) => {
             const values = res.data.records.map((area) => ({
                 value: String(area.params.id),
                 label: area.params.nome,
@@ -91,6 +106,7 @@ const AreaMultiSelect = (props) => {
             setOptions(values)
         })
     }, [])
+
 
     const handleChange = (selectedOptions) => {
         const values = selectedOptions.map((opt) => opt.value)
@@ -108,9 +124,9 @@ const AreaMultiSelect = (props) => {
 
     return (
         <>
-            <label style={{fontSize:"12px", lineHeight:"16px", fontFamily:"Roboto, sans-serif"}}>Área</label>
+            <label style={{ fontSize: "12px", lineHeight: "16px", fontFamily: "Roboto, sans-serif" }}>Área</label>
 
-            <div style={{ marginBottom: "25px", marginTop:"8px" }}>
+            <div style={{ marginBottom: "25px", marginTop: "8px" }}>
                 <Select
                     options={options}
                     value={getSelectedOptions()}
