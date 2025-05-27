@@ -4,14 +4,16 @@ import cors from 'cors';
 
 const router = Router();
 
-// Configuração CORS específica para esta rota
 const corsOptions = {
-  origin: '*', // ou '*' para liberar tudo
+  origin: '*', // Substitua por um domínio específico em produção!
   methods: ['POST'],
   allowedHeaders: ['Content-Type', 'Authorization']
 };
 
-// Aplica o middleware cors APENAS nesta rota POST
+// ✅ Responde ao preflight (OPTIONS) com CORS permitido
+router.options('/', cors(corsOptions));
+
+// ✅ Rota principal POST
 router.post('/', cors(corsOptions), ContatoFormController.index);
 
 export default router;
