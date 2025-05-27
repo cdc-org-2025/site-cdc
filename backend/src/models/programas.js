@@ -13,6 +13,10 @@ class Programa extends Model {
         type: DataTypes.ARRAY(DataTypes.INTEGER),
         allowNull: true,
       },
+      is_ativo: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true
+      }
     }, {
       sequelize,
       tableName: "programas",

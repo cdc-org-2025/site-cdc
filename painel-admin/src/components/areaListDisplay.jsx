@@ -70,7 +70,12 @@ const AreaListDisplay = (props) => {
 
         let isMounted = true
 
-        axios.get('/admin/api/resources/areas/actions/list')
+        axios.get('/admin/api/resources/areas/actions/search', {
+            params: {
+                query: '',
+                perPage: 9999
+            }
+        })
             .then((response) => {
                 if (!isMounted) return
                 const areas = response.data.records.map(rec => rec.params)
@@ -86,11 +91,12 @@ const AreaListDisplay = (props) => {
         return () => { isMounted = false }
     }, [selectedIds])
 
+
     return (
         <Box display="flex" flexWrap="wrap" gap="sm">
             {areaNames.length > 0
                 ? areaNames.map((name, index) => (
-                    <Badge key={index} variant="primary" style={{marginRight: '2px'}}>
+                    <Badge key={index} variant="primary" style={{ marginRight: '2px' }}>
                         {name}
                     </Badge>
                 ))

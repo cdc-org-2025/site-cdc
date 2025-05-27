@@ -526,6 +526,7 @@ export const adminJs = new AdminJS({
                     'areaDeAtuacao',
                     'uploadCapa',
                     'uploadImagens',
+                    'is_ativo'
 
                 ],
                 showProperties: [
@@ -535,7 +536,9 @@ export const adminJs = new AdminJS({
                     'descricao',
                     'areaDeAtuacao',
                     'url_image_capa',
-                    'url_imagem'
+                    'url_imagem',
+                    'is_ativo'
+
 
                 ],
                 listProperties: [
@@ -545,7 +548,9 @@ export const adminJs = new AdminJS({
                     'descricao',
                     'areaDeAtuacao',
                     'url_image_capa',
-                    'url_imagem'
+                    'url_imagem',
+                    'is_ativo'
+
                 ]
             },
         },
@@ -727,6 +732,60 @@ export const adminJs = new AdminJS({
             options: {
                 navigation: 'Configurações',
                 actions: {
+                    edit: {
+                        after: async (response, request, context) => {
+                            const { record } = context;
+                            if (!record || record.isValid() === false) return response;
+
+                            const imagens = Object.entries(request.files || {})
+                                .filter(([key]) => key.startsWith('uploadImagens'))
+                                .map(([, file]) => file);
+
+                            const organizacaoImagem = models.OrganizacaoImagem;
+
+                            // 🧹 Remove imagens anteriores (opcional, se você quer substituir)
+                            await organizacaoImagem.destroy({
+                                where: { organizacao_id: record.id() }
+                            });
+
+                            // 📥 Salva novas imagens
+                            for (const imagem of imagens) {
+                                const filename = imagem?.name?.replace(/\s+/g, '_');
+                                const gcsPath = `organizacao/${record.id()}-${filename}`;
+
+                                await organizacaoImagem.create({
+                                    organizacao_id: record.id(),
+                                    imagem_url: gcsPath,
+                                });
+                            }
+
+                            return response;
+                        }
+                    },
+                    // edit: {
+                    //     after: async (response, request, context) => {
+                    //         const { record } = context;
+                    //         if (!record || record.isValid() === false) return response;
+
+                    //         const imagens = Object.entries(request.files || {})
+                    //             .filter(([key]) => key.startsWith('uploadImagens'))
+                    //             .map(([, file]) => file);
+
+                    //         const organizacaoImagem = models.OrganizacaoImagem;
+
+                    //         for (const imagem of imagens) {
+                    //             const filename = imagem?.name?.replace(/\s+/g, '_');
+                    //             const gcsPath = `organizacao/${record.id()}-${filename}`;
+
+                    //             await organizacaoImagem.create({
+                    //                 organizacao_id: record.id(),
+                    //                 imagem_url: gcsPath,
+                    //             });
+                    //         }
+
+                    //         return response;
+                    //     }
+                    // },
                     new: {
                         after: async (response, request, context) => {
                             const { record } = context
