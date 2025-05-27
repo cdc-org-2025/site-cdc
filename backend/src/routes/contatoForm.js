@@ -6,7 +6,7 @@ const router = Router();
 
 // Configuração CORS específica para esta rota
 const corsOptions = {
-  origin: 'https://site-cdc.vercel.app', // ou '*' para liberar tudo
+  origin: '*', // ou '*' para liberar tudo
   methods: ['POST'],
   allowedHeaders: ['Content-Type', 'Authorization']
 };
