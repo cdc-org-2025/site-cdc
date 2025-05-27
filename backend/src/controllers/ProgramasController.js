@@ -3,6 +3,7 @@ import db from "../models/index.js";
 class ProgramasController {
   static async index(req, res) {
     const programas = await db.Programa.findAll({
+      where: { is_ativo: true },
       attributes: ['id', 'url_image_capa', 'titulo', 'subtitulo', 'resumo', 'descricao', 'area_ids'],
       include: [{
         model: db.ProgramaImagens,
