@@ -21,7 +21,8 @@ dayjs.locale('pt-br')
 export default function NoticiasUniquePage() {
   const { id } = useParams()
   const { data } = useNoticiaQuery(id)
-  const { data: listNoticias } = useNoticiasAreaQuery({ area_id: data?.areas?.[0]?.id })
+  const idsArea = data?.areas?.map((item) => item.id).join(',');
+  const { data: listNoticias } = useNoticiasAreaQuery({ area_id: idsArea })
   const { palette: { primary: { main } } } = useTheme()
   const { push } = useRouter()
 

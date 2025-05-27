@@ -21,7 +21,7 @@ export const getNoticiaArea = async (area: number): Promise<INoticiaArea[]> => {
   return data;
 };
 
-export const getNoticiasArea = async (area_id?: number): Promise<INoticiasResponse> => {
+export const getNoticiasArea = async (area_id?: string): Promise<INoticiasResponse> => {
   const params = buildQueryParams({ area_id });
 
   const { data } = await api.get('/noticias', { params });
