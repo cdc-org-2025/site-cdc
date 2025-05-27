@@ -10,6 +10,7 @@ import Transparency from '@/features/institucional/Transparency'
 import Faq from '@/features/institucional/Faq'
 import { Lato } from 'next/font/google'
 import { storageUrl } from '@/constants/storageDomain'
+import Typography from '@mui/material/Typography'
 
 const lato = Lato({
   subsets: ['latin'],
@@ -30,24 +31,22 @@ export default function ProgramaUniquePage() {
   return (
     <>
       <HeaderBannerUnique noneMobile Banner={Banner} />
-      {data?.conteudo && (
-        <Box width={'100%'} display='flex' justifyContent={'center'}>
-          <Box width={'100%'} maxWidth={'800px'} p='16px'>
-            {data.descricao ? (
-              <Box
-                sx={{
-                  fontFamily: `${lato.style.fontFamily}, "Source Sans Pro", sans-serif !important`,
-                }}
-                dangerouslySetInnerHTML={{
-                  __html: sanitizeHtml(data.descricao),
-                }}
-              />
-            ) : (
-              <>Sem descrição disponivel</>
-            )}
-          </Box>
+      <Box width={'100%'} display='flex' justifyContent={'center'}>
+        <Box width={'100%'} maxWidth={'800px'} p='16px'>
+          {data?.descricao ? (
+            <Box
+              sx={{
+                fontFamily: `${lato.style.fontFamily}, "Source Sans Pro", sans-serif !important`,
+              }}
+              dangerouslySetInnerHTML={{
+                __html: sanitizeHtml(data.descricao),
+              }}
+            />
+          ) : (
+            <Typography variant='h1' color={"primary"} textAlign={"center"}>Sem descrição disponivel</Typography>
+          )}
         </Box>
-      )}
+      </Box>
       <LatestNews programa />
       <Box px={{ xs: '16px', md: '32px' }} mt="64px" pb={{ xs: '80px', md: '160px' }} width="100%">
         <Transparency />
