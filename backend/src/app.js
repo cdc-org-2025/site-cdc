@@ -10,8 +10,6 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.options("*", cors()); // 🔧 Permite todos os preflight
-
 app.use("/api", routes);
 
 
