@@ -526,6 +526,7 @@ export const adminJs = new AdminJS({
                     'areaDeAtuacao',
                     'uploadCapa',
                     'uploadImagens',
+                    'is_ativo'
 
                 ],
                 showProperties: [
@@ -535,7 +536,9 @@ export const adminJs = new AdminJS({
                     'descricao',
                     'areaDeAtuacao',
                     'url_image_capa',
-                    'url_imagem'
+                    'url_imagem',
+                    'is_ativo'
+
 
                 ],
                 listProperties: [
@@ -545,7 +548,9 @@ export const adminJs = new AdminJS({
                     'descricao',
                     'areaDeAtuacao',
                     'url_image_capa',
-                    'url_imagem'
+                    'url_imagem',
+                    'is_ativo'
+
                 ]
             },
         },

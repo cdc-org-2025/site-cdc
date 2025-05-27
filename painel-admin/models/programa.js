@@ -23,6 +23,10 @@ export class Programa extends Model {
         }
       },
       resumo: DataTypes.TEXT,
+      is_ativo: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true
+      }
 
 
       // uploadCapa: {
