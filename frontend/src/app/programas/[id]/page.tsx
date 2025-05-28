@@ -7,10 +7,11 @@ import { sanitizeHtml } from '@/utils/stripHtmlTags'
 import { useProgramaQuery } from '@/clients/api/programas'
 import LatestNews from '@/components/molecules/LastestNews'
 import Transparency from '@/features/institucional/Transparency'
-import Faq from '@/features/institucional/Faq'
 import { Lato } from 'next/font/google'
 import { storageUrl } from '@/constants/storageDomain'
 import Typography from '@mui/material/Typography'
+import { useTransparenciaAreaQuery } from '@/clients/api/transparencia'
+import { useNoticiasAreaQuery } from '@/clients/api/noticias'
 
 const lato = Lato({
   subsets: ['latin'],
@@ -20,6 +21,9 @@ const lato = Lato({
 export default function ProgramaUniquePage() {
   const { id } = useParams()
   const { data } = useProgramaQuery(id)
+  const idsArea = data?.areas?.map((item) => item.id).join(',');
+  const { data: listTransparencia } = useTransparenciaAreaQuery({ area_id: idsArea })
+  const { data: listNoticias } = useNoticiasAreaQuery({ area_id: idsArea })
 
   const Banner = {
     id: 1,
@@ -47,10 +51,9 @@ export default function ProgramaUniquePage() {
           )}
         </Box>
       </Box>
-      <LatestNews programa />
-      <Box px={{ xs: '16px', md: '32px' }} mt="64px" pb={{ xs: '80px', md: '160px' }} width="100%">
-        <Transparency />
-        <Faq />
+      <Box px={{ xs: '16px', md: '32px' }} mt="64px" pb={{ xs: '80px', md: '160px' }} width="100%" maxWidth={"100vw"}>
+        <LatestNews listNoticia={listNoticias?.data} programa />
+        <Transparency listTransparencia={listTransparencia} />
       </Box>
       <Footer />
     </>

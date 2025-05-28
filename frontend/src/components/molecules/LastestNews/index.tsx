@@ -6,14 +6,12 @@ import Typography from '@mui/material/Typography'
 import React from 'react'
 import AnimationSplitText from '@/components/animations/splitText'
 import Grid from '@mui/material/Grid'
-import { useNoticiasListQuery } from '@/clients/api/noticias'
+import { INoticias } from '@/clients/api/noticias'
 import { useRouter } from 'next/navigation'
 import ZoomOutOnView from '@/components/animations/zoomOutOnView'
 import VectorRoundedLines from '@/components/atoms/VectorRoundedLines'
 
-export default function LatestNews({ programa }: { programa?: boolean }) {
-  const { data } = useNoticiasListQuery()
-  const dataset = data?.data?.slice(0, 3)
+export default function LatestNews({ programa, listNoticia }: { programa?: boolean, listNoticia?: INoticias[] }) {
   const { push } = useRouter()
 
   return (
@@ -54,7 +52,7 @@ export default function LatestNews({ programa }: { programa?: boolean }) {
       <Box overflow={"hidden"} width={"100%"} maxWidth={"100vw"}>
         <ZoomOutOnView delay={200} scaleFrom={1.3}>
           <Grid container spacing={{ xs: '35px', md: 4 }} >
-            {dataset?.map((news) => (
+            {listNoticia?.slice(0, 3)?.map((news: INoticias) => (
               <Grid item key={news.id} xs={12} sm={4} md={4}>
                 <CardTagDesc
                   info={news}

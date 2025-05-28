@@ -27,8 +27,8 @@ export const MenuOptions = [
       { id: 11, label: 'Organização do CDC', scrollView: 'organizationCdc' },
       { id: 12, label: 'Lideranças', scrollView: 'leadership' },
       { id: 13, label: 'Transparência', scrollView: 'transparent' },
-      { id: 14, label: 'Perguntas Frequentes', scrollView: 'faq' },
-      { id: 15, label: 'Trabalhe Conosco', link: 'trabalhe-conosco' },
+      { id: 14, label: 'Perguntas frequentes', scrollView: 'faq' },
+      { id: 15, label: 'Trabalhe conosco', link: 'trabalhe-conosco' },
     ],
   },
   {

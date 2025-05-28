@@ -3,7 +3,6 @@ import { useTheme } from '@mui/material'
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
-import Typography from '@mui/material/Typography'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import CloseIcon from '@mui/icons-material/Close'
@@ -134,7 +133,7 @@ export default function MenuAreasWithSearchInput({
         onClose={handleCloseMenu}
         MenuListProps={{ 'aria-labelledby': 'basic-button' }}
       >
-        <Box p="24px" >
+        <Box p="12px 24px 24px 24px" >
           <Box
             display="flex"
             justifyContent="space-between"
@@ -142,7 +141,7 @@ export default function MenuAreasWithSearchInput({
             mb="16px"
             width={"100%"}
           >
-            <Typography variant="subtitle1">Áreas</Typography>
+            <Box />
             <IconButton size="small" onClick={handleCloseMenu}>
               <CloseIcon
                 sx={{ width: '16px', height: '16px', color: '#333' }}

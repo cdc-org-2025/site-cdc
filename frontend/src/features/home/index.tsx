@@ -11,7 +11,6 @@ import VisionImage from '../../assets/cards-information/vision.svg'
 import AccordionProjects from '@/components/molecules/AccordionProjects'
 import Partners from '@/components/atoms/Partners'
 import LatestNews from '@/components/molecules/LastestNews'
-import FormContactMap from '@/components/templates/FormContactMap'
 import AnimationSplitText from '@/components/animations/splitText'
 import AnimetedSlide from '@/components/animations/slide'
 import { useCardsInformativosListQuery } from '@/clients/api/cards-informativos'
@@ -19,10 +18,12 @@ import { storageUrl } from '@/constants/storageDomain'
 import Indicadores from './Indicadores'
 import { useOrganizacaoListQuery } from '@/clients/api/organizacao'
 import { isStorage } from '@/helpers/isStorage'
+import { useNoticiasListQuery } from '@/clients/api/noticias'
 
 export default function HomePage() {
   const { data: cardOption } = useCardsInformativosListQuery()
   const { data: cardsOrganizacao } = useOrganizacaoListQuery()
+  const { data: noticiasResponse } = useNoticiasListQuery()
   const cardVisao = cardOption?.find(item => item.titulo === "Visão")
   const cardMissao = cardOption?.find(item => item.titulo === "Missão")
 
@@ -194,8 +195,7 @@ export default function HomePage() {
       <AccordionProjects />
       <Partners />
       <Indicadores />
-      <LatestNews />
-      <FormContactMap />
+      <LatestNews listNoticia={noticiasResponse?.data} />
     </>
   )
 }
