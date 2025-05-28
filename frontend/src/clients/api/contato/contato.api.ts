@@ -13,7 +13,13 @@ export const getContato = async (id: number): Promise<IContato> => {
   return data;
 };
 
-export const postContato = async (payload: IPostContato): Promise<any> => {
-  const { data } = await api.post('/contato', payload);
+export const postContato = async (payload: IPostContato): Promise<{ message: string }> => {
+  const formData = new FormData();
+  formData.append('nome', payload.nome);
+  formData.append('email', payload.email);
+  formData.append('mensagem', payload.mensagem);
+  formData.append('motivo', payload.motivo);
+
+  const { data } = await api.post('/contato', formData);
   return data;
 };

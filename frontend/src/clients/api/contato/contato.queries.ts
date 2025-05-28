@@ -1,6 +1,6 @@
 import { useQuery, UseQueryOptions, useMutation } from '@tanstack/react-query';
 import { getListContatos, getContato, postContato } from './contato.api';
-import { IContato, IPostContato } from './contato';
+import { IContato } from './contato';
 
 export const useContatosQuery = (options?: UseQueryOptions<IContato[], Error>) => {
   return useQuery<IContato[], Error>({
@@ -20,7 +20,7 @@ export const useContatoQuery = (id: number, options?: UseQueryOptions<IContato, 
 };
 
 export const useContatoMutation = () => {
-  return useMutation<IPostContato, Error, IPostContato>({
+  return useMutation<{ message: string }, Error, any>({
     mutationFn: postContato,
   });
 };

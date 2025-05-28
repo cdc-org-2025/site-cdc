@@ -91,17 +91,18 @@ export default function FormEnrollment({ tituloVaga }: { tituloVaga?: string }) 
 
     const payload = { ...data, tituloVaga }
     try {
-      await mutateAsync(payload);
+      const response = await mutateAsync(payload);
       toast.update(id, {
-        render: "Formulário enviado com sucesso",
+        render: response?.message,
         type: "success",
         isLoading: false,
         autoClose: 5000,
+        className: ""
       });
 
       setmessageResponseForm({
         sucesso: true,
-        mensagem: 'Formulário enviado com sucesso!',
+        mensagem: response?.message,
       });
       reset();
       setFileName('');
@@ -111,6 +112,7 @@ export default function FormEnrollment({ tituloVaga }: { tituloVaga?: string }) 
         type: "error",
         isLoading: false,
         autoClose: 5000,
+        className: ""
       });
       setmessageResponseForm({
         sucesso: false,
