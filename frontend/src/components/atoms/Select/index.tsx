@@ -1,17 +1,17 @@
 import React from 'react'
-import { UseFormRegisterReturn } from 'react-hook-form'
 import MenuItem from '@mui/material/MenuItem'
 import Select from '@mui/material/Select'
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 import FormHelperText from '@mui/material/FormHelperText'
 import Typography from '@mui/material/Typography'
+import { ControllerRenderProps } from 'react-hook-form'
 
 interface ISelect {
   label: string
   error?: boolean
   helperText?: string
-  register?: UseFormRegisterReturn
+  field: ControllerRenderProps<any, any> // Vem do useForm via Controller
   options: { label: string; value: string | number }[]
 }
 
@@ -19,7 +19,7 @@ export default function SelectComponent({
   label,
   error,
   helperText,
-  register,
+  field,
   options,
   ...props
 }: ISelect) {
@@ -50,14 +50,13 @@ export default function SelectComponent({
         {label}
       </InputLabel>
       <Select
-        {...register}
+        {...field}
         {...props}
-        label={label}
         fullWidth
         displayEmpty
-        defaultValue=""
+        value={field?.value ?? ''}
         renderValue={(selected) => {
-          if (!selected) {
+          if (!selected || selected === '') {
             return (
               <Typography
                 variant="subtitle1"
@@ -82,7 +81,6 @@ export default function SelectComponent({
           '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
             borderColor: 'secondary.light',
           },
-
           '& .MuiInputLabel-root.MuiFormLabel-filled': {
             color: 'secondary.light',
           },
@@ -97,7 +95,7 @@ export default function SelectComponent({
           },
         }}
       >
-        <MenuItem value="" disabled>
+        <MenuItem value="">
           <Typography
             variant="subtitle1"
             textTransform="none"

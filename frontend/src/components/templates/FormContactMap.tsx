@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import React, { useState } from 'react'
 import TextfieldComponent from '../atoms/Textfield'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import ButtonAction from '../atoms/ButtonAction'
@@ -36,12 +36,19 @@ const schema = yup
 
 export default function FormContactMap() {
   const {
+    control,
     register,
     handleSubmit,
     reset,
     formState: { errors, isSubmitting, isValid },
   } = useForm({
     resolver: yupResolver(schema),
+    defaultValues: {
+      nome: '',
+      email: '',
+      motivo: '',
+      mensagem: '',
+    },
   })
   const { mutateAsync } = useContatoMutation();
 
@@ -56,24 +63,31 @@ export default function FormContactMap() {
     })
 
     try {
-      await mutateAsync(data)
+      const response = await mutateAsync(data)
       toast.update(id, {
-        render: "Formulário enviado com sucesso",
+        render: response?.message,
         type: "success",
         isLoading: false,
         autoClose: 5000,
+        className: ""
       });
       setmessageResponseForm({
         sucesso: true,
-        mensagem: 'Formulário enviado com sucesso!',
+        mensagem: response?.message,
       })
-      reset()
+      reset({
+        nome: '',
+        email: '',
+        motivo: "",
+        mensagem: '',
+      })
     } catch {
       toast.update(id, {
         render: 'Algum erro aconteceu no envio do formulário. Entre em contato com a organização',
         type: "error",
         isLoading: false,
         autoClose: 5000,
+        className: ""
       });
       setmessageResponseForm({
         sucesso: false,
@@ -163,15 +177,22 @@ export default function FormContactMap() {
               />
             </Box>
             <Box width="100%" pb="8px">
-              <SelectComponent
-                label={'Razão do contato'}
-                register={register('motivo')}
-                error={!!errors.motivo}
-                helperText={errors.motivo?.message}
-                options={[
-                  { label: 'teste1', value: 1 },
-                  { label: 'teste2', value: 3 },
-                ]}
+              <Controller
+                name="motivo"
+                control={control}
+                defaultValue=""
+                render={({ field }) => (
+                  <SelectComponent
+                    label="Razão do contato"
+                    field={field}
+                    error={!!errors.motivo}
+                    helperText={errors.motivo?.message}
+                    options={[
+                      { label: 'teste1', value: '1' },
+                      { label: 'teste2', value: '3' },
+                    ]}
+                  />
+                )}
               />
             </Box>
             <TextfieldComponent

@@ -3,7 +3,7 @@ import { ICandidatura } from './candidatura';
 
 const api = apiData()
 
-export const postCandidatura = async (payload: ICandidatura): Promise<any> => {
+export const postCandidatura = async (payload: ICandidatura): Promise<{ message: string }> => {
   const formData = new FormData();
   formData.append('nome', payload.nome);
   formData.append('email', payload.email);
