@@ -16,18 +16,20 @@ export default function HeaderBannerUnique({
   return (
     <>
       <Header />
-      <AnimetedSlide distance={500} threshold={0.1}>
-        <Box
-          display={{ xs: noneMobile ? 'none' : 'flex', sm: 'flex' }}
-          sx={{
-            height: 'calc(100vh - 94px)',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <BannerUnique Banner={Banner} />
-        </Box>
-      </AnimetedSlide>
+      {Banner && (
+        <AnimetedSlide distance={500} threshold={0.1}>
+          <Box
+            display={{ xs: noneMobile ? 'none' : 'flex', sm: 'flex' }}
+            sx={{
+              height: 'calc(100vh - 94px)',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <BannerUnique Banner={Banner} />
+          </Box>
+        </AnimetedSlide>
+      )}
     </>
   )
 }

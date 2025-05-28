@@ -9,9 +9,9 @@ export interface IBannerUnique {
 }
 
 export interface TypeBannerUnique {
-  id: number
+  id?: number
   title?: string
-  image: any
+  image?: any
   highlight?: string
 }
 
