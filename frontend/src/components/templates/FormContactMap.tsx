@@ -127,7 +127,7 @@ export default function FormContactMap() {
             textTransform="none"
             lineHeight={"150%"}
           >
-            O Centro de Democracia e Cidadania está disponível para contato, tanto por e-mail, WhatsApp, como presencialmente.</Typography>
+            O Centro de Desenvolvimento e Cidadania está disponível para contato, tanto por e-mail, WhatsApp, como presencialmente.</Typography>
         </AnimationSplitText>
       </Box>
 
