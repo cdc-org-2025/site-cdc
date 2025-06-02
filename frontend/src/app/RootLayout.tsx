@@ -8,6 +8,8 @@ import { ThemeProvider } from "@mui/material";
 import getTheme from "@/theme";
 import 'react-toastify/dist/ReactToastify.css';
 import ButtonAccessible from "@/components/atoms/ButtonAccessible";
+import Script from 'next/script'
+import GoogleTranslate from "@/components/atoms/ButtonTranslate";
 
 export default function RootLayout({
   children,
@@ -45,8 +47,26 @@ function InnerRootLayout({
   return (
     <ThemeProvider theme={getTheme(theme, fontScale, fontWeightScale)}>
       <html lang={"pt-BR"}>
+        <head>
+          <Script
+            strategy="afterInteractive"
+            src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+          />
+          <Script id="google-translate-init" strategy="afterInteractive">
+            {`
+            function googleTranslateElementInit() {
+              new google.translate.TranslateElement({
+                pageLanguage: 'pt',
+                includedLanguages: 'en,pt,es,fr,it,de',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+              }, 'google_translate_element');
+            }
+          `}
+          </Script>
+        </head>
         <body>
           <ButtonAccessible />
+          <GoogleTranslate />
           <div id="app-content" style={{ filter: getAccessibilityFilter(), transition: 'filter 0.3s ease' }}>
             {children}
           </div>
