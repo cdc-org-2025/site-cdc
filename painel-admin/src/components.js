@@ -14,8 +14,7 @@ const Components = {
   // ImageListEditPreview: componentLoader.add("ImageListEditPreview", "./components/imageListEditPreview.jsx"),
   EditorLinhaTempo: componentLoader.add("EditorLinhaTempo", "./components/editorlinhaTempo.jsx"),
   ProgramaEditor: componentLoader.add("ProgramaEditor", './components/editorProgramas.jsx'),
-  TextoPreview: componentLoader.add("TextoPreview", "./components/textoShow.jsx"),
-
+  // TextoPreview: componentLoader.add("TextoPreview", "./components/textoShow.jsx")
 };
 
 export { componentLoader, Components };
