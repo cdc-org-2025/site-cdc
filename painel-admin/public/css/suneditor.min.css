@@ -2943,6 +2943,6 @@ textarea.se-error:focus {
     padding: .2em .4em
 }
 
-.adminjs_Box .sc-dmqHEX {
+.adminjs_Box .adminjs_Box {
     overflow: auto !important;
 }
