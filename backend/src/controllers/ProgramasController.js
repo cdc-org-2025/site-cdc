@@ -41,7 +41,8 @@ class ProgramasController {
         descricao: prog.descricao,
         resumo: prog.resumo,
         areas: areas,
-        imagens: prog.imagens || []
+        imagens: prog.imagens || [],
+        is_ativo: prog.is_ativo
       };
     });
 
@@ -65,8 +66,7 @@ class ProgramasController {
 
   static async show(req, res) {
     const programa = await db.Programa.findByPk(req.params.id, {
-      where: { is_ativo: true }, // 👈 Adicionado aqui
-      attributes: ['id', 'url_image_capa', 'titulo', 'subtitulo', 'resumo', 'descricao', 'area_ids'],
+      attributes: ['id', 'url_image_capa', 'titulo', 'subtitulo', 'resumo', 'descricao', 'area_ids', 'is_ativo'],
       include: [{
         model: db.ProgramaImagens,
         as: 'imagens',
