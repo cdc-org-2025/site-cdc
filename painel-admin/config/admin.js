@@ -17,7 +17,7 @@ export const adminJs = new AdminJS({
     assets: {
         styles: [
             '/css/suneditor.min.css',
-            '/css/editor-custom.css'
+            '/css/editor-custom.css',
         ], // 👈 adiciona aqui
     },
     resources: [
@@ -516,7 +516,19 @@ export const adminJs = new AdminJS({
                         components: {
                             list: Components.ImageListPreview
                         }
-                    }
+                    },
+                    // resumo: {
+                    //     components:{
+                    //         list: Components.TextoPreview, // novo componente para a listagem
+                    //     }
+                    // },
+                    descricao: {
+                        components: {
+                            edit: Components.ProgramaEditor,
+                            list: Components.NoticiaPreview, // novo componente para a listagem
+
+                        }
+                    },
                 },
                 editProperties: [
                     'titulo',
@@ -542,7 +554,7 @@ export const adminJs = new AdminJS({
 
                 ],
                 listProperties: [
-                    'titulo',
+                    // 'titulo',
                     'subtitulo',
                     'resumo',
                     'descricao',

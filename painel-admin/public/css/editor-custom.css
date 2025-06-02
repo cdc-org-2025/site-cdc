@@ -62,3 +62,9 @@
   height: auto !important;
   display: block;
 }
+
+
+
+.sun-editor .adminjs_Box {
+    overflow: auto !important;
+}
