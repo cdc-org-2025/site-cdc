@@ -21,7 +21,7 @@ import EditorLinhaTempo from '../src/components/editorlinhaTempo'
 AdminJS.UserComponents.EditorLinhaTempo = EditorLinhaTempo
 import ProgramaEditor from '../src/components/editorProgramas'
 AdminJS.UserComponents.ProgramaEditor = ProgramaEditor
-import TextoPreview from '../src/components/textoshow'
+import TextoPreview from '../src/components/textoShow'
 AdminJS.UserComponents.TextoPreview = TextoPreview
 import UploadEditComponent from '../node_modules/@adminjs/upload/build/features/upload-file/components/UploadEditComponent'
 AdminJS.UserComponents.UploadEditComponent = UploadEditComponent
