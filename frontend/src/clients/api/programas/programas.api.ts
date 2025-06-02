@@ -8,6 +8,11 @@ export const getListProgramas = async (): Promise<IProgramResponse> => {
   return data;
 };
 
+export const getListProgramasActive = async (): Promise<IProgramResponse> => {
+  const { data } = await api.get('/programas?is_ativo=true');
+  return data;
+};
+
 export const getPrograma = async (id: string | string[]): Promise<IPrograma> => {
   const { data } = await api.get(`/programas/${id}`);
   return data;
