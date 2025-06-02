@@ -2,13 +2,13 @@
 import React, { useEffect, useState } from 'react'
 import AccordionProjectsDesktop from './desktop'
 import AccordionProjectsMobile from './mobile'
-import { IPrograma, useProgramasListQuery } from '@/clients/api/programas'
+import { IPrograma, useProgramasListAtivoQuery } from '@/clients/api/programas'
 import { useMediaQuery, useTheme } from '@mui/material'
 
 export default function AccordionProjects() {
-  const { data } = useProgramasListQuery()
+  const { data } = useProgramasListAtivoQuery()
+  const dataset = data?.data.filter(item => item.is_ativo === true)
   const [expandedAccordion, setExpandedAccordion] = useState<IPrograma | undefined>()
-  const dataset = data?.data
 
   const theme = useTheme()
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'))
