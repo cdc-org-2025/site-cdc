@@ -188,8 +188,10 @@ export default function FormContactMap() {
                     error={!!errors.motivo}
                     helperText={errors.motivo?.message}
                     options={[
-                      { label: 'teste1', value: '1' },
-                      { label: 'teste2', value: '3' },
+                      { label: 'Parcerias e colaborações', value: 'Parcerias e colaborações' },
+                      { label: 'Reclamações / Sugestões / Elogios', value: 'Reclamações / Sugestões / Elogios' },
+                      { label: 'Dúvidas', value: 'Dúvidas' },
+                      { label: 'Outros', value: 'Outros' },
                     ]}
                   />
                 )}

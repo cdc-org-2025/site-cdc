@@ -8,6 +8,11 @@ export interface IPrograma {
   conteudo: string
   resumo: string
   areas: { id: number, nome: string }[]
+  is_ativo: boolean
+  imagens: {
+    id: number
+    url_imagem: string
+  }[]
 }
 
 export interface IProgramList {

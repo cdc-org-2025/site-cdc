@@ -1,12 +1,13 @@
 'use client'
-import { useProgramasListQuery } from '@/clients/api/programas'
+import { useProgramasListAtivoQuery } from '@/clients/api/programas'
 import { MenuOptions, IMenu, ISubMenu } from '@/constants/menuNavigation'
 
 export const useMenuOptions = (): IMenu[] => {
-  const { data } = useProgramasListQuery()
+  const { data } = useProgramasListAtivoQuery()
+  const programsListActive = data?.data.filter(item => item.is_ativo === true)
 
   const subMenusFromAPI: ISubMenu[] =
-    data?.data.map((programa) => ({
+    programsListActive?.map((programa) => ({
       id: programa.id,
       label: `${programa.titulo} (${programa.subtitulo})`,
       link: `/programas/${programa.id}`,

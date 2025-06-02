@@ -3,7 +3,6 @@ import Footer from '@/components/molecules/Footer'
 import HeaderBannerUnique from '@/components/templates/HeaderBannerUnique'
 import { useParams } from 'next/navigation'
 import Box from '@mui/material/Box'
-import { sanitizeHtml } from '@/utils/stripHtmlTags'
 import { useProgramaQuery } from '@/clients/api/programas'
 import LatestNews from '@/components/molecules/LastestNews'
 import Transparency from '@/features/institucional/Transparency'
@@ -12,6 +11,9 @@ import { storageUrl } from '@/constants/storageDomain'
 import Typography from '@mui/material/Typography'
 import { useTransparenciaAreaQuery } from '@/clients/api/transparencia'
 import { useNoticiasAreaQuery } from '@/clients/api/noticias'
+import Grid from '@mui/material/Grid'
+import VectorRoundedLines from '@/components/atoms/VectorRoundedLines'
+import { sanitizeHtml } from '@/utils/stripHtmlTags'
 
 const lato = Lato({
   subsets: ['latin'],
@@ -24,6 +26,7 @@ export default function ProgramaUniquePage() {
   const idsArea = data?.areas?.map((item) => item.id).join(',');
   const { data: listTransparencia } = useTransparenciaAreaQuery({ area_id: idsArea })
   const { data: listNoticias } = useNoticiasAreaQuery({ area_id: idsArea })
+  const listImagePrograms = data?.imagens
 
   const Banner = {
     id: 1,
@@ -35,24 +38,78 @@ export default function ProgramaUniquePage() {
   return (
     <>
       <HeaderBannerUnique noneMobile Banner={Banner} />
-      <Box width={'100%'} display='flex' justifyContent={'center'}>
-        <Box width={'100%'} maxWidth={'800px'} p='16px'>
-          {data?.descricao ? (
-            <Box
-              sx={{
-                fontFamily: `${lato.style.fontFamily}, "Source Sans Pro", sans-serif !important`,
-              }}
-              dangerouslySetInnerHTML={{
-                __html: sanitizeHtml(data.descricao),
-              }}
-            />
-          ) : (
-            <Typography variant='h1' color={"primary"} textAlign={"center"}>Sem descrição disponivel</Typography>
-          )}
-        </Box>
-      </Box>
+      {data?.descricao ? (
+        <Box width={'100%'} maxWidth={'100vw'} display='flex' justifyContent={'center'}>
+          <VectorRoundedLines left={0} margin="300px 0px 0px 0px" />
+          <Grid
+            container
+            rowSpacing="24px"
+            columnSpacing="24px"
+            width={"100%"}
+            p={{ xs: '32px 6px', sm: "40px 6px", md: "40px 10px" }}
+          >
+            <Grid item xs={12} sm={12} md={6}>
+              <Box width="100%">
+                <Typography variant='h3' color="primary" pb="16px">
+                  Sobre o programa
+                </Typography>
+                <Box
+                  sx={{
+                    fontFamily: `${lato.style.fontFamily}, "Source Sans Pro", sans-serif !important`,
+                    lineHeight: "150%"
+                  }}
+                  dangerouslySetInnerHTML={{
+                    __html: sanitizeHtml(data?.descricao),
+                  }}
+                />
+              </Box>
+            </Grid>
+            <Grid item xs={12} sm={12} md={6}>
+              <Box
+                width="100%"
+                height="100%"
+                borderRadius="32px"
+                sx={{
+                  bgcolor: 'gray',
+                  backgroundImage: `url("${storageUrl}/${listImagePrograms?.[0]?.url_imagem}")`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  backgroundRepeat: 'no-repeat',
+                }}
+              />
+            </Grid>
+            {listImagePrograms?.slice(1).map((image) => (
+              <Grid
+                item
+                key={image.id}
+                xs={12}
+                sm={6}
+                md={6}
+                height={{ xs: "155px", sm: "300px", md: "330px" }}
+              >
+                <Box
+                  height="100%"
+                  width="100%"
+                  bgcolor="gray"
+                  display="flex"
+                  justifyContent="flex-end"
+                  borderRadius="32px"
+                  sx={{
+                    backgroundImage: `url("${storageUrl}/${image.url_imagem}")`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat',
+                  }}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        </Box >
+      ) : (
+        <Typography variant='h1' color={"primary"} textAlign={"center"}>Sem descrição disponivel</Typography>
+      )}
+      <LatestNews listNoticia={listNoticias?.data} programa />
       <Box px={{ xs: '16px', md: '32px' }} mt="64px" pb={{ xs: '80px', md: '160px' }} width="100%" maxWidth={"100vw"}>
-        <LatestNews listNoticia={listNoticias?.data} programa />
         <Transparency listTransparencia={listTransparencia} />
       </Box>
       <Footer />

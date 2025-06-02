@@ -1,11 +1,19 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { getListProgramas, getPrograma } from './programas.api';
+import { getListProgramas, getListProgramasActive, getPrograma } from './programas.api';
 import { IPrograma, IProgramResponse } from './programas';
 
 export const useProgramasListQuery = (options?: UseQueryOptions<IProgramResponse, Error>) => {
   return useQuery<IProgramResponse, Error>({
     queryKey: ['programas'],
     queryFn: getListProgramas,
+    ...options,
+  });
+};
+
+export const useProgramasListAtivoQuery = (options?: UseQueryOptions<IProgramResponse, Error>) => {
+  return useQuery<IProgramResponse, Error>({
+    queryKey: ['programas-ativos'],
+    queryFn: getListProgramasActive,
     ...options,
   });
 };

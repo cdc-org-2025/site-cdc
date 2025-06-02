@@ -11,7 +11,7 @@ import { useNavigation } from '@/hooks/useNavigation'
 import { useMenuOptions } from '@/hooks/useMenuOption'
 import { useRouter } from 'next/navigation'
 import YouTubeIcon from '@mui/icons-material/YouTube';
-import LogoCDC from '../../../assets/logo_cdc.png'
+import LogoCDC from '../../../assets/logo_cdc.svg'
 
 export default function Footer() {
   const { handleSubMenuClick } = useNavigation()
