@@ -15,6 +15,8 @@ COPY . .
 
 # Expõe porta 3000
 # EXPOSE 3000
+EXPOSE 8080
+
 
 # Comando para iniciar
 CMD [ "node", "--max-old-space-size=3072", "index.js" ]
