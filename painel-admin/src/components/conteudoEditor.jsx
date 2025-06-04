@@ -54,7 +54,6 @@ function convertStylesToInline(html) {
     el.style.color = '#000000';
     el.style.lineHeight = '1.6';
     el.style.quotes = '"\\201C""\\201D""\\2018""\\2019"';
-    // el.innerHTML = `“${el.innerText}”`; // adiciona aspas tipográficas
   });
 
 
@@ -208,6 +207,7 @@ const ConteudoEditor = (props) => {
             paragraphTags: false,
             defaultTag: "",
             formats
+            
           }}
         />
       </Box>
