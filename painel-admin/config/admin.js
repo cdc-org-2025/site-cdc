@@ -517,18 +517,18 @@ export const adminJs = new AdminJS({
                             list: Components.ImageListPreview
                         }
                     },
-                    // resumo: {
-                    //     components:{
-                    //         list: Components.TextoPreview, // novo componente para a listagem
-                    //     }
-                    // },
-                    // descricao: {
-                    //     components: {
-                    //         edit: Components.ProgramaEditor,
-                    //         list: Components.NoticiaPreview, // novo componente para a listagem
+                    resumo: {
+                        components:{
+                            list: Components.TextoPreview, // novo componente para a listagem
+                        }
+                    },
+                    descricao: {
+                        components: {
+                            edit: Components.ProgramaEditor,
+                            list: Components.NoticiaPreview, // novo componente para a listagem
 
-                    //     }
-                    // },
+                        }
+                    },
                 },
                 editProperties: [
                     'titulo',
