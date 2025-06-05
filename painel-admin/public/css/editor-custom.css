@@ -74,3 +74,8 @@
 .sun-editor-editable strong {
   font-weight: bold;
 }
+
+.sun-editor-editable i,
+.sun-editor-editable em {
+  font-style: italic;
+}
