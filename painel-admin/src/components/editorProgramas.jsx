@@ -6,12 +6,12 @@ import SunEditor from 'suneditor-react';
 const ProgramaEditor = (props) => {
     const { onChange, property, record } = props;
 
-    const initialData = record.params[property.path] || {
-        titulo: '',
-        conteudo: '<p><br></p>',
-    };
+    // const initialData = record.params['conteudo'] || {
+    //     titulo: '',
+    //     conteudo: '<p><br></p>',
+    // };
 
-    const [content, setContent] = useState(initialData.conteudo);
+    const [content, setContent] = useState(record.params['descricao']);
 
     const editorRef = useRef(null);
 
