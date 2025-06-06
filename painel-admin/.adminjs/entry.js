@@ -23,6 +23,8 @@ import ProgramaEditor from '../src/components/editorProgramas'
 AdminJS.UserComponents.ProgramaEditor = ProgramaEditor
 import TextoPreview from '../src/components/textoShow'
 AdminJS.UserComponents.TextoPreview = TextoPreview
+import ImageEditor from '../src/components/imagemEdit'
+AdminJS.UserComponents.ImageEditor = ImageEditor
 import UploadEditComponent from '../node_modules/@adminjs/upload/build/features/upload-file/components/UploadEditComponent'
 AdminJS.UserComponents.UploadEditComponent = UploadEditComponent
 import UploadListComponent from '../node_modules/@adminjs/upload/build/features/upload-file/components/UploadListComponent'

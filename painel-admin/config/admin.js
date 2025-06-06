@@ -6,6 +6,7 @@ import { sequelize } from './database.js'
 import { Components, componentLoader } from '../src/components.js'
 import { createUploadFeature } from './uploadStorage.js'
 import readingTime from 'reading-time';
+import { Op } from 'sequelize'
 
 
 
@@ -139,88 +140,158 @@ export const adminJs = new AdminJS({
             ],
             options: {
                 navigation: 'Institucional',
+
+                // Definimos explicitamente os campos para cada ação
+                newProperties: ['titulo', 'ano', 'conteudo', 'uploadImagens'],
+                editProperties: ['titulo', 'ano', 'conteudo', 'uploadImagens'],
+
                 listProperties: ['id', 'url_imagem', 'titulo', 'conteudo', 'ano'],
-                actions: {
-                    new: {
-                        after: async (response, request, context) => {
-                            const { record } = context
-                            if (!record || record.isValid() === false) return response
+                showProperties: ['id', 'titulo', 'ano', 'conteudo', 'url_imagem'],
+                filterProperties: ['titulo', 'ano'],
 
-                            const imagens = Object.entries(request.files || {})
-                                .filter(([key]) => key.startsWith('uploadImagens'))
-                                .map(([, file]) => file)
-
-                            const LinhaDoTempoImagem = models.LinhaDoTempoImagem
-
-                            for (const imagem of imagens) {
-                                const filename = imagem?.name?.replace(/\s+/g, '_')
-                                const gcsPath = `linha_do_tempos/${record.id()}-${filename}`
-
-                                await LinhaDoTempoImagem.create({
-                                    linha_do_tempo_id: record.id(),
-                                    url_imagem: gcsPath,
-                                })
-                            }
-
-                            return response
-                        }
-                    },
-                    list: {
-                        after: async (response) => {
-                            const imagens = await models.LinhaDoTempoImagem.findAll()
-
-                            const imagensMap = imagens.reduce((acc, img) => {
-                                const id = img.linha_do_tempo_id
-
-                                if (!acc[id]) {
-                                    acc[id] = []
-                                }
-
-                                acc[id].push(img.url_imagem) // 👉 guarda todas as imagens
-
-                                return acc
-                            }, {})
-
-                            for (const record of response.records) {
-                                const id = record.params.id
-                                const imagemArray = imagensMap[id]
-
-                                if (imagemArray) {
-                                    record.params.url_imagem = imagemArray
-                                }
-                            }
-
-                            return response
-                        }
-                    }
-                },
                 properties: {
                     titulo: { isTitle: true },
-                    conteudo: {
-                        components: {
-                            edit: Components.EditorLinhaTempo,
-                            list: Components.NoticiaPreview,
-                        }
-                    },
+                    conteudo: { type: 'richtext' },
                     ano: { type: 'number' },
+
+                    // Propriedade de upload, agora com configuração de componente por ação
                     uploadImagens: {
-                        type: 'mixed',
-                        isVisible: { list: false, show: false, filter: false, edit: true },
+                        label: 'Imagens',
                         components: {
-                            edit: Components.UploadMultiple
+                            // Ao EDITAR, usamos nosso componente customizado.
+                            edit: Components.ImageEditor,
+                            // Para a ação de NEW (criar), não especificamos nada.
+                            // Isso faz com que o AdminJS use o componente PADRÃO 
+                            // fornecido pelo createUploadFeature, que é exatamente o que queremos.
                         },
-                        custom: { multiple: true },
-                        isTitle: false
                     },
+
+                    imagesToDelete: { isVisible: false },
+
                     url_imagem: {
-                        isVisible: { list: true, show: false, edit: false },
+                        isVisible: { list: true, show: true, edit: false, filter: false },
                         components: {
-                            list: Components.ImageListPreview
+                            list: Components.ImageListPreview,
+                            show: Components.ImageListPreview,
                         }
                     }
                 },
-                editProperties: ['titulo', 'ano', 'conteudo', 'uploadImagens'],
-                showProperties: ['titulo', 'ano', 'conteudo']
+                actions: {
+                     new: {
+    after: async (response, request, context) => {
+      const { record } = context;
+      if (!record || !record.isValid()) { return response; }
+
+      const novasImagens = Object.entries(request.files || {})
+        .filter(([key]) => key.startsWith('uploadImagens'))
+        .map(([, file]) => file);
+
+      if (novasImagens && novasImagens.length > 0) {
+        for (const imagem of novasImagens) {
+          // ================================================================
+          // ▼▼▼ LÓGICA FINAL E CORRETA DE CONSTRUÇÃO DE PATH ▼▼▼
+          // ================================================================
+          // Recriamos o caminho do GCP, pois sabemos como ele é formado.
+          // Isso não depende de 'key' ou 'path' e é muito mais robusto.
+          const filename = imagem.name.replace(/\s/g, '_');
+          const gcsPath = `linha_do_tempos/${record.id()}-${filename}`;
+          // ================================================================
+          
+          await models.LinhaDoTempoImagem.create({
+            linha_do_tempo_id: record.id(),
+            url_imagem: gcsPath,
+          });
+          console.log(`✅ Registro no BD criado para o caminho construído: ${gcsPath}`);
+        }
+      }
+      return response;
+    }
+  },
+
+                    list: {
+                        // Sua lógica de listagem para agrupar imagens está correta
+                        after: async (response, request, context) => {
+                            const imagens = await models.LinhaDoTempoImagem.findAll();
+                            const imagensMap = imagens.reduce((acc, img) => {
+                                const id = img.linha_do_tempo_id;
+                                if (!acc[id]) { acc[id] = []; }
+                                acc[id].push(img.url_imagem);
+                                return acc;
+                            }, {});
+
+                            for (const record of response.records) {
+                                const id = record.params.id;
+                                if (imagensMap[id]) {
+                                    record.params.url_imagem = imagensMap[id];
+                                }
+                            }
+                            return response;
+                        }
+                    },
+                    edit: {
+                        before: async (request, context) => {
+                            const { record } = context;
+                            if (record && record.id()) {
+                                const imagens = await models.LinhaDoTempoImagem.findAll({
+                                    where: { linha_do_tempo_id: record.id() },
+                                    raw: true,
+                                });
+                                // O hook before continua populando `record.params.imagens`
+                                // para o nosso componente ler as imagens existentes.
+                                record.params.imagens = imagens;
+                            }
+                            return request;
+                        },
+                        after: async (response, request, context) => {
+                            const { record } = context;
+                            const { payload } = request;
+
+                            // 1. Lidar com a exclusão (Esta lógica já funciona)
+                            const idsParaDeletar = Object.keys(payload)
+                                .filter(key => key.startsWith('imagesToDelete.'))
+                                .map(key => payload[key]);
+
+                            if (idsParaDeletar && idsParaDeletar.length > 0) {
+                                await models.LinhaDoTempoImagem.destroy({
+                                    where: { id: { [Op.in]: idsParaDeletar } }
+                                });
+                            }
+
+                            // 2. Lidar com o upload (Esta lógica voltará a funcionar)
+                            // `request.files` será populado novamente pelo UploadFeature
+                            const novasImagens = Object.entries(request.files || {})
+                                .filter(([key]) => key.startsWith('uploadImagens'))
+                                .map(([, file]) => file);
+
+                            if (novasImagens && novasImagens.length > 0) {
+                                for (const imagem of novasImagens) {
+                                    const filename = imagem?.name?.replace(/\s+/g, '_');
+                                    const gcsPath = `linha_do_tempos/${record.id()}-${filename}`;
+                                    await models.LinhaDoTempoImagem.create({
+                                        linha_do_tempo_id: record.id(),
+                                        url_imagem: gcsPath,
+                                    });
+                                }
+                            }
+                            return response;
+                        }
+                    },
+                    delete: {
+                        after: async (response, request, context) => {
+                            // Quando um item da linha do tempo é deletado,
+                            // devemos deletar também todas as imagens associadas.
+                            const { record } = context;
+
+                            await models.LinhaDoTempoImagem.destroy({
+                                where: { linha_do_tempo_id: record.id() }
+                            });
+
+                            // Aqui também deveria deletar os arquivos do storage.
+
+                            return response;
+                        }
+                    },
+                }
             }
         },
         {
@@ -518,7 +589,7 @@ export const adminJs = new AdminJS({
                         }
                     },
                     resumo: {
-                        components:{
+                        components: {
                             list: Components.TextoPreview, // novo componente para a listagem
                         }
                     },

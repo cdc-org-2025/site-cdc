@@ -4,6 +4,7 @@ const ImageListPreview = (props) => {
   const { record, property } = props
   const raw = record.params[property.path]
 
+  console.log(record.params)
   if (!raw) return null
 
   const imagens = Array.isArray(raw) ? raw : [raw]
