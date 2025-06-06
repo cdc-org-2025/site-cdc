@@ -44,16 +44,13 @@ export default function Timeline({ listTimeLine }: { listTimeLine?: ILinhaTempo[
             {item.titulo}
           </Typography>
         </AnimationSplitText>
-        <AnimationSplitText>
-          <Typography
-            variant="overline"
-            textTransform="none"
-            color="text.primary"
-            lineHeight="150%"
-          >
-            {item.conteudo && sanitizeHtml(item?.conteudo)}
-          </Typography>
-        </AnimationSplitText>
+        <Typography
+          variant="overline"
+          textTransform="none"
+          color="text.primary"
+          lineHeight="150%"
+          dangerouslySetInnerHTML={{ __html: sanitizeHtml(item?.conteudo || '') }}
+        />
 
         <Box display="flex" flexDirection="column" gap="24px" width="100%">
           {item.imagens[0] && (
