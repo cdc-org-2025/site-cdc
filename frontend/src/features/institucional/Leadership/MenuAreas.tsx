@@ -5,7 +5,6 @@ import { useTheme } from '@mui/material'
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
-import Typography from '@mui/material/Typography'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import CloseIcon from '@mui/icons-material/Close'
@@ -110,11 +109,10 @@ export default function MenuAreas({
         <Box p="24px" bgcolor={liderancas ? primary.light : 'inherit'}>
           <Box
             display="flex"
-            justifyContent="space-between"
+            justifyContent="flex-end"
             alignItems="center"
             mb="16px"
           >
-            <Typography variant="subtitle1">Áreas</Typography>
             <IconButton
               size="small"
               onClick={handleCloseMenu}

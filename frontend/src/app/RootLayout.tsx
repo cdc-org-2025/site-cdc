@@ -9,7 +9,7 @@ import getTheme from "@/theme";
 import 'react-toastify/dist/ReactToastify.css';
 import ButtonAccessible from "@/components/atoms/ButtonAccessible";
 import Script from 'next/script'
-import GoogleTranslate from "@/components/atoms/ButtonTranslate";
+// import GoogleTranslate from "@/components/atoms/ButtonTranslate";
 
 export default function RootLayout({
   children,
@@ -66,7 +66,7 @@ function InnerRootLayout({
         </head>
         <body>
           <ButtonAccessible />
-          <GoogleTranslate />
+          {/* <GoogleTranslate /> */}
           <div id="app-content" style={{ filter: getAccessibilityFilter(), transition: 'filter 0.3s ease' }}>
             {children}
           </div>

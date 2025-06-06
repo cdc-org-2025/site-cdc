@@ -37,24 +37,20 @@ export default function Timeline({ listTimeLine }: { listTimeLine?: ILinhaTempo[
         display="flex"
         flexDirection="column"
         gap="16px"
-        pb={{ xs: '32px', lg: '0px' }}
+        pb={item?.conteudo?.length < 130 ? "54px" : "32px"}
       >
         <AnimationSplitText>
           <Typography variant="h5" color="text.primary">
             {item.titulo}
           </Typography>
         </AnimationSplitText>
-        <AnimationSplitText>
-          <Typography
-            variant="overline"
-            textTransform="none"
-            color="text.primary"
-            lineHeight="150%"
-          >
-            {item.conteudo && sanitizeHtml(item?.conteudo)}
-          </Typography>
-        </AnimationSplitText>
-
+        <Typography
+          variant="overline"
+          textTransform="none"
+          color="text.primary"
+          lineHeight="150%"
+          dangerouslySetInnerHTML={{ __html: sanitizeHtml(item?.conteudo || '') }}
+        />
         <Box display="flex" flexDirection="column" gap="24px" width="100%">
           {item.imagens[0] && (
             <AnimetedSlide>
@@ -92,7 +88,6 @@ export default function Timeline({ listTimeLine }: { listTimeLine?: ILinhaTempo[
             </Typography>
           </Circle>
         </AnimatedFade>
-
         <Box
           width="1.35px"
           height="100%"
