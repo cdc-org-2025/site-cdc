@@ -1,46 +1,46 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useRef } from 'react';
+import { Box, TextArea } from '@adminjs/design-system';
 import SunEditor from 'suneditor-react';
 
-const MAX_CHARS = 255
 
-const ConteudoRichTextLimitado = ({ property, record, onChange }) => {
-  const initialValue = record.params['conteudo'] || ''
-  const [content, setContent] = useState(initialValue)
-  const [charCount, setCharCount] = useState(0)
+const ConteudoRichTextLimitado = (props) => {
+  const { onChange, property, record } = props;
 
-  // Atualiza a contagem ao carregar
-  useEffect(() => {
-    const text = initialValue.replace(/<[^>]+>/g, '')
-    setCharCount(text.length)
-  }, [initialValue])
+  console.log('record.params Noticias', record.params)
+  const initialData = record.params['conteudo'] || {
+    titulo: '',
+    conteudo: '<p><br></p>',
+  };
 
-  const handleChange = (val) => {
-    const plainText = val.replace(/<[^>]+>/g, '')
-    if (plainText.length <= MAX_CHARS) {
-      setContent(val)
-      setCharCount(plainText.length)
-      onChange('conteudo', val)
-    }
-  }
+  const editorRef = useRef(null);
+
+  const handleSetInstance = (instance) => {
+    editorRef.current = instance;
+  };
+
+  const handleEditorChange = (newHtml) => {
+    onChange('conteudo', newHtml);
+  };
+
 
   return (
-    <div>
-      <SunEditor
-        setContents={content}
-        onChange={handleChange}
-        style={{marginBotton:"10px"}}
-        setOptions={{
-          height: 200,
-          buttonList: [
-            ['bold', 'underline', 'italic', 'list', 'align', 'fontSize'],
-          ],
-        }}
-      />
-      <p style={{ marginTop: '8px' }}>
-        <strong>{charCount}</strong> / {MAX_CHARS} caracteres
-      </p>
-    </div>
-  )
-}
+    <Box>
+      <Box mt="xl">
+        <SunEditor
+          getSunEditorInstance={handleSetInstance}
+          placeholder="Digite algo aqui..."
+          onChange={handleEditorChange}
+          defaultValue={initialData}
+          setOptions={{
+            height: 200,
+            buttonList: [
+              ['bold', 'underline', 'italic', 'list', 'align', 'fontSize'],
+            ],
+          }}
+        />
+      </Box>
+    </Box>
+  );
+};
 
-export default ConteudoRichTextLimitado
+export default ConteudoRichTextLimitado;

@@ -45,6 +45,18 @@ function convertStylesToInline(html) {
     el.setAttribute('height', '400');
   });
 
+  tempDiv.querySelectorAll('blockquote').forEach(el => {
+    el.style.borderLeft = '3px solid #A7181D';
+    el.style.paddingLeft = '12px';
+    el.style.margin = '16px 0';
+    el.style.fontStyle = 'italic';
+    el.style.fontSize = '18px';
+    el.style.color = '#000000';
+    el.style.lineHeight = '1.6';
+    el.style.quotes = '"\\201C""\\201D""\\2018""\\2019"';
+  });
+
+
   return tempDiv.innerHTML;
 }
 
@@ -180,8 +192,8 @@ const ConteudoEditor = (props) => {
             ],
             imageWidth: "800px",
             imageHeight: "400px",
-            videoHeight:"400px",
-            videoWidth:"771px",
+            videoHeight: "400px",
+            videoWidth: "771px",
             addTagsWhitelist: "div,img,span",
             mediaAutoSelect: false,
             imageMultipleFile: true,
@@ -195,6 +207,7 @@ const ConteudoEditor = (props) => {
             paragraphTags: false,
             defaultTag: "",
             formats
+            
           }}
         />
       </Box>

@@ -5,7 +5,7 @@ class LinhaDoTempo extends Model {
     return super.init({
       titulo: DataTypes.STRING,
       ano: DataTypes.INTEGER,
-      conteudo: DataTypes.STRING,
+      conteudo: DataTypes.TEXT,
     }, { sequelize, tableName: 'linha_do_tempo', timestamps: false });
   }
 

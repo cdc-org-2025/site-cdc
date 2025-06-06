@@ -36,13 +36,13 @@ function convertStylesToInline(html) {
 const OportunidadeEditor = (props) => {
     const { onChange, property, record } = props;
 
-    const initialData = record.params[property.path] || {
+    const initialData = record.params['descricao'] || {
         titulo: '',
         conteudo: '<p><br></p>',
     };
 
-    const [titulo, setTitulo] = useState(initialData.titulo || '');
-    const [content, setContent] = useState(initialData.conteudo);
+    const [titulo, setTitulo] = useState(record.params['titulo'] || '');
+    const [content, setContent] = useState(record.params['descricao']);
     const [htmlContent, setHtmlContent] = useState(initialData.html);
     const [structuredContent, setStructuredContent] = useState(initialData.structured);
 
