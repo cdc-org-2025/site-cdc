@@ -23,6 +23,7 @@ import indicadoresRoutes from "./indicadores.js";
 import contatoForm from './contatoForm.js'
 import organizacao from './organizacao.js'
 import banners from './banners.js'
+import conteudoSecao from './conteudo_secao.js'
 
 const router = Router();
 
@@ -45,6 +46,7 @@ router.use('/indicadores', indicadoresRoutes)
 router.use('/contato', contatoForm)
 router.use("/organizacao", organizacao )
 router.use("/banner", banners)
+router.use("/conteudo-secao", conteudoSecao)
 
 
 export default router;
