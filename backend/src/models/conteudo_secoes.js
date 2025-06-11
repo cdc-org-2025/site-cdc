@@ -2,7 +2,7 @@
 
 import { Model, DataTypes } from 'sequelize';
 
-export class ConteudoSecao extends Model {
+class ConteudoSecao extends Model {
   static init(sequelize) {
     return super.init({
       id: {
@@ -36,3 +36,5 @@ export class ConteudoSecao extends Model {
     });
   }
 }
+
+export default ConteudoSecao;
