@@ -7,12 +7,26 @@ import { Components, componentLoader } from '../src/components.js'
 import { createUploadFeature } from './uploadStorage.js'
 import readingTime from 'reading-time';
 import { Op } from 'sequelize'
+import { createImageUploadProperties } from '../helpers/admin.helper.js'
 
 
 
 AdminJS.registerAdapter({ Database, Resource })
 
 const models = initializeModels(sequelize)
+
+// No topo do seu arquivo admin.js
+
+const areaDeAtuacaoProperty = {
+    reference: 'areas',
+    isVisible: { list: true, edit: true, filter: true, show: true },
+    label: 'Área de Atuação',
+    isArray: true,
+    components: {
+        list: Components.AreaListDisplay,
+        edit: Components.MultiSelectInput,
+    },
+};
 
 export const adminJs = new AdminJS({
     assets: {
@@ -83,17 +97,7 @@ export const adminJs = new AdminJS({
                         },
                         isVisible: { list: true, edit: true, filter: false, show: true },
                     },
-                    areaDeAtuacao: {
-                        reference: 'areas',
-                        isVisible: { list: true, edit: true, filter: true, show: true },
-                        label: 'Área de Atuação',
-                        isArray: true,
-                        components: {
-                            list: Components.AreaListDisplay, // 👈 mostrar os nomes das áreas na lista
-                            edit: Components.MultiSelectInput,
-                        }
-
-                    },
+                    areaDeAtuacao: areaDeAtuacaoProperty,
                     conteudo: {
                         isVisible: false
                     },
@@ -207,11 +211,24 @@ export const adminJs = new AdminJS({
                             return response;
                         }
                     },
-
                     list: {
-                        // Sua lógica de listagem para agrupar imagens está correta
-                        after: async (response, request, context) => {
-                            const imagens = await models.LinhaDoTempoImagem.findAll();
+                        after: async (response) => {
+                            // 1. Pega os IDs apenas dos registros que estão na página atual.
+                            const recordIds = response.records.map(r => r.params.id);
+
+                            // 2. Se não houver registros na página, não há o que fazer.
+                            if (recordIds.length === 0) {
+                                return response;
+                            }
+
+                            // 3. Busca no banco de dados APENAS as imagens relacionadas aos IDs da página.
+                            const imagens = await models.LinhaDoTempoImagem.findAll({
+                                where: {
+                                    linha_do_tempo_id: { [Op.in]: recordIds }
+                                }
+                            });
+
+                            // 4. O resto da sua lógica para agrupar as imagens permanece a mesma.
                             const imagensMap = imagens.reduce((acc, img) => {
                                 const id = img.linha_do_tempo_id;
                                 if (!acc[id]) { acc[id] = []; }
@@ -225,6 +242,7 @@ export const adminJs = new AdminJS({
                                     record.params.url_imagem = imagensMap[id];
                                 }
                             }
+
                             return response;
                         }
                     },
@@ -299,32 +317,11 @@ export const adminJs = new AdminJS({
             options: {
                 navigation: 'Institucional',
                 properties: {
-                    areaDeAtuacao: {
-                        reference: 'areas',
-                        isVisible: { list: true, edit: true, filter: true, show: true },
-                        label: 'Área de Atuação',
-                        isArray: true,
-                        components: {
-                            list: Components.AreaListDisplay, // 👈 mostrar os nomes das áreas na lista
-                            edit: Components.MultiSelectInput,
-                        }
-
-                    },
+                    areaDeAtuacao: areaDeAtuacaoProperty,
                     area_ids: {
                         isVisible: false
                     },
-                    url_imagem: {
-                        isVisible: { list: true, show: true, edit: false },
-                        components: {
-                            list: Components.ImageListPreview,
-                            show: Components.ImageListPreview, // opcional, se quiser mostrar no "show"
-                        }
-                    },
-                    uploadImagem: {
-                        type: 'file',
-                        isVisible: { edit: true, list: false, show: false, filter: false },
-                        isArray: false, // 👈 isso força o AdminJS a usar `uploadImagem` ao invés de `uploadImagem.0`
-                    },
+                    ...createImageUploadProperties()
                 },
                 editProperties: [
                     'nome',
@@ -391,18 +388,7 @@ export const adminJs = new AdminJS({
             options: {
                 navigation: 'Parceiros',
                 properties: {
-                    url_imagem: {
-                        isVisible: { list: true, show: true, edit: false },
-                        components: {
-                            list: Components.ImageListPreview,
-                            show: Components.ImageListPreview, // opcional, se quiser mostrar no "show"
-                        }
-                    },
-                    uploadImagem: {
-                        type: 'file',
-                        isVisible: { edit: true, list: false, show: false, filter: false },
-                        isArray: false, // 👈 isso força o AdminJS a usar `uploadImagem` ao invés de `uploadImagem.0`
-                    },
+                    ...createImageUploadProperties()
                 },
             }
         },
@@ -411,32 +397,11 @@ export const adminJs = new AdminJS({
             options: {
                 navigation: 'Institucional',
                 properties: {
-                    areaDeAtuacao: {
-                        reference: 'areas',
-                        isVisible: { list: true, edit: true, filter: true, show: true },
-                        label: 'Área de Atuação',
-                        isArray: true,
-                        components: {
-                            list: Components.AreaListDisplay, // 👈 mostrar os nomes das áreas na lista
-                            edit: Components.MultiSelectInput,
-                        }
-
-                    },
+                    areaDeAtuacao: areaDeAtuacaoProperty,
                     area_ids: {
                         isVisible: false
                     },
-                    url_imagem: {
-                        isVisible: { list: true, show: true, edit: false },
-                        components: {
-                            list: Components.ImageListPreview,
-                            show: Components.ImageListPreview, // opcional, se quiser mostrar no "show"
-                        }
-                    },
-                    uploadImagem: {
-                        type: 'file',
-                        isVisible: { edit: true, list: false, show: false, filter: false },
-                        isArray: false, // 👈 isso força o AdminJS a usar `uploadImagem` ao invés de `uploadImagem.0`
-                    },
+                    ...createImageUploadProperties()
 
                 },
                 editProperties: [
@@ -505,10 +470,7 @@ export const adminJs = new AdminJS({
                     is_ativo: { label: 'Ativo?' },
 
                     area_ids: { isVisible: false },
-                    areaDeAtuacao: {
-                        reference: 'areas', isArray: true, label: 'Área de Atuação',
-                        components: { list: Components.AreaListDisplay, edit: Components.MultiSelectInput }
-                    },
+                    areaDeAtuacao: areaDeAtuacaoProperty,
 
                     uploadCapa: {
                         label: 'Imagem de Capa (single)',
@@ -646,30 +608,12 @@ export const adminJs = new AdminJS({
             options: {
                 navigation: 'Informe-se',
                 properties: {
-                    areaDeAtuacao: {
-                        reference: 'areas',
-                        isVisible: { list: true, edit: true, filter: true, show: true },
-                        isArray: true,
-                        components: {
-                            list: Components.AreaListDisplay, // 👈 mostrar os nomes das áreas na lista
-                            edit: Components.MultiSelectInput,
-                        }
-
-                    },
+                    areaDeAtuacao: areaDeAtuacaoProperty,
                     area_ids: {
                         isVisible: false
                     },
-                    url_imagem: {
-                        isVisible: { list: true, edit: false, show: true },
-                        components: {
-                            list: Components.ImageListPreview,
-                        },
-                    },
-                    uploadImagem: {
-                        type: 'file',
-                        isVisible: { edit: true, list: false, show: false, filter: false },
-                        isArray: false, // 👈 isso força o AdminJS a usar `uploadImagem` ao invés de `uploadImagem.0`
-                    },
+                    ...createImageUploadProperties()
+
                 },
 
                 editProperties: [
@@ -698,18 +642,7 @@ export const adminJs = new AdminJS({
             options: {
                 navigation: 'Configurações',
                 properties: {
-                    url_imagem: {
-                        isVisible: { list: true, show: true, edit: false },
-                        components: {
-                            list: Components.ImageListPreview,
-                            show: Components.ImageListPreview, // opcional, se quiser mostrar no "show"
-                        }
-                    },
-                    uploadImagem: {
-                        type: 'file',
-                        isVisible: { edit: true, list: false, show: false, filter: false },
-                        isArray: false, // 👈 isso força o AdminJS a usar `uploadImagem` ao invés de `uploadImagem.0`
-                    },
+                    ...createImageUploadProperties()
                 },
                 editProperties: [
                     'titular_conta',
@@ -765,18 +698,8 @@ export const adminJs = new AdminJS({
             options: {
                 navigation: 'Informativos',
                 properties: {
-                    url_imagem: {
-                        isVisible: { list: true, show: true, edit: false },
-                        components: {
-                            list: Components.ImageListPreview,
-                            show: Components.ImageListPreview, // opcional, se quiser mostrar no "show"
-                        }
-                    },
-                    uploadImagem: {
-                        type: 'file',
-                        isVisible: { edit: true, list: false, show: false, filter: false },
-                        isArray: false, // 👈 isso força o AdminJS a usar `uploadImagem` ao invés de `uploadImagem.0`
-                    },
+                    ...createImageUploadProperties()
+
                 },
                 editProperties: [
                     'titulo',
@@ -842,30 +765,6 @@ export const adminJs = new AdminJS({
                             return response;
                         }
                     },
-                    // edit: {
-                    //     after: async (response, request, context) => {
-                    //         const { record } = context;
-                    //         if (!record || record.isValid() === false) return response;
-
-                    //         const imagens = Object.entries(request.files || {})
-                    //             .filter(([key]) => key.startsWith('uploadImagens'))
-                    //             .map(([, file]) => file);
-
-                    //         const organizacaoImagem = models.OrganizacaoImagem;
-
-                    //         for (const imagem of imagens) {
-                    //             const filename = imagem?.name?.replace(/\s+/g, '_');
-                    //             const gcsPath = `organizacao/${record.id()}-${filename}`;
-
-                    //             await organizacaoImagem.create({
-                    //                 organizacao_id: record.id(),
-                    //                 imagem_url: gcsPath,
-                    //             });
-                    //         }
-
-                    //         return response;
-                    //     }
-                    // },
                     new: {
                         after: async (response, request, context) => {
                             const { record } = context
@@ -892,30 +791,44 @@ export const adminJs = new AdminJS({
                     },
                     list: {
                         after: async (response) => {
-                            const imagens = await models.OrganizacaoImagem.findAll()
+                            // 1. Pega os IDs apenas dos registros da organização que estão na página atual.
+                            const recordIds = response.records.map(r => r.params.id);
 
+                            // 2. Se a página estiver vazia, retorna a resposta sem fazer a consulta.
+                            if (recordIds.length === 0) {
+                                return response;
+                            }
+
+                            // 3. Busca no banco de dados APENAS as imagens cujo 'organizacao_id' corresponde aos registros da página.
+                            const imagens = await models.OrganizacaoImagem.findAll({
+                                where: {
+                                    organizacao_id: { [Op.in]: recordIds }
+                                }
+                            });
+
+                            // 4. Sua lógica de mapeamento, que já estava correta, continua aqui.
                             const imagensMap = imagens.reduce((acc, img) => {
-                                const id = img.organizacao_id
+                                const id = img.organizacao_id;
 
                                 if (!acc[id]) {
-                                    acc[id] = []
+                                    acc[id] = [];
                                 }
 
-                                acc[id].push(img.imagem_url) // 👉 guarda todas as imagens
+                                acc[id].push(img.imagem_url); // 👉 guarda todas as imagens
 
-                                return acc
-                            }, {})
+                                return acc;
+                            }, {});
 
                             for (const record of response.records) {
-                                const id = record.params.id
-                                const imagemArray = imagensMap[id]
+                                const id = record.params.id;
+                                const imagemArray = imagensMap[id];
 
                                 if (imagemArray) {
-                                    record.params.imagem_url = imagemArray
+                                    record.params.imagem_url = imagemArray;
                                 }
                             }
 
-                            return response
+                            return response;
                         }
                     }
                 },
