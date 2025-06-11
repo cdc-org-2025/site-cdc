@@ -996,6 +996,7 @@ export const adminJs = new AdminJS({
 
             }
         },
+        { resource: models.ConteudoSecao, options: { navigation: 'Configurações' } },
 
 
 
