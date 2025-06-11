@@ -5,7 +5,6 @@ export class Programa extends Model {
     return super.init({
       titulo: DataTypes.STRING(100),
       descricao: DataTypes.TEXT,
-      // area_id: DataTypes.INTEGER,
       url_image_capa: DataTypes.STRING,
       subtitulo: DataTypes.TEXT,
       area_ids: {
@@ -27,16 +26,6 @@ export class Programa extends Model {
         type: DataTypes.BOOLEAN,
         defaultValue: true
       }
-
-
-      // uploadCapa: {
-      //   type: DataTypes.VIRTUAL,
-      //   get() {
-      //     return null;
-      //   },
-      //   set(value) {
-      //   }
-      // }
     }, {
       sequelize,
       tableName: 'programas',

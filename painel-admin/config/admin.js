@@ -177,36 +177,36 @@ export const adminJs = new AdminJS({
                     }
                 },
                 actions: {
-                     new: {
-    after: async (response, request, context) => {
-      const { record } = context;
-      if (!record || !record.isValid()) { return response; }
+                    new: {
+                        after: async (response, request, context) => {
+                            const { record } = context;
+                            if (!record || !record.isValid()) { return response; }
 
-      const novasImagens = Object.entries(request.files || {})
-        .filter(([key]) => key.startsWith('uploadImagens'))
-        .map(([, file]) => file);
+                            const novasImagens = Object.entries(request.files || {})
+                                .filter(([key]) => key.startsWith('uploadImagens'))
+                                .map(([, file]) => file);
 
-      if (novasImagens && novasImagens.length > 0) {
-        for (const imagem of novasImagens) {
-          // ================================================================
-          // ▼▼▼ LÓGICA FINAL E CORRETA DE CONSTRUÇÃO DE PATH ▼▼▼
-          // ================================================================
-          // Recriamos o caminho do GCP, pois sabemos como ele é formado.
-          // Isso não depende de 'key' ou 'path' e é muito mais robusto.
-          const filename = imagem.name.replace(/\s/g, '_');
-          const gcsPath = `linha_do_tempos/${record.id()}-${filename}`;
-          // ================================================================
-          
-          await models.LinhaDoTempoImagem.create({
-            linha_do_tempo_id: record.id(),
-            url_imagem: gcsPath,
-          });
-          console.log(`✅ Registro no BD criado para o caminho construído: ${gcsPath}`);
-        }
-      }
-      return response;
-    }
-  },
+                            if (novasImagens && novasImagens.length > 0) {
+                                for (const imagem of novasImagens) {
+                                    // ================================================================
+                                    // ▼▼▼ LÓGICA FINAL E CORRETA DE CONSTRUÇÃO DE PATH ▼▼▼
+                                    // ================================================================
+                                    // Recriamos o caminho do GCP, pois sabemos como ele é formado.
+                                    // Isso não depende de 'key' ou 'path' e é muito mais robusto.
+                                    const filename = imagem.name.replace(/\s/g, '_');
+                                    const gcsPath = `linha_do_tempos/${record.id()}-${filename}`;
+                                    // ================================================================
+
+                                    await models.LinhaDoTempoImagem.create({
+                                        linha_do_tempo_id: record.id(),
+                                        url_imagem: gcsPath,
+                                    });
+                                    console.log(`✅ Registro no BD criado para o caminho construído: ${gcsPath}`);
+                                }
+                            }
+                            return response;
+                        }
+                    },
 
                     list: {
                         // Sua lógica de listagem para agrupar imagens está correta
@@ -489,152 +489,149 @@ export const adminJs = new AdminJS({
             ],
             options: {
                 navigation: 'Programas',
-                actions: {
-                    new: {
-                        after: async (response, request, context) => {
-                            const { record } = context
-                            if (!record || record.isValid() === false) return response
 
-                            const imagens = Object.entries(request.files || {})
-                                .filter(([key]) => key.startsWith('uploadImagens'))
-                                .map(([, file]) => file)
+                newProperties: ['titulo', 'subtitulo', 'resumo', 'descricao', 'areaDeAtuacao', 'uploadCapa', 'uploadImagens', 'is_ativo'],
+                editProperties: ['titulo', 'subtitulo', 'resumo', 'descricao', 'areaDeAtuacao', 'uploadCapa', 'uploadImagens', 'is_ativo'],
 
-                            const programaImagem = models.ProgramaImagens
+                listProperties: ['titulo', 'url_image_capa', 'url_imagem', 'is_ativo'],
+                showProperties: ['titulo', 'subtitulo', 'resumo', 'descricao', 'areaDeAtuacao', 'url_image_capa', 'url_imagem', 'is_ativo'],
+                filterProperties: ['titulo', 'subtitulo', 'is_ativo'],
 
-                            for (const imagem of imagens) {
-                                const filename = imagem?.name?.replace(/\s+/g, '_')
-                                const gcsPath = `programa/${record.id()}-${filename}`
-
-                                await programaImagem.create({
-                                    programa_id: record.id(),
-                                    url_imagem: gcsPath,
-                                })
-                            }
-
-                            return response
-                        }
-                    },
-                    list: {
-                        after: async (response) => {
-                            const imagens = await models.ProgramaImagens.findAll()
-
-                            const imagensMap = imagens.reduce((acc, img) => {
-                                const id = img.programa_id
-
-                                if (!acc[id]) {
-                                    acc[id] = []
-                                }
-
-                                acc[id].push(img.url_imagem) // 👉 guarda todas as imagens
-
-                                return acc
-                            }, {})
-
-                            for (const record of response.records) {
-                                const id = record.params.id
-                                const imagemArray = imagensMap[id]
-
-                                if (imagemArray) {
-                                    record.params.url_imagem = imagemArray
-                                }
-                            }
-
-                            return response
-                        }
-                    }
-                },
                 properties: {
+                    titulo: { isTitle: true },
+                    subtitulo: { type: 'textarea' },
+                    resumo: { type: 'textarea' },
+                    descricao: { type: 'richtext', components: { edit: Components.ProgramaEditor, list: Components.NoticiaPreview } },
+                    is_ativo: { label: 'Ativo?' },
 
-                    area_ids: {
-                        isVisible: false
-                    },
+                    area_ids: { isVisible: false },
                     areaDeAtuacao: {
-                        reference: 'areas',
-                        isVisible: { list: true, edit: true, filter: true, show: true },
-                        label: 'Área de Atuação',
-                        isArray: true,
-                        components: {
-                            list: Components.AreaListDisplay, // 👈 mostrar os nomes das áreas na lista
-                            edit: Components.MultiSelectInput,
-                        }
-
+                        reference: 'areas', isArray: true, label: 'Área de Atuação',
+                        components: { list: Components.AreaListDisplay, edit: Components.MultiSelectInput }
                     },
+
                     uploadCapa: {
+                        label: 'Imagem de Capa (single)',
                         type: 'file',
-                        isVisible: { edit: true, list: false, show: false, filter: false },
                         isArray: false,
                     },
                     url_image_capa: {
-                        isVisible: { list: true, show: true, edit: false },
-                        components: {
-                            list: Components.ImageListPreview,
-                            show: Components.ImageListPreview,
-                        },
+                        components: { list: Components.ImageListPreview, show: Components.ImageListPreview }
                     },
 
-
+                    // Lógica para as MÚLTIPLAS IMAGENS
                     uploadImagens: {
-                        type: 'mixed',
-                        isVisible: { list: false, show: false, filter: false, edit: true },
+                        label: 'Imagens do Programa (múltiplas)',
                         components: {
-                            edit: Components.UploadMultiple
+                            edit: Components.ImageEditor,
                         },
-                        custom: { multiple: true },
-                        isTitle: false
                     },
+                    imagesToDelete: { isVisible: false },
                     url_imagem: {
-                        isVisible: { list: true, show: false, edit: false },
-                        components: {
-                            list: Components.ImageListPreview
-                        }
-                    },
-                    resumo: {
-                        components: {
-                            list: Components.TextoPreview, // novo componente para a listagem
-                        }
-                    },
-                    descricao: {
-                        components: {
-                            edit: Components.ProgramaEditor,
-                            list: Components.NoticiaPreview, // novo componente para a listagem
-
-                        }
+                        label: 'Imagens Adicionais',
+                        components: { list: Components.ImageListPreview, show: Components.ImageListPreview }
                     },
                 },
-                editProperties: [
-                    'titulo',
-                    'subtitulo',
-                    'resumo',
-                    'descricao',
-                    'areaDeAtuacao',
-                    'uploadCapa',
-                    'uploadImagens',
-                    'is_ativo'
 
-                ],
-                showProperties: [
-                    'titulo',
-                    'subtitulo',
-                    'resumo',
-                    'descricao',
-                    'areaDeAtuacao',
-                    'url_image_capa',
-                    'url_imagem',
-                    'is_ativo'
+                // As actions que definimos na mensagem anterior estão corretas e não precisam mudar.
+                // Elas já foram desenhadas para funcionar com esta configuração.
+                actions: {
+                    new: {
+                        after: async (response, request, context) => {
+                            const { record } = context;
+                            if (!record || !record.isValid()) { return response; }
 
+                            const novasImagens = Object.entries(request.files || {})
+                                .filter(([key]) => key.startsWith('uploadImagens'))
+                                .map(([, file]) => file);
 
-                ],
-                listProperties: [
-                    // 'titulo',
-                    'subtitulo',
-                    'resumo',
-                    'descricao',
-                    'areaDeAtuacao',
-                    'url_image_capa',
-                    'url_imagem',
-                    'is_ativo'
+                            if (novasImagens && novasImagens.length > 0) {
+                                for (const imagem of novasImagens) {
+                                    const filename = imagem.name.replace(/\s/g, '_');
+                                    const gcsPath = `programa/${record.id()}-${filename}`;
 
-                ]
+                                    await models.ProgramaImagens.create({
+                                        programa_id: record.id(),
+                                        url_imagem: gcsPath,
+                                    });
+                                }
+                            }
+                            return response;
+                        }
+                    },
+
+                    edit: {
+                        before: async (request, context) => {
+                            const { record } = context;
+                            if (record && record.id()) {
+                                const imagens = await models.ProgramaImagens.findAll({
+                                    where: { programa_id: record.id() },
+                                    raw: true,
+                                });
+                                record.params.imagens = imagens;
+                            }
+                            return request;
+                        },
+                        after: async (response, request, context) => {
+                            const { record } = context;
+                            const { payload } = request;
+
+                            const idsParaDeletar = Object.keys(payload)
+                                .filter(key => key.startsWith('imagesToDelete.'))
+                                .map(key => payload[key]);
+                            if (idsParaDeletar && idsParaDeletar.length > 0) {
+                                await models.ProgramaImagens.destroy({ where: { id: { [Op.in]: idsParaDeletar } } });
+                            }
+
+                            const novasImagens = Object.entries(request.files || {})
+                                .filter(([key]) => key.startsWith('uploadImagens'))
+                                .map(([, file]) => file);
+                            if (novasImagens && novasImagens.length > 0) {
+                                for (const imagem of novasImagens) {
+                                    const filename = imagem.name.replace(/\s/g, '_');
+                                    const gcsPath = `programa/${record.id()}-${filename}`;
+                                    await models.ProgramaImagens.create({
+                                        programa_id: record.id(),
+                                        url_imagem: gcsPath,
+                                    });
+                                }
+                            }
+                            return response;
+                        }
+                    },
+                    // Dentro do seu bloco 'actions'
+                    list: {
+                        after: async (response) => {
+                            // ▼▼▼ CORREÇÃO APLICADA AQUI ▼▼▼
+                            const todosIds = response.records.map(r => r.params.id);
+                            // ▲▲▲ FIM DA CORREÇÃO ▲▲▲
+
+                            const imagens = await models.ProgramaImagens.findAll({ where: { programa_id: { [Op.in]: todosIds } } });
+
+                            const imagensMap = imagens.reduce((acc, img) => {
+                                const id = img.programa_id;
+                                if (!acc[id]) { acc[id] = []; }
+                                acc[id].push(img.url_imagem);
+                                return acc;
+                            }, {});
+
+                            for (const record of response.records) {
+                                const id = record.params.id;
+                                if (imagensMap[id]) {
+                                    record.params.url_imagem = imagensMap[id];
+                                }
+                            }
+                            return response;
+                        }
+                    },
+                    delete: {
+                        after: async (response, request, context) => {
+                            const { record } = context;
+                            await models.ProgramaImagens.destroy({ where: { programa_id: record.id() } });
+                            return response;
+                        }
+                    },
+                }
             },
         },
         {
