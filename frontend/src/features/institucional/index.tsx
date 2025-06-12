@@ -14,6 +14,7 @@ import { useCardsInformativosListQuery } from '@/clients/api/cards-informativos'
 import { useLiderancasListQuery } from '@/clients/api/liderancas'
 import { useListTransparenciaQuery } from '@/clients/api/transparencia'
 import { usePerguntasQuery } from '@/clients/api/perguntas'
+import { useConteudoSecaoQuery } from '@/clients/api/conteudo-secao'
 
 export default function InstitucionalPage() {
   const { data: listTimeLine } = useTimeLineQuery()
@@ -21,12 +22,22 @@ export default function InstitucionalPage() {
   const { data: listLiderancas } = useLiderancasListQuery()
   const { data: listTransparencia } = useListTransparenciaQuery()
   const { data: listPerguntas } = usePerguntasQuery()
+  const { data: organizationSectionInfo } = useConteudoSecaoQuery("organizacao")
+  const { data: leadershipSectionInfo } = useConteudoSecaoQuery("liderancas")
+  const { data: transparencySectionInfo } = useConteudoSecaoQuery("transparencia")
 
   return (
     <Suspense fallback={null}>
-      {listTimeLine && listCards && listLiderancas && listTransparencia && listPerguntas && (
-        <SearchScrollHandler />
-      )}
+      {listTimeLine &&
+        listCards &&
+        listLiderancas &&
+        listTransparencia &&
+        listPerguntas &&
+        organizationSectionInfo &&
+        leadershipSectionInfo &&
+        transparencySectionInfo && (
+          <SearchScrollHandler />
+        )}
       <Box
         width="100%"
         p={{
@@ -39,9 +50,9 @@ export default function InstitucionalPage() {
         <VectorRoundedLines left={0} margin="400px 0px 0px 0px" />
         <VectorRoundedLines rotate={true} right={0} margin="1200px 0px 0px 0px" />
         <Timeline listTimeLine={listTimeLine} />
-        <OrganizationCdcCards listCards={listCards} />
-        <Leadership listLiderancas={listLiderancas} />
-        <Transparency listTransparencia={listTransparencia} />
+        <OrganizationCdcCards sectionInfo={organizationSectionInfo?.[0]} listCards={listCards} />
+        <Leadership sectionInfo={leadershipSectionInfo?.[0]} listLiderancas={listLiderancas} />
+        <Transparency sectionInfo={transparencySectionInfo?.[0]} listTransparencia={listTransparencia} />
         <Faq listPerguntas={listPerguntas} />
       </Box>
     </Suspense>

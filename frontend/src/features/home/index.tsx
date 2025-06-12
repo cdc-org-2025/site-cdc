@@ -19,6 +19,7 @@ import Indicadores from './Indicadores'
 import { useOrganizacaoListQuery } from '@/clients/api/organizacao'
 import { isStorage } from '@/helpers/isStorage'
 import { useNoticiasListQuery } from '@/clients/api/noticias'
+import { useConteudoSecaoQuery } from '@/clients/api/conteudo-secao'
 
 export default function HomePage() {
   const { data: cardOption } = useCardsInformativosListQuery()
@@ -26,6 +27,7 @@ export default function HomePage() {
   const { data: noticiasResponse } = useNoticiasListQuery()
   const cardVisao = cardOption?.find(item => item.titulo === "Visão")
   const cardMissao = cardOption?.find(item => item.titulo === "Missão")
+  const { data: programsSectionInfo } = useConteudoSecaoQuery("entrada-programas")
 
   const cardOptions = [
     {
@@ -175,8 +177,7 @@ export default function HomePage() {
             textAlign="center"
             lineHeight="120%"
           >
-            Na luta para o fortalecimento democrático e cidadão pela redução das
-            desigualdades.
+            {programsSectionInfo?.[0].titulo ?? "Na luta para o fortalecimento democrático e cidadão pela redução das desigualdades."}
           </Typography>
         </AnimationSplitText>
         <AnimationSplitText>
@@ -187,8 +188,7 @@ export default function HomePage() {
             lineHeight="150%"
             textAlign="center"
           >
-            Atuamos por meio de programas para desenvolver ações para
-            fortalecimento cidadão na luta pela redução das desigualdades.
+            {programsSectionInfo?.[0].resumo ?? "Atuamos por meio de programas para desenvolver ações para fortalecimento cidadão na luta pela redução das desigualdades."}
           </Typography>
         </AnimationSplitText>
       </Box>

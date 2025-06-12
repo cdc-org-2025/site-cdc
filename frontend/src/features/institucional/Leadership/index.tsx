@@ -10,8 +10,9 @@ import AnimationSplitText from '@/components/animations/splitText'
 import AnimetedSlide from '@/components/animations/slide'
 import { IArea } from '@/clients/api/areas'
 import { ILideranca, ILiderancaResponse } from '@/clients/api/liderancas'
+import { IConteudoSecao } from '@/clients/api/conteudo-secao'
 
-export default function Leadership({ listLiderancas }: { listLiderancas?: ILiderancaResponse }) {
+export default function Leadership({ listLiderancas, sectionInfo }: { listLiderancas?: ILiderancaResponse, sectionInfo?: IConteudoSecao }) {
   const [listColaboradores, setListColaboradores] = useState<ILideranca[] | undefined>([])
   const [areaSelect, setAreaSelect] = useState<IArea[]>([])
 
@@ -43,7 +44,7 @@ export default function Leadership({ listLiderancas }: { listLiderancas?: ILider
       <Box display="flex" flexDirection="column" gap="16px" id="leadership">
         <AnimationSplitText direction='down' threshold={0.6}>
           <Typography variant="h3" color="primary" width="100%">
-            Lideranças
+            {sectionInfo?.titulo ?? "Lideranças"}
           </Typography>
         </AnimationSplitText>
         <AnimationSplitText>
@@ -54,8 +55,7 @@ export default function Leadership({ listLiderancas }: { listLiderancas?: ILider
             lineHeight="150%"
             maxWidth="600px"
           >
-            O CDC é liderado por pessoas referência no campo dos direitos
-            humanos, garantindo a cidadania e transformação social.
+            {sectionInfo?.resumo ?? "O CDC é liderado por pessoas referência no campo dos direitos  humanos, garantindo a cidadania e transformação social."}
           </Typography>
         </AnimationSplitText>
       </Box>

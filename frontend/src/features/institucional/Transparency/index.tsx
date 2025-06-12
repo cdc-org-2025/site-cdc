@@ -9,8 +9,9 @@ import AnimationSplitText from '@/components/animations/splitText'
 import { ITransparencia, ITransparenciaResponse } from '@/clients/api/transparencia'
 import { useTheme } from '@mui/material'
 import ZoomOutOnView from '@/components/animations/zoomOutOnView'
+import { IConteudoSecao } from '@/clients/api/conteudo-secao'
 
-export default function Transparency({ listTransparencia }: { listTransparencia?: ITransparenciaResponse }) {
+export default function Transparency({ listTransparencia, sectionInfo }: { listTransparencia?: ITransparenciaResponse, sectionInfo?: IConteudoSecao }) {
   const { palette: { primary: { main } } } = useTheme()
 
   return (
@@ -19,7 +20,7 @@ export default function Transparency({ listTransparencia }: { listTransparencia?
         <Box display="flex" flexDirection="column" gap="16px" pb="24px" id="transparent">
           <AnimationSplitText direction='down'>
             <Typography variant="h3" color="primary" width="100%">
-              Transparência
+              {sectionInfo?.titulo ?? "Transparência"}
             </Typography>
           </AnimationSplitText>
           <AnimationSplitText>
@@ -30,8 +31,7 @@ export default function Transparency({ listTransparencia }: { listTransparencia?
               lineHeight="150%"
               maxWidth="600px"
             >
-              O CDC conta com um time especializado para garantir o sucesso das
-              ações e efetivar transformações sociais significativas.
+              {sectionInfo?.resumo ?? "O CDC conta com um time especializado para garantir o sucesso das ações e efetivar transformações sociais significativas."}
             </Typography>
           </AnimationSplitText>
         </Box>
