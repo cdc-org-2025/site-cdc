@@ -24,6 +24,7 @@ import contatoForm from './contatoForm.js'
 import organizacao from './organizacao.js'
 import banners from './banners.js'
 import conteudoSecao from './conteudo_secao.js'
+import search from './search.js'
 
 const router = Router();
 
@@ -46,7 +47,8 @@ router.use('/indicadores', indicadoresRoutes)
 router.use('/contato', contatoForm)
 router.use("/organizacao", organizacao )
 router.use("/banner", banners)
-router.use("/conteudo-secao", conteudoSecao)
+router.use("/conteudo-secao", conteudoSecao),
+router.use("/pesquisa", search)
 
 
 export default router;
