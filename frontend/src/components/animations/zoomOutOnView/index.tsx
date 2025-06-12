@@ -1,6 +1,6 @@
 'use client'
 import React, { ReactNode } from 'react'
-import { Box } from '@mui/material'
+import Box from '@mui/material/Box'
 import { useInView } from 'react-intersection-observer'
 
 interface ZoomOutOnViewProps {

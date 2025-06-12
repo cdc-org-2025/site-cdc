@@ -1,4 +1,5 @@
-import { Box, Typography } from '@mui/material'
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
 import React, { useEffect, useRef, useState } from 'react'
 import { useIndicadoresQuery } from '@/clients/api/indicadores'
 import { useBannerQuery } from '@/clients/api/banners'
