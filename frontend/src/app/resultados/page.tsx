@@ -1,17 +1,13 @@
-import type { Metadata } from 'next'
+"use client"
+import { getPesquisasList, IPesquisa, usePesquisaQuery } from '@/clients/api/pesquisa'
+import ZoomOutOnView from '@/components/animations/zoomOutOnView'
 import Footer from '@/components/molecules/Footer'
+import ListCards from '@/components/molecules/ListCards'
+import MenuAreasWithSearchInput from '@/components/molecules/MenuAreaWithSearchInput'
 import HeaderBannerUnique from '@/components/templates/HeaderBannerUnique'
-import { Typography } from '@mui/material'
-
-export const metadata: Metadata = {
-  title: 'CDC - Resultados',
-  description:
-    'É uma Organização da Sociedade Civil, sem fins lucrativos, com atuação em âmbito local e nacional. Tem como missão contribuir para a transformação social na promoção da cidadania, por meio de atividades formativas, articulação, incidência em políticas públicas e assessoria técnica, tendo suas ações voltadas à promoção de atividades de relevância pública e social que fortaleçam a democracia e beneficiem a humanidade.',
-  authors: {
-    name: 'Renato Albuquerque',
-    url: 'https://www.linkedin.com/in/renato-albuquerque-dev/',
-  },
-}
+import Box from '@mui/material/Box'
+import { useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
 export default function PublicacoesPage() {
   const Banner = {
@@ -20,10 +16,65 @@ export default function PublicacoesPage() {
     image: '/ppdi.svg',
   }
 
+  const searchParams = useSearchParams();
+  const termoDePesquisa = searchParams.get('pesquisa');
+  const { data } = usePesquisaQuery(termoDePesquisa)
+  const [fieldSearch, setFieldSearch] = useState('')
+  const [areaSelect, setAreaSelect] = useState<string[]>([])
+  const [listPesquisas, setListPesquisas] = useState<IPesquisa[]>([])
+  const [areasFiltro, setAreasFiltro] = useState<{ id: number, nome: string }[]>([])
+
+  const onSearch = async () => {
+    if (fieldSearch !== "") {
+      const { data, areas_filtro } = await getPesquisasList(fieldSearch?.toLocaleLowerCase())
+      setListPesquisas(data)
+      setAreasFiltro(areas_filtro)
+    }
+  }
+
+  useEffect(() => {
+    if (data?.data && areaSelect.length > 0) {
+      const filtradas = data.data.filter((noticia: IPesquisa) =>
+        noticia.areas?.some(area => areaSelect.includes(area.nome))
+      )
+      setListPesquisas(filtradas)
+    } else if (data?.data) {
+      setListPesquisas(data.data)
+    }
+  }, [areaSelect, data])
+
+  useEffect(() => {
+    if (data) {
+      setListPesquisas(data?.data)
+      setAreasFiltro(data?.areas_filtro)
+    }
+  }, [data])
+
   return (
     <>
       <HeaderBannerUnique noneMobile Banner={Banner} />
-      <Typography py="40px" textAlign={"center"} variant='h1' color="primary">AGUARDANDO O BACKEND DE RESULTADOS</Typography>
+      <Box
+        p={{ xs: '32px 16px 32px 16px', md: '40px 32px 160px 32px' }}
+        display="flex"
+        flexDirection="column"
+        gap={{ xs: '32px', md: '24px' }}
+        bgcolor="background.default"
+        overflow={"hidden"} width={"100%"} maxWidth={"100vw"}
+      >
+        <ZoomOutOnView>
+          <Box display="flex" gap="24px" alignItems={'center'}>
+            <MenuAreasWithSearchInput
+              valueInput={fieldSearch}
+              setValueInput={setFieldSearch}
+              areaSelect={areaSelect}
+              setAreaSelect={setAreaSelect}
+              listAreasAvailable={areasFiltro}
+              onSearch={onSearch}
+            />
+          </Box>
+        </ZoomOutOnView>
+        <ListCards page="/resultados" list={listPesquisas} />
+      </Box>
       <Footer />
     </>
   )

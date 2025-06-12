@@ -1,12 +1,14 @@
 import { Box, Typography } from '@mui/material'
 import React, { useEffect, useRef, useState } from 'react'
-import BackgroundImpacts from '@/assets/pages/home-page/background-impacts.svg'
 import { useIndicadoresQuery } from '@/clients/api/indicadores'
+import { useBannerQuery } from '@/clients/api/banners'
+import { storageUrl } from '@/constants/storageDomain'
 
 export default function Indicadores() {
   const sectionRef = useRef<HTMLDivElement>(null)
   const [_, setShowFixedText] = useState(false)
   const { data } = useIndicadoresQuery()
+  const { data: bannerData } = useBannerQuery("indicadores")
 
   useEffect(() => {
     const handleScroll = () => {
@@ -36,7 +38,7 @@ export default function Indicadores() {
       ref={sectionRef}
       sx={{
         backgroundColor: '#afafaf',
-        backgroundImage: `url(${BackgroundImpacts.src})`,
+        backgroundImage: `url(${storageUrl}/${bannerData?.[0].url_img})`,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center top',
@@ -68,7 +70,7 @@ export default function Indicadores() {
           }}
           textTransform="none"
         >
-          Através dos seus programas, o CDC impactou e continua{' '}
+          {bannerData?.[0]?.titulo ?? "Através dos seus programas, o CDC impactou e continua "}
           <Typography
             component="span"
             sx={{
@@ -77,7 +79,7 @@ export default function Indicadores() {
             }}
             textTransform="none"
           >
-            impactando milhares de vidas
+            {bannerData?.[0]?.subtitulo ?? "impactando milhares de vidas"}
           </Typography>
         </Typography>
       </Box>
