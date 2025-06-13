@@ -5,6 +5,7 @@ class LiderancaController {
   static async index(req, res) {
     const liderancas = await db.Lideranca.findAll({
       attributes: ['id', 'nome', 'cargo', 'email', 'url_imagem', 'area_ids'],
+      order: [['id', 'ASC']]
     });
 
     const allAreas = await db.Area.findAll({
