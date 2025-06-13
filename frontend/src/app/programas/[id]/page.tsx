@@ -14,6 +14,7 @@ import { useNoticiasAreaQuery } from '@/clients/api/noticias'
 import Grid from '@mui/material/Grid'
 import VectorRoundedLines from '@/components/atoms/VectorRoundedLines'
 import { sanitizeHtml } from '@/utils/stripHtmlTags'
+import { useConteudoSecaoQuery } from '@/clients/api/conteudo-secao'
 
 const lato = Lato({
   subsets: ['latin'],
@@ -27,6 +28,7 @@ export default function ProgramaUniquePage() {
   const { data: listTransparencia } = useTransparenciaAreaQuery({ area_id: idsArea })
   const { data: listNoticias } = useNoticiasAreaQuery({ area_id: idsArea })
   const listImagePrograms = data?.imagens
+  const { data: transparencySectionInfo } = useConteudoSecaoQuery("transparencia")
 
   const Banner = {
     id: 1,
@@ -110,7 +112,7 @@ export default function ProgramaUniquePage() {
       )}
       <LatestNews listNoticia={listNoticias?.data} programa />
       <Box px={{ xs: '16px', md: '32px' }} mt="64px" pb={{ xs: '80px', md: '160px' }} width="100%" maxWidth={"100vw"}>
-        <Transparency listTransparencia={listTransparencia} />
+        <Transparency sectionInfo={transparencySectionInfo?.[0]} listTransparencia={listTransparencia} />
       </Box>
       <Footer />
     </>

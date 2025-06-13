@@ -15,6 +15,7 @@ import { toast } from 'react-toastify'
 import ZoomOutOnView from '../animations/zoomOutOnView'
 import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
+import { useConteudoSecaoQuery } from '@/clients/api/conteudo-secao'
 
 const schema = yup
   .object({
@@ -51,6 +52,7 @@ export default function FormContactMap() {
     },
   })
   const { mutateAsync } = useContatoMutation();
+  const { data: contatoSectionInfo } = useConteudoSecaoQuery("contato")
 
   const [messageResponseForm, setmessageResponseForm] = useState<{
     sucesso?: boolean
@@ -114,7 +116,7 @@ export default function FormContactMap() {
           pb="24px"
           fontSize={{ xs: '27px', md: '1.94rem' }}
         >
-          Contato
+          {contatoSectionInfo?.[0].titulo ?? "Contato"}
         </Typography>
       </AnimationSplitText>
 
@@ -127,7 +129,8 @@ export default function FormContactMap() {
             textTransform="none"
             lineHeight={"150%"}
           >
-            O Centro de Desenvolvimento e Cidadania está disponível para contato, tanto por e-mail, WhatsApp, como presencialmente.</Typography>
+            {contatoSectionInfo?.[0].resumo ?? "O Centro de Desenvolvimento e Cidadania está disponível para contato, tanto por e-mail, WhatsApp, como presencialmente."}
+          </Typography>
         </AnimationSplitText>
       </Box>
 

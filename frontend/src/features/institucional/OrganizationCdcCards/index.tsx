@@ -11,8 +11,9 @@ import CardInformation from '@/components/molecules/CardInformation'
 import AnimationSplitText from '@/components/animations/splitText'
 import AnimetedSlide from '@/components/animations/slide'
 import { ICardsInfo } from '@/clients/api/cards-informativos'
+import { IConteudoSecao } from '@/clients/api/conteudo-secao'
 
-export default function OrganizationCdcCards({ listCards }: { listCards?: ICardsInfo[] }) {
+export default function OrganizationCdcCards({ listCards, sectionInfo }: { listCards?: ICardsInfo[], sectionInfo?: IConteudoSecao }) {
 
   const cardsMap = useMemo(() => {
     const map: Record<string, { titulo: string; descricao: string }> = {}
@@ -79,7 +80,7 @@ export default function OrganizationCdcCards({ listCards }: { listCards?: ICards
             id='organizationCdc'
             fontSize={{ xs: '35px', md: '1.94rem' }}
           >
-            Organização do CDC
+            {sectionInfo?.titulo ?? "Organização do CDC"}
           </Typography>
         </AnimationSplitText>
         <AnimationSplitText>
@@ -91,9 +92,8 @@ export default function OrganizationCdcCards({ listCards }: { listCards?: ICards
             lineHeight="150%"
             maxWidth="650px"
           >
-            O Centro de Desenvolvimento e Cidadania tem uma estrutura
-            estabelecida para garantir confiança e transparência nas decisões
-            tomadas pela ONG.
+            {sectionInfo?.resumo ??
+              "O Centro de Desenvolvimento e Cidadania tem uma estrutura estabelecida para garantir confiança e transparência nas decisões tomadas pela ONG."}
           </Typography>
         </AnimationSplitText>
       </Box>

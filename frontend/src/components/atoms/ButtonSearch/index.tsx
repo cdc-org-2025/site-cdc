@@ -24,7 +24,7 @@ export default function ButtonSearch() {
 
   const onSearch = () => {
     handleClose()
-    push(`/resultados?${inputText}`)
+    push(`/resultados?pesquisa=${inputText}`)
   }
   return (
     <>
