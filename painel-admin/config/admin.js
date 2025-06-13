@@ -15,6 +15,7 @@ AdminJS.registerAdapter({ Database, Resource })
 
 const models = initializeModels(sequelize)
 
+
 // No topo do seu arquivo admin.js
 
 const areaDeAtuacaoProperty = {
@@ -314,44 +315,90 @@ export const adminJs = new AdminJS({
         },
         {
             resource: models.Lideranca,
-            options: {
-                navigation: 'Institucional',
-                properties: {
-                    areaDeAtuacao: areaDeAtuacaoProperty,
-                    area_ids: {
-                        isVisible: false
-                    },
-                    ...createImageUploadProperties()
-                },
-                editProperties: [
-                    'nome',
-                    'cargo',
-                    'email',
-                    'areaDeAtuacao',
-                    'uploadImagem' // usado para enviar imagem
-                ],
-                showProperties: [
-                    'nome',
-                    'cargo',
-                    'email',
-                    'areaDeAtuacao',
-                    'url_imagem'
-                ],
-                listProperties: [
-                    'nome',
-                    'cargo',
-                    'email',
-                    'areaDeAtuacao',
-                    'url_imagem'
-                ]
-            },
             features: [
+                // Seu helper continua INTACTO, como solicitado.
                 createUploadFeature({
                     folder: 'colaboradores',
                     file: 'uploadImagem',
                     key: 'url_imagem',
                 }),
             ],
+            options: {
+                navigation: 'Institucional',
+
+                properties: {
+                    // Mantemos suas propriedades como estavam na última tentativa
+                    nome: { isTitle: true },
+                    cargo: { type: 'textarea' },
+                    email: { type: 'string' },
+                    areaDeAtuacao: areaDeAtuacaoProperty,
+                    area_ids: { isVisible: false },
+                    uploadImagem: {
+                        label: 'Imagem do Colaborador',
+                        isVisible: { new: true, edit: true, list: false, show: false, filter: false },
+                    },
+                    url_imagem: {
+                        label: 'Imagem Atual',
+                        isVisible: { list: true, show: true, new: false, edit: false, filter: false },
+                        components: {
+                            list: Components.ImageListPreview,
+                            show: Components.ImageListPreview,
+                        }
+                    },
+                },
+
+                newProperties: ['nome', 'cargo', 'email', 'areaDeAtuacao', 'uploadImagem'],
+                editProperties: ['nome', 'cargo', 'email', 'areaDeAtuacao', 'uploadImagem'],
+                showProperties: ['nome', 'cargo', 'email', 'areaDeAtuacao', 'url_imagem'],
+                listProperties: ['nome', 'cargo', 'email', 'areaDeAtuacao', 'url_imagem'],
+                actions: {
+                    edit: {
+                        before: async (request, context) => {
+                            const { record, _admin, resource } = context; // Adicionamos 'resource' ao contexto
+                            const { payload } = request;
+
+                            const oldImagePath = record.params.url_imagem;
+                            const newUploadData = payload.uploadImagem;
+
+                            // Condição robusta que já funciona:
+                            if (oldImagePath && !newUploadData) {
+                                console.log("✔️ DETECTADO: Intenção de remover imagem existente.");
+
+                                // 1. Deleta o arquivo antigo do GCP
+                                try {
+                                    // ================================================================
+                                    // ▼▼▼ CORREÇÃO DEFINITIVA AQUI ▼▼▼
+                                    // ================================================================
+                                    // Buscamos na lista de features globais aquela que pertence a este recurso
+                                    // E que está configurada para a propriedade 'uploadImagem'.
+                                    const feature = _admin.features.find(f =>
+                                        f.resource.id() === resource.id() &&
+                                        f.options.properties.file === 'uploadImagem'
+                                    );
+                                    // ================================================================
+
+                                    if (feature) {
+                                        const provider = feature.provider;
+                                        await provider.delete(oldImagePath, provider.bucket);
+                                        console.log(`✅ Arquivo deletado do GCP: ${oldImagePath}`);
+                                    } else {
+                                        console.warn("⚠️  Feature de upload não encontrado para a propriedade 'uploadImagem'. O arquivo não será deletado do GCP.");
+                                    }
+
+                                } catch (e) {
+                                    console.error('❌ Erro ao tentar deletar o arquivo do GCP:', e);
+                                }
+
+                                // 2. Define o campo no banco como nulo (já está funcionando)
+                                payload.url_imagem = null;
+                                console.log("✅ Campo 'url_imagem' definido como NULL para atualização no banco.");
+                            }
+
+                            return request;
+                        },
+                    },
+                }
+            }
         },
         {
             resource: models.Oportunidade,
