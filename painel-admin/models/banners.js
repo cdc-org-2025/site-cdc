@@ -4,7 +4,7 @@ export class Banners extends Model {
     static init(sequelize) {
         return super.init({
             url_img: DataTypes.STRING,
-            pagina: DataTypes.ENUM('inicio', 'institucional', 'programas', 'noticias', 'publicacoes', 'contato', 'indicadores', 'trabalhe conosco'),
+            pagina: DataTypes.ENUM('inicio', 'institucional', 'programas', 'noticias', 'publicacoes', 'contato', 'indicadores', 'trabalhe_conosco'),
         }, { sequelize, tableName: 'banner', timestamps: false });
 
     }
