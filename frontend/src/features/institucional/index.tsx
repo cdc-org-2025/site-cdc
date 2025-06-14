@@ -12,7 +12,7 @@ import SearchScrollHandler from './SearchScrollHandler'
 import { useTimeLineQuery } from '@/clients/api/linha-tempo'
 import { useCardsInformativosListQuery } from '@/clients/api/cards-informativos'
 import { useLiderancasListQuery } from '@/clients/api/liderancas'
-import { useListTransparenciaQuery } from '@/clients/api/transparencia'
+import { useTransparenciaAreaQuery } from '@/clients/api/transparencia'
 import { usePerguntasQuery } from '@/clients/api/perguntas'
 import { useConteudoSecaoQuery } from '@/clients/api/conteudo-secao'
 
@@ -20,7 +20,7 @@ export default function InstitucionalPage() {
   const { data: listTimeLine } = useTimeLineQuery()
   const { data: listCards } = useCardsInformativosListQuery()
   const { data: listLiderancas } = useLiderancasListQuery()
-  const { data: listTransparencia } = useListTransparenciaQuery()
+  const { data: listTransparencia } = useTransparenciaAreaQuery({ area_id: "3" })
   const { data: listPerguntas } = usePerguntasQuery()
   const { data: organizationSectionInfo } = useConteudoSecaoQuery("organizacao")
   const { data: leadershipSectionInfo } = useConteudoSecaoQuery("liderancas")
