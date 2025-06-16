@@ -7,15 +7,19 @@ import Box from '@mui/material/Box'
 import FormEnrollment from './formEnrollment'
 import { useOportunidadeQuery } from '@/clients/api/oportunidades'
 import VectorRoundedLines from '@/components/atoms/VectorRoundedLines'
+import { useBannerQuery } from '@/clients/api/banners'
+import { storageUrl } from '@/constants/storageDomain'
 
 export default function TrabalheConoscoVagaPage() {
   const { id } = useParams()
   const { data } = useOportunidadeQuery(id)
+  const { data: dataBanner } = useBannerQuery("trabalhe_conosco")
 
   const Banner = {
-    id: Number(id),
-    title: data?.titulo,
-    image: '/ppdi.svg',
+    id: dataBanner?.[0]?.id,
+    title: data?.titulo ?? 'Trabalhe Conosco',
+    highlight: dataBanner?.[0]?.subtitulo ?? "",
+    image: `${storageUrl}/${dataBanner?.[0].url_img}`,
   }
 
   return (

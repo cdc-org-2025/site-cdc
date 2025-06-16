@@ -7,7 +7,7 @@ import { storageUrl } from '@/constants/storageDomain'
 import { TypeBannerUnique } from '@/components/atoms/Banner/unique'
 
 export default function TrabalheConosco() {
-  const { data } = useBannerQuery("trabalhe-conosco")
+  const { data } = useBannerQuery("trabalhe_conosco")
 
   const Banner: TypeBannerUnique = {
     id: data?.[0]?.id,
