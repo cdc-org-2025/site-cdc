@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useIndicadoresQuery } from '@/clients/api/indicadores'
 import { useBannerQuery } from '@/clients/api/banners'
 import { storageUrl } from '@/constants/storageDomain'
+import { sanitizeHtml } from '@/utils/stripHtmlTags'
 
 export default function Indicadores() {
   const sectionRef = useRef<HTMLDivElement>(null)
@@ -39,7 +40,6 @@ export default function Indicadores() {
       ref={sectionRef}
       sx={{
         backgroundColor: '#afafaf',
-        backgroundImage: `url("${storageUrl}/${bannerData?.[0].url_img}")`,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center top',
@@ -47,6 +47,10 @@ export default function Indicadores() {
         height: 'calc(300vh - 94px)',
         position: 'relative',
         borderRadius: '32px',
+        backgroundImage: `
+        linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+        url("${storageUrl}/${bannerData?.[0].url_img}")
+      `,
       }}
     >
       <Box width="100%" height={"120px"} />
@@ -61,6 +65,7 @@ export default function Indicadores() {
           flexDirection: "column"
         }}
       >
+
         <Typography
           sx={{
             typography: { xs: 'h4', sm: 'h4', md: 'h3', lg: 'h3' },
@@ -68,18 +73,11 @@ export default function Indicadores() {
             textAlign: 'left',
             marginBottom: '500px',
             fontSize: '32px',
-            backgroundColor: 'rgba(0, 0, 0, 0.411)',
             borderRadius: '20px',
-            padding: '6px',
-            backdropFilter: 'blur(8px)',
-            WebkitBackdropFilter: 'blur(8px)',
-            border: '1px solid rgba(255, 255, 255, 0.041)',
-            boxShadow: '0 4px 30px rgba(0, 0, 0, 0.2)',
           }}
           textTransform="none"
-        >
-          {bannerData?.[0]?.titulo ?? "Sem título"}
-        </Typography>
+          dangerouslySetInnerHTML={{ __html: sanitizeHtml(bannerData?.[0]?.titulo ?? "Sem título de teste") }}
+        />
       </Box>
       <Box
         sx={{
