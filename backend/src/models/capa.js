@@ -1,11 +1,12 @@
 import { Model, DataTypes } from 'sequelize';
 
-class Banners extends Model {
+class Capa extends Model {
     static init(sequelize) {
         return super.init({
             url_img: DataTypes.STRING,
             pagina: DataTypes.ENUM('inicio', 'institucional', 'programas', 'noticias', 'publicacoes', 'contato', 'indicadores', 'trabalhe_conosco', 'doacao'),
-        }, { sequelize, tableName: 'banner', timestamps: false });
+            titulo: DataTypes.STRING,
+        }, { sequelize, tableName: 'capa', timestamps: false });
 
     }
 
@@ -13,4 +14,4 @@ class Banners extends Model {
     }
 }
 
-export default Banners
+export default Capa
