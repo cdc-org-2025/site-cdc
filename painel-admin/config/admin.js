@@ -772,131 +772,165 @@ export const adminJs = new AdminJS({
         {
             resource: models.Organizacao,
             features: [
+                // Sua configuração do feature continua a mesma, está correta
                 createUploadFeature({
                     folder: 'organizacao',
                     file: 'uploadImagens',
-                    key: 'imagem_url',
+                    key: 'imagem_url', // <- Note que a key aqui é 'imagem_url'
                     multiple: true,
                 }),
             ],
             options: {
                 navigation: 'Configurações',
+
+                listProperties: ['id', 'titulo', 'descricao', 'imagem_url'],
+                newProperties: ['titulo', 'descricao', 'uploadImagens'],
+                editProperties: ['titulo', 'descricao', 'uploadImagens'],
+                showProperties: ['id', 'titulo', 'descricao', 'imagem_url'],
+
+                properties: {
+                    id: { isVisible: { list: true, edit: false, show: true, filter: true } },
+
+                    // A propriedade 'nome' foi renomeada para 'titulo' para corresponder ao seu Model
+                    titulo: {
+                        isTitle: true,
+                        isRequired: true,
+                    },
+                    descricao: {
+                        type: 'richtext',
+                        // components: {
+                        //     list: Components.TextoPreview,
+                        // }
+                    },
+
+                    // Suas propriedades de imagem, sem alterações
+                    uploadImagens: {
+                        label: 'Imagens',
+                        components: {
+                            edit: Components.ImageEditor,
+                        },
+                        isVisible: { list: false, show: false, filter: false, edit: true },
+                    },
+                    imagesToDelete: { isVisible: false },
+                    imagem_url: {
+                        label: "Imagens",
+                        isVisible: { list: true, show: true, edit: false, filter: false },
+                        components: {
+                            list: Components.ImageListPreview,
+                            show: Components.ImageListPreview,
+                        }
+                    }
+                },
+
+
+                // Substituímos suas actions antigas por esta lógica completa
                 actions: {
-                    edit: {
+                    new: {
                         after: async (response, request, context) => {
                             const { record } = context;
-                            if (!record || record.isValid() === false) return response;
+                            if (!record || !record.isValid()) { return response; }
 
-                            const imagens = Object.entries(request.files || {})
+                            const novasImagens = Object.entries(request.files || {})
                                 .filter(([key]) => key.startsWith('uploadImagens'))
                                 .map(([, file]) => file);
 
-                            const organizacaoImagem = models.OrganizacaoImagem;
+                            if (novasImagens && novasImagens.length > 0) {
+                                for (const imagem of novasImagens) {
+                                    const filename = imagem.name.replace(/\s/g, '_');
+                                    const gcsPath = `organizacao/${record.id()}-${filename}`;
 
-                            // 🧹 Remove imagens anteriores (opcional, se você quer substituir)
-                            await organizacaoImagem.destroy({
-                                where: { organizacao_id: record.id() }
-                            });
-
-                            // 📥 Salva novas imagens
-                            for (const imagem of imagens) {
-                                const filename = imagem?.name?.replace(/\s+/g, '_');
-                                const gcsPath = `organizacao/${record.id()}-${filename}`;
-
-                                await organizacaoImagem.create({
-                                    organizacao_id: record.id(),
-                                    imagem_url: gcsPath,
-                                });
+                                    await models.OrganizacaoImagem.create({
+                                        organizacao_id: record.id(), // Chave estrangeira correta
+                                        imagem_url: gcsPath,         // Nome do campo de imagem correto
+                                    });
+                                }
                             }
-
                             return response;
                         }
                     },
-                    new: {
+
+                    edit: {
+                        before: async (request, context) => {
+                            const { record } = context;
+                            if (record && record.id()) {
+                                const imagens = await models.OrganizacaoImagem.findAll({
+                                    where: { organizacao_id: record.id() }, // Chave estrangeira correta
+                                    raw: true,
+                                });
+                                // Renomeamos a propriedade para o componente ImageEditor funcionar
+                                // Ele espera 'url_imagem', mas seu model tem 'imagem_url'
+                                record.params.imagens = imagens.map(img => ({
+                                    id: img.id,
+                                    url_imagem: img.imagem_url, // Mapeamento de nome
+                                }));
+                            }
+                            return request;
+                        },
                         after: async (response, request, context) => {
-                            const { record } = context
-                            if (!record || record.isValid() === false) return response
+                            const { record } = context;
+                            const { payload } = request;
 
-                            const imagens = Object.entries(request.files || {})
-                                .filter(([key]) => key.startsWith('uploadImagens'))
-                                .map(([, file]) => file)
-
-                            const organizacaoImagem = models.OrganizacaoImagem
-
-                            for (const imagem of imagens) {
-                                const filename = imagem?.name?.replace(/\s+/g, '_')
-                                const gcsPath = `organizacao/${record.id()}-${filename}`
-
-                                await organizacaoImagem.create({
-                                    organizacao_id: record.id(),
-                                    imagem_url: gcsPath,
-                                })
+                            // 1. Lógica de exclusão
+                            const idsParaDeletar = Object.keys(payload)
+                                .filter(key => key.startsWith('imagesToDelete.'))
+                                .map(key => payload[key]);
+                            if (idsParaDeletar && idsParaDeletar.length > 0) {
+                                await models.OrganizacaoImagem.destroy({ where: { id: { [Op.in]: idsParaDeletar } } });
                             }
 
-                            return response
+                            // 2. Lógica de upload
+                            const novasImagens = Object.entries(request.files || {})
+                                .filter(([key]) => key.startsWith('uploadImagens'))
+                                .map(([, file]) => file);
+                            if (novasImagens && novasImagens.length > 0) {
+                                for (const imagem of novasImagens) {
+                                    const filename = imagem.name.replace(/\s/g, '_');
+                                    const gcsPath = `organizacao/${record.id()}-${filename}`;
+                                    await models.OrganizacaoImagem.create({
+                                        organizacao_id: record.id(),
+                                        imagem_url: gcsPath,
+                                    });
+                                }
+                            }
+                            return response;
                         }
                     },
+
                     list: {
                         after: async (response) => {
-                            // 1. Pega os IDs apenas dos registros da organização que estão na página atual.
                             const recordIds = response.records.map(r => r.params.id);
+                            if (recordIds.length === 0) return response;
 
-                            // 2. Se a página estiver vazia, retorna a resposta sem fazer a consulta.
-                            if (recordIds.length === 0) {
-                                return response;
-                            }
-
-                            // 3. Busca no banco de dados APENAS as imagens cujo 'organizacao_id' corresponde aos registros da página.
                             const imagens = await models.OrganizacaoImagem.findAll({
-                                where: {
-                                    organizacao_id: { [Op.in]: recordIds }
-                                }
+                                where: { organizacao_id: { [Op.in]: recordIds } }
                             });
 
-                            // 4. Sua lógica de mapeamento, que já estava correta, continua aqui.
                             const imagensMap = imagens.reduce((acc, img) => {
                                 const id = img.organizacao_id;
-
-                                if (!acc[id]) {
-                                    acc[id] = [];
-                                }
-
-                                acc[id].push(img.imagem_url); // 👉 guarda todas as imagens
-
+                                if (!acc[id]) { acc[id] = []; }
+                                acc[id].push(img.imagem_url);
                                 return acc;
                             }, {});
 
                             for (const record of response.records) {
                                 const id = record.params.id;
-                                const imagemArray = imagensMap[id];
-
-                                if (imagemArray) {
-                                    record.params.imagem_url = imagemArray;
+                                if (imagensMap[id]) {
+                                    record.params.imagem_url = imagensMap[id];
                                 }
                             }
-
                             return response;
                         }
-                    }
-                },
-                properties: {
-                    uploadImagens: {
-                        type: 'mixed',
-                        isVisible: { list: false, show: false, filter: false, edit: true },
-                        components: {
-                            edit: Components.UploadMultiple
-                        },
-                        custom: { multiple: true },
-                        isTitle: false
                     },
-                    imagem_url: {
-                        isVisible: { list: true, show: false, edit: false },
-                        components: {
-                            list: Components.ImageListPreview
+
+                    delete: {
+                        after: async (response, request, context) => {
+                            const { record } = context;
+                            await models.OrganizacaoImagem.destroy({ where: { organizacao_id: record.id() } });
+                            return response;
                         }
-                    }
+                    },
                 }
-            }
+            },
         },
         {
             resource: models.Inidicador,
