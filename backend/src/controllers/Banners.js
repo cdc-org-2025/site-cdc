@@ -6,7 +6,7 @@ class BannerController {
     static async index(req, res) {
         try {
             const { pagina } = req.query;
-            const banner = await db.Banners.findAll({
+            const banner = await db.Capa.findAll({
                 where: { pagina: pagina }
             });
 
