@@ -9,6 +9,8 @@ import AddIcon from '@mui/icons-material/Add'
 import AnimetedSlide from '@/components/animations/slide'
 import { IPrograma } from '@/clients/api/programas'
 import { useRouter } from 'next/navigation'
+import { sanitizeHtml } from '@/utils/stripHtmlTags'
+import { storageUrl } from '@/constants/storageDomain'
 
 export default function AccordionProjectsMobile({
   projectList,
@@ -134,9 +136,8 @@ export default function AccordionProjectsMobile({
                   color={'text.primary'}
                   variant="subtitle1"
                   lineHeight="150%"
-                >
-                  {expandedAccordion?.descricao}
-                </Typography>
+                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(expandedAccordion?.descricao ?? '') }}
+                />
                 <Box
                   display="flex"
                   justifyContent="flex-end"
@@ -166,7 +167,7 @@ export default function AccordionProjectsMobile({
               height: '480px',
               borderRadius: '32px',
               backgroundColor: background.default,
-              backgroundImage: `url(${expandedAccordion?.url_image_capa ?? "https://support.heberjahiz.com/hc/article_attachments/21013076295570"} )`,
+              backgroundImage: `url("${storageUrl}/${expandedAccordion?.url_image_capa ?? ""}")`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat',

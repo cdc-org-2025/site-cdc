@@ -39,7 +39,7 @@ export default function Indicadores() {
       ref={sectionRef}
       sx={{
         backgroundColor: '#afafaf',
-        backgroundImage: `url(${storageUrl}/${bannerData?.[0].url_img})`,
+        backgroundImage: `url("${storageUrl}/${bannerData?.[0].url_img}")`,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center top',
