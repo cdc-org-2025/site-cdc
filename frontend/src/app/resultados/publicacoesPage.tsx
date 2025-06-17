@@ -1,20 +1,26 @@
 'use client'
 
+import { useBannerQuery } from '@/clients/api/banners'
 import { getPesquisasList, IPesquisa, usePesquisaQuery } from '@/clients/api/pesquisa'
 import ZoomOutOnView from '@/components/animations/zoomOutOnView'
+import { TypeBannerUnique } from '@/components/atoms/Banner/unique'
 import Footer from '@/components/molecules/Footer'
 import ListCards from '@/components/molecules/ListCards'
 import MenuAreasWithSearchInput from '@/components/molecules/MenuAreaWithSearchInput'
 import HeaderBannerUnique from '@/components/templates/HeaderBannerUnique'
+import { storageUrl } from '@/constants/storageDomain'
+import { sanitizeHtml } from '@/utils/stripHtmlTags'
 import Box from '@mui/material/Box'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 export default function PublicacoesPage() {
-  const Banner = {
-    id: 1,
-    title: 'Resultados',
-    image: '/ppdi.svg',
+  const { data: dataBanner } = useBannerQuery("publicacoes")
+
+  const Banner: TypeBannerUnique = {
+    id: dataBanner?.[0]?.id,
+    title: dataBanner?.[0]?.titulo ? sanitizeHtml(dataBanner?.[0]?.titulo) : 'Sem título',
+    image: `${storageUrl}/${dataBanner?.[0].url_img}`,
   }
 
   const searchParams = useSearchParams()

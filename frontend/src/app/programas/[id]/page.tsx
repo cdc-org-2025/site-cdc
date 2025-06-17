@@ -32,7 +32,7 @@ export default function ProgramaUniquePage() {
 
   const Banner = {
     id: 1,
-    title: `${data?.titulo} -`,
+    title: data?.titulo ? sanitizeHtml(data?.titulo) : 'Sem título',
     image: `${storageUrl}/${data?.url_image_capa}`,
     highlight: data?.subtitulo
   }
@@ -111,9 +111,11 @@ export default function ProgramaUniquePage() {
         <Typography variant='h1' color={"primary"} textAlign={"center"}>Sem descrição disponivel</Typography>
       )}
       <LatestNews listNoticia={listNoticias?.data} programa />
-      <Box px={{ xs: '16px', md: '32px' }} mt="64px" pb={{ xs: '80px', md: '160px' }} width="100%" maxWidth={"100vw"}>
-        <Transparency sectionInfo={transparencySectionInfo?.[0]} listTransparencia={listTransparencia} />
-      </Box>
+      {listTransparencia?.data?.length && (
+        <Box px={{ xs: '16px', md: '32px' }} mt="64px" pb={{ xs: '80px', md: '160px' }} width="100%" maxWidth={"100vw"}>
+          <Transparency sectionInfo={transparencySectionInfo?.[0]} listTransparencia={listTransparencia} />
+        </Box>
+      )}
       <Footer />
     </>
   )
