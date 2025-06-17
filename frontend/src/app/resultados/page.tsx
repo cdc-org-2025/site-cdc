@@ -1,10 +1,10 @@
 import { Suspense } from 'react'
-import PublicacoesPage from '../publicacoes/page'
+import ResultadosPage from './resultadosPage'
 
 export default function Page() {
   return (
     <Suspense fallback={null}>
-      <PublicacoesPage />
+      <ResultadosPage />
     </Suspense>
   )
 }

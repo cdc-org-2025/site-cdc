@@ -14,8 +14,8 @@ import Box from '@mui/material/Box'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
-export default function PublicacoesPage() {
-  const { data: dataBanner } = useBannerQuery("publicacoes")
+export default function ResultadosPage() {
+  const { data: dataBanner } = useBannerQuery("resultados")
 
   const Banner: TypeBannerUnique = {
     id: dataBanner?.[0]?.id,
