@@ -18,7 +18,8 @@ class ConteudoSecao extends Model {
           'liderancas',
           'transparencia',
           'indicadores',
-          'institucional'
+          'institucional',
+          'perguntas_frequentes'
         ),
         allowNull: false,
         unique: true, // se quiser garantir uma seção única
