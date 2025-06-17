@@ -63,25 +63,22 @@ export default function Indicadores() {
       >
         <Typography
           sx={{
-            typography: { xs: 'h4', sm: "h4", md: 'h3', lg: "h3" },
+            typography: { xs: 'h4', sm: 'h4', md: 'h3', lg: 'h3' },
             color: '#f6f6f6',
             textAlign: 'left',
-            paddingBottom: "500px",
-            fontSize: "32px"
+            marginBottom: '500px',
+            fontSize: '32px',
+            backgroundColor: 'rgba(0, 0, 0, 0.411)',
+            borderRadius: '20px',
+            padding: '6px',
+            backdropFilter: 'blur(8px)',
+            WebkitBackdropFilter: 'blur(8px)',
+            border: '1px solid rgba(255, 255, 255, 0.041)',
+            boxShadow: '0 4px 30px rgba(0, 0, 0, 0.2)',
           }}
           textTransform="none"
         >
-          {bannerData?.[0]?.titulo ?? "Através dos seus programas, o CDC impactou e continua "}
-          <Typography
-            component="span"
-            sx={{
-              typography: { xs: 'h4', sm: "h4", md: 'h3', lg: "h3" },
-              color: 'secondary.light',
-            }}
-            textTransform="none"
-          >
-            {bannerData?.[0]?.subtitulo ?? "impactando milhares de vidas"}
-          </Typography>
+          {bannerData?.[0]?.titulo ?? "Sem título"}
         </Typography>
       </Box>
       <Box

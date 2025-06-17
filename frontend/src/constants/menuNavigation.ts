@@ -24,7 +24,7 @@ export const MenuOptions = [
     link: "/institucional",
     subMenus: [
       { id: 10, label: 'Linha do tempo', scrollView: 'timeline' },
-      { id: 11, label: 'Organização do CDC', scrollView: 'organizationCdc' },
+      { id: 11, label: 'Estrutura Organizacional', scrollView: 'organizationCdc' },
       { id: 12, label: 'Lideranças', scrollView: 'leadership' },
       { id: 13, label: 'Transparência', scrollView: 'transparent' },
       { id: 14, label: 'Perguntas frequentes', scrollView: 'faq' },

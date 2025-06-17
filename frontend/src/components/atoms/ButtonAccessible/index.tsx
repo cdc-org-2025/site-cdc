@@ -75,9 +75,9 @@ export default function ButtonAccessible() {
         alignItems="center"
         position="fixed"
         bottom={90}
-        right={34}
+        right={0}
         marginBottom={{ xs: "0px", sm: "90px" }}
-        marginRight={{ xs: "0px", sm: "34px" }}
+        marginRight={{ xs: "0px", sm: "16px" }}
         border="2px solid #52c1ee"
         sx={{
           cursor: 'pointer',
