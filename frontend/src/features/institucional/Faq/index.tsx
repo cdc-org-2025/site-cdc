@@ -8,16 +8,18 @@ import AccordionComponent from '@/components/atoms/Accordion'
 import AnimationSplitText from '@/components/animations/splitText'
 import { useRouter } from 'next/navigation'
 import { IPerguntas } from '@/clients/api/perguntas'
+import { useConteudoSecaoQuery } from '@/clients/api/conteudo-secao'
 
 export default function Faq({ listPerguntas }: { listPerguntas?: IPerguntas[] }) {
   const {
     palette: { primary },
   } = useTheme()
   const { push } = useRouter()
+  const { data } = useConteudoSecaoQuery("perguntas_frequentes")
 
   return (
     <>
-      {listPerguntas && (
+      {listPerguntas && data && (
         <Box display="flex" flexDirection="column" gap="16px" pb="32px" id="faq">
           <AnimationSplitText threshold={0.8}>
             <Typography
@@ -26,7 +28,7 @@ export default function Faq({ listPerguntas }: { listPerguntas?: IPerguntas[] })
               textAlign="center"
               width="100%"
             >
-              Perguntas frequentes
+              {data[0].titulo ?? "Perguntas frequentes"}
             </Typography>
           </AnimationSplitText>
 
@@ -46,11 +48,16 @@ export default function Faq({ listPerguntas }: { listPerguntas?: IPerguntas[] })
               },
             }}
           >
-            Não encontrou o que queria? Entre em{' '}
-            <Box component="span" onClick={() => push('/contato')}>
-              contato
-            </Box>{' '}
-            com o CDC
+            {data[0].resumo
+              ??
+              <>
+                Não encontrou o que queria? Entre em{' '}
+                <Box component="span" onClick={() => push('/contato')}>
+                  contato
+                </Box>{' '}
+                com o CDC
+              </>
+            }
           </Typography>
         </Box>
       )}
