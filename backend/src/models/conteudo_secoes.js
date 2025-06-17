@@ -16,7 +16,9 @@ class ConteudoSecao extends Model {
           'organizacao',
           'entrada-programas',
           'liderancas',
-          'transparencia'
+          'transparencia',
+          'indicadores',
+          'institucional'
         ),
         allowNull: false,
         unique: true, // se quiser garantir uma seção única
