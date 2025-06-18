@@ -5,7 +5,7 @@ class Capa extends Model {
         return super.init({
             url_img: DataTypes.STRING,
             pagina: DataTypes.ENUM('inicio', 'institucional', 'programas', 'noticias', 'publicacoes', 'contato', 'indicadores', 'trabalhe_conosco', 'doacao'),
-            titulo: DataTypes.STRING,
+            titulo: DataTypes.TEXT,
         }, { sequelize, tableName: 'capa', timestamps: false });
 
     }
