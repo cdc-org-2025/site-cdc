@@ -1,6 +1,8 @@
-import DOMPurify from 'dompurify'
+import DOMPurify from 'isomorphic-dompurify'
 
-export const sanitizeHtml = (html: string): string => {
+export const sanitizeHtml = (html?: string) => {
+  if (!html) return ''
+
   return DOMPurify.sanitize(html, {
     ADD_TAGS: ['iframe'],
     ADD_ATTR: [
@@ -12,7 +14,7 @@ export const sanitizeHtml = (html: string): string => {
       'style',
       'width',
       'height',
-      'data-*'
+      'data-*',
     ],
   })
 }

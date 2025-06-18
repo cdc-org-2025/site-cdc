@@ -3,6 +3,7 @@ import React from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { useTheme } from '@mui/material'
+import { sanitizeHtml } from '@/utils/stripHtmlTags'
 
 export interface IBannerUnique {
   Banner: TypeBannerUnique
@@ -72,7 +73,9 @@ export default function BannerUnique({ Banner }: IBannerUnique) {
               }}
               color={'primary.light'}
             >
-              {Banner.title}
+              <div
+                dangerouslySetInnerHTML={{ __html: sanitizeHtml(Banner?.title) }}
+              />
               {Banner.highlight && (
                 <Typography
                   variant="h2"

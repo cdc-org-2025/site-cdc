@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useIndicadoresQuery } from '@/clients/api/indicadores'
 import { useBannerQuery } from '@/clients/api/banners'
 import { storageUrl } from '@/constants/storageDomain'
+import { sanitizeHtml } from '@/utils/stripHtmlTags'
 
 export default function Indicadores() {
   const sectionRef = useRef<HTMLDivElement>(null)
@@ -39,7 +40,6 @@ export default function Indicadores() {
       ref={sectionRef}
       sx={{
         backgroundColor: '#afafaf',
-        backgroundImage: `url("${storageUrl}/${bannerData?.[0].url_img}")`,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center top',
@@ -47,6 +47,10 @@ export default function Indicadores() {
         height: 'calc(300vh - 94px)',
         position: 'relative',
         borderRadius: '32px',
+        backgroundImage: `
+        linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+        url("${storageUrl}/${bannerData?.[0].url_img}")
+      `,
       }}
     >
       <Box width="100%" height={"120px"} />
@@ -61,28 +65,19 @@ export default function Indicadores() {
           flexDirection: "column"
         }}
       >
+
         <Typography
           sx={{
-            typography: { xs: 'h4', sm: "h4", md: 'h3', lg: "h3" },
+            typography: { xs: 'h4', sm: 'h4', md: 'h3', lg: 'h3' },
             color: '#f6f6f6',
             textAlign: 'left',
-            paddingBottom: "500px",
-            fontSize: "32px"
+            marginBottom: '500px',
+            fontSize: '32px',
+            borderRadius: '20px',
           }}
           textTransform="none"
-        >
-          {bannerData?.[0]?.titulo ?? "Através dos seus programas, o CDC impactou e continua "}
-          <Typography
-            component="span"
-            sx={{
-              typography: { xs: 'h4', sm: "h4", md: 'h3', lg: "h3" },
-              color: 'secondary.light',
-            }}
-            textTransform="none"
-          >
-            {bannerData?.[0]?.subtitulo ?? "impactando milhares de vidas"}
-          </Typography>
-        </Typography>
+          dangerouslySetInnerHTML={{ __html: sanitizeHtml(bannerData?.[0]?.titulo ?? "Sem título de teste") }}
+        />
       </Box>
       <Box
         sx={{

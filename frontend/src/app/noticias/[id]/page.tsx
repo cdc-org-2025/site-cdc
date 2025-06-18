@@ -30,7 +30,7 @@ export default function NoticiasUniquePage() {
 
   const Banner = {
     id: 1,
-    title: data?.titulo,
+    title: data?.titulo ? sanitizeHtml(data?.titulo) : "Sem título",
     image: `${storageUrl}/${data?.imagem_capa}`,
   }
 

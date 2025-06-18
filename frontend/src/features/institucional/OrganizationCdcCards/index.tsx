@@ -80,7 +80,7 @@ export default function OrganizationCdcCards({ listCards, sectionInfo }: { listC
             id='organizationCdc'
             fontSize={{ xs: '35px', md: '1.94rem' }}
           >
-            {sectionInfo?.titulo ?? "Organização do CDC"}
+            {sectionInfo?.titulo ?? "Sem título"}
           </Typography>
         </AnimationSplitText>
         <AnimationSplitText>
