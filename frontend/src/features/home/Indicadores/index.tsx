@@ -60,12 +60,11 @@ export default function Indicadores() {
           top: '200px',
           zIndex: 2,
           marginLeft: { xs: '16px', sm: "16px", md: "16px", lg: "90px" },
-          maxWidth: { xs: '157px', sm: "157px", md: "300px", lg: "445px" },
+          maxWidth: { xs: '200px', sm: "40vw", md: "300px", lg: "445px" },
           display: "flex",
           flexDirection: "column"
         }}
       >
-
         <Typography
           sx={{
             typography: { xs: 'h4', sm: 'h4', md: 'h3', lg: 'h3' },
@@ -76,7 +75,7 @@ export default function Indicadores() {
             borderRadius: '20px',
           }}
           textTransform="none"
-          dangerouslySetInnerHTML={{ __html: sanitizeHtml(bannerData?.[0]?.titulo ?? "Sem título de teste") }}
+          dangerouslySetInnerHTML={{ __html: sanitizeHtml(bannerData?.[0]?.titulo ?? "Sem título de teste 1 2 3 4 5") }}
         />
       </Box>
       <Box
@@ -92,7 +91,7 @@ export default function Indicadores() {
         }}
       >
         <Box
-          maxWidth={{ xs: '200px', sm: "200px", md: "500px", lg: "500px" }}
+          maxWidth={{ xs: '200px', sm: "40vw", md: "470px", lg: "500px" }}
           width="100%"
           display={"flex"}
           flexDirection={"column"}
