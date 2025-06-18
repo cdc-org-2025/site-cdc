@@ -951,7 +951,7 @@ export const adminJs = new AdminJS({
             }
         },
         {
-            resource: models.Banners,
+            resource: models.Capa,
             features: [
                 createUploadFeature({
                     folder: 'banners',
@@ -973,17 +973,26 @@ export const adminJs = new AdminJS({
                         components: {
                             list: Components.ImageListPreview
                         }
+                    },
+                    titulo: {
+                        components:{
+                            edit: Components.CapaTituloEditor,
+                            list: Components.NoticiaPreview,
+                        }
                     }
                 },
                 editProperties: [
+                    'titulo',
                     'pagina',
                     'uploadImagens' // usado para enviar imagem
                 ],
                 showProperties: [
+                    'titulo',
                     'pagina',
                     'url_img'
                 ],
                 listProperties: [
+                    'titulo',
                     'pagina',
                     'url_img'
                 ],
