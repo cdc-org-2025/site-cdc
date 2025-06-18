@@ -1,6 +1,6 @@
 
 import { Area } from './area.js';
-import { Banners } from './banners.js';
+import { Capa } from './banners.js';
 import { CardInformativo } from './card_informativo.js';
 import { Categoria } from './categoria.js';
 import { ConteudoSecao } from './conteudo_secao.js';
@@ -44,7 +44,7 @@ export function initializeModels(sequelize) {
     Inidicador: Inidicador.init(sequelize),
     Organizacao: Organizacao.init(sequelize),
     OrganizacaoImagem: OrganizacaoImagem.init(sequelize),
-    Banners: Banners.init(sequelize),
+    Capa: Capa.init(sequelize),
     ConteudoSecao: ConteudoSecao.init(sequelize)
   };
 
