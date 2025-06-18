@@ -47,17 +47,18 @@ export default function Leadership({ listLiderancas, sectionInfo }: { listLidera
             {sectionInfo?.titulo ?? "Lideranças"}
           </Typography>
         </AnimationSplitText>
-        <AnimationSplitText>
-          <Typography
-            variant="overline"
-            textTransform="none"
-            color="text.primary"
-            lineHeight="150%"
-            maxWidth="600px"
-          >
-            {sectionInfo?.resumo ?? "O CDC é liderado por pessoas referência no campo dos direitos  humanos, garantindo a cidadania e transformação social."}
-          </Typography>
-        </AnimationSplitText>
+        {/* <AnimationSplitText> */}
+        <Typography
+          variant="overline"
+          textTransform="none"
+          color="text.primary"
+          lineHeight="150%"
+          maxWidth="600px"
+          textAlign={"justify"}
+        >
+          {sectionInfo?.resumo ?? "O CDC é liderado por pessoas referência no campo dos direitos  humanos, garantindo a cidadania e transformação social."}
+        </Typography>
+        {/* </AnimationSplitText> */}
       </Box>
 
       <MenuAreas
