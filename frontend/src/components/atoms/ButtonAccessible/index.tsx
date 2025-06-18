@@ -131,17 +131,6 @@ export default function ButtonAccessible() {
           >
             <IconButton
               size="small"
-              aria-label="Aumentar fonte"
-              onClick={(e) => {
-                e.stopPropagation()
-                increaseFont()
-              }}
-            >
-              <AddCircleOutlineIcon style={{ width: 25 }} htmlColor='#52c1ee' />
-            </IconButton>
-            <Typography fontSize="20px">A a</Typography>
-            <IconButton
-              size="small"
               aria-label="Diminuir fonte"
               onClick={(e) => {
                 e.stopPropagation()
@@ -149,6 +138,17 @@ export default function ButtonAccessible() {
               }}
             >
               <RemoveCircleOutlineIcon style={{ width: 25 }} htmlColor='#52c1ee' />
+            </IconButton>
+            <Typography fontSize="20px">A a</Typography>
+            <IconButton
+              size="small"
+              aria-label="Aumentar fonte"
+              onClick={(e) => {
+                e.stopPropagation()
+                increaseFont()
+              }}
+            >
+              <AddCircleOutlineIcon style={{ width: 25 }} htmlColor='#52c1ee' />
             </IconButton>
           </Box>
         </Tooltip>
@@ -164,19 +164,6 @@ export default function ButtonAccessible() {
           >
             <IconButton
               size="small"
-              aria-label="Aumentar peso da fonte"
-              onClick={(e) => {
-                e.stopPropagation()
-                increaseFontWeight()
-              }}
-            >
-              <AddCircleOutlineIcon style={{ width: 25 }} htmlColor='#52c1ee' />
-            </IconButton>
-            <Typography fontSize="20px">
-              <span style={{ fontWeight: 700 }}>A</span> A
-            </Typography>
-            <IconButton
-              size="small"
               aria-label="Diminuir peso da fonte"
               onClick={(e) => {
                 e.stopPropagation()
@@ -184,6 +171,19 @@ export default function ButtonAccessible() {
               }}
             >
               <RemoveCircleOutlineIcon style={{ width: 25 }} htmlColor='#52c1ee' />
+            </IconButton>
+            <Typography fontSize="20px">
+              <span style={{ fontWeight: 700 }}>A</span> A
+            </Typography>
+            <IconButton
+              size="small"
+              aria-label="Aumentar peso da fonte"
+              onClick={(e) => {
+                e.stopPropagation()
+                increaseFontWeight()
+              }}
+            >
+              <AddCircleOutlineIcon style={{ width: 25 }} htmlColor='#52c1ee' />
             </IconButton>
           </Box>
         </Tooltip>
