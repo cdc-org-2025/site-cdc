@@ -8,7 +8,7 @@ import Doacoes from '@/features/doacoes'
 import { sanitizeHtml } from '@/utils/stripHtmlTags'
 
 export default function DoacoesPage() {
-  const { data } = useBannerQuery("doacoes")
+  const { data } = useBannerQuery("doacao")
 
   const Banner: TypeBannerUnique = {
     id: data?.[0]?.id,

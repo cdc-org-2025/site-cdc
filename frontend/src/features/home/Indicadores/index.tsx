@@ -92,12 +92,13 @@ export default function Indicadores() {
         }}
       >
         <Box
-          pr={{ xs: '20px', sm: "20px", md: "44px", lg: "80px" }}
           maxWidth={{ xs: '200px', sm: "200px", md: "500px", lg: "500px" }}
           width="100%"
           display={"flex"}
           flexDirection={"column"}
           gap="70vh"
+          pt="100px"
+          mr={{ xs: '20px', sm: "44px", md: "44px", lg: "80px" }}
         >
           {data?.map((item) => (
             <Box
