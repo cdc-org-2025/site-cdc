@@ -19,6 +19,7 @@ function convertStylesToInline(html) {
     }
   });
 
+  
   tempDiv.querySelectorAll('span[style*="#FE9A03"]').forEach(el => {
     el.style.color = '#FE9A03';
     el.style.fontWeight = '700';
