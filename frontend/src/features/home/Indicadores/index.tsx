@@ -87,17 +87,17 @@ export default function Indicadores() {
           right: 0,
           width: "100%",
           justifyContent: "flex-end",
-          marginTop: "-660px"
+          marginTop: "-660px",
         }}
+        pb={{ xs: "15vh", sm: "0px" }}
       >
         <Box
           maxWidth={{ xs: '200px', sm: "40vw", md: "470px", lg: "500px" }}
           width="100%"
           display={"flex"}
           flexDirection={"column"}
-          gap="70vh"
+          gap={{ xs: "60vh", sm: "70vh" }}
           mr={{ xs: '0px', sm: "44px", md: "44px", lg: "80px" }}
-          maxHeight={"2550px"}
           mt={{ xs: '-110px', sm: "0px", md: "0px", lg: "0px" }}
         >
           {data?.map((item, index) => (
@@ -110,7 +110,7 @@ export default function Indicadores() {
               borderRadius="32px"
               maxWidth={{ xs: '100%', sm: '500px' }}
               minWidth={{ xs: '148px', sm: '200px' }}
-              mt={{ xs: index === 2 ? "60px" : "0px", sm: index === 2 ? "180px" : "0px" }}
+              mt={{ xs: index === 2 ? "-40px" : "0px", sm: index === 2 ? "180px" : "0px" }}
             >
               <Typography variant="h1" color="primary" pb="8px">
                 {item.quantidade}
