@@ -100,6 +100,7 @@ export default function Indicadores() {
           gap={{ xs: "60vh", sm: "70vh" }}
           mr={{ xs: '0px', sm: "44px", md: "44px", lg: "80px" }}
           mt={{ xs: '-110px', sm: "0px", md: "0px", lg: "0px" }}
+          justifyContent={"space-between"}
         >
           {data?.map((item, index) => (
             <Box
@@ -115,7 +116,7 @@ export default function Indicadores() {
                 xs: index === 2 ? "-50px" : "0px",
                 sm: index === 2 ? "110px" : "0px",
                 md: index === 2 ? "110px" : "0px",
-                lg: index === 2 ? "110px" : "0px",
+                lg: index === 2 ? "12vh" : "0px",
               }}
             >
               <Typography variant="h1" color="primary" pb="8px">

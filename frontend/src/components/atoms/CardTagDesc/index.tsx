@@ -260,7 +260,7 @@ function CardTagDesc({
             height: '100%',
             backgroundImage: `url("${storageUrl}/${info?.imagem_capa ?? info?.url_imagem ?? info?.url_image_capa}")`,
             backgroundColor: 'gray',
-            backgroundSize: '100%',
+            backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
             transition: 'background-size 0.3s ease-in-out',
