@@ -3,12 +3,84 @@
 import { useBannerQuery } from "@/clients/api/banners";
 import { useIndicadoresQuery } from "@/clients/api/indicadores";
 import { storageUrl } from "@/constants/storageDomain";
+import { useWindowDimensions } from "@/hooks/useDimensions";
 import { sanitizeHtml } from "@/utils/stripHtmlTags";
 import { Box, Typography } from "@mui/material";
 
 export default function BannerFixedBackground() {
   const { data: bannerData } = useBannerQuery("indicadores");
-  const { data } = useIndicadoresQuery()
+  const { data } = useIndicadoresQuery();
+  const { width, height } = useWindowDimensions();
+
+  const androidPequeno = width <= 360 && height <= 640;
+  const mobilePequeno = width <= 375 && height <= 667;
+  const mobileMedio = width <= 390 && height <= 844;
+  const mobileGrande = width <= 430 && height <= 932;
+
+  const tabletPequeno = width <= 768 && height <= 1024;
+  const tabletMedio = width <= 834 && height <= 1194;
+  const tabletGrande = width <= 1024 && height <= 1366;
+
+  const iPad = width === 1024 && height === 768;
+  const Laptop = width === 1440 && height === 900;
+
+  const notebookPequeno = width <= 1366 && height <= 768;
+  const notebookMedio = width <= 1600 && height <= 900;
+  const notebookGrande = width <= 1920 && height <= 1080;
+
+  const desktopMedio = width <= 2560 && height <= 1440;
+  const desktopGrande = width <= 3440 && height <= 1440;
+  const desktopUltra = width >= 3840 && height >= 2160;
+
+  const gapCards = () => {
+    if (iPad) return "600px"
+    if (Laptop) return "740px"
+
+    if (androidPequeno) return "400px";
+    if (mobilePequeno) return "420px";
+    if (mobileMedio) return "600px";
+    if (mobileGrande) return "680px";
+
+    if (tabletPequeno) return "730px";
+    if (tabletMedio) return "1040px";
+    if (tabletGrande) return "1250px";
+
+    if (notebookPequeno) return "610px";
+    if (notebookMedio) return "750px";
+    if (notebookGrande) return "920px";
+
+    if (desktopMedio) return "1300px";
+    if (desktopGrande) return "1008px";
+    if (desktopUltra) return "1512px";
+
+
+    return "1512px"; // fallback
+  };
+
+  const paddingBottom = () => {
+    if (iPad) return "510px"
+    if (Laptop) return "630px"
+
+
+    if (androidPequeno) return "230px";
+    if (mobilePequeno) return "270px";
+    if (mobileMedio) return "440px";
+    if (mobileGrande) return "540px";
+
+    if (tabletPequeno) return "730px";
+    if (tabletMedio) return "890px";
+    if (tabletGrande) return "1000px";
+
+    if (notebookPequeno) return "490px";
+    if (notebookMedio) return "600px";
+    if (notebookGrande) return "800px";
+
+    if (desktopMedio) return "1120px";
+    if (desktopGrande) return "720px";
+    if (desktopUltra) return "1080px";
+
+    return "1080px"; // fallback
+  };
 
   return (
     <Box
@@ -34,6 +106,7 @@ export default function BannerFixedBackground() {
           paddingTop: "100px",
           zIndex: 1,
         }}
+        paddingBottom={paddingBottom()}
       >
         <Typography
           sx={{
@@ -62,13 +135,12 @@ export default function BannerFixedBackground() {
         }}
       >
         <Box
-          maxWidth={{ xs: '200px', sm: "40vw", md: "470px", lg: "500px" }}
+          maxWidth={{ xs: "200px", sm: "40vw", md: "470px", lg: "500px" }}
           width="100%"
           display={"flex"}
           flexDirection={"column"}
-          gap={"calc(100vh - 94px)"}
-          mr={{ xs: '0px', sm: "44px", md: "44px", lg: "80px" }}
-          mt={{ xs: '0px', sm: "0px", md: "0px", lg: "0px" }}
+          gap={gapCards()}
+          mr={{ xs: "0px", sm: "44px", md: "44px", lg: "80px" }}
           justifyContent={"space-between"}
         >
           {data?.map((item, index) => (
@@ -79,9 +151,13 @@ export default function BannerFixedBackground() {
               minHeight="200px"
               bgcolor="background.paper"
               borderRadius="32px"
-              maxWidth={{ xs: '100%', sm: '500px' }}
-              minWidth={{ xs: '148px', sm: '200px' }}
-              marginTop={{ xs: index === 2 ? "0px" : "", sm: index === 2 ? "100px" : "", md: index === 2 ? "-180px" : "" }}
+              maxWidth={{ xs: "100%", sm: "500px" }}
+              minWidth={{ xs: "148px", sm: "200px" }}
+              marginTop={{
+                xs: index === 2 ? "0px" : "",
+                sm: index === 2 ? "100px" : "",
+                md: index === 2 ? "-180px" : "",
+              }}
             >
               <Typography variant="h1" color="primary" pb="8px">
                 {item.quantidade}
