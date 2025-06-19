@@ -8,6 +8,7 @@ import { sanitizeHtml } from "@/utils/stripHtmlTags";
 import { Box, Typography } from "@mui/material";
 
 export default function BannerFixedBackground() {
+  // esse componente contém uma má prática inimaginavél, se for fazer scroll-jacking, crie outro componente, melhor que editar esse.
   const { data: bannerData } = useBannerQuery("indicadores");
   const { data } = useIndicadoresQuery();
   const { width, height } = useWindowDimensions();
@@ -38,7 +39,7 @@ export default function BannerFixedBackground() {
 
     if (androidPequeno) return "400px";
     if (mobilePequeno) return "420px";
-    if (mobileMedio) return "600px";
+    if (mobileMedio) return "590px";
     if (mobileGrande) return "680px";
 
     if (tabletPequeno) return "730px";
@@ -62,7 +63,7 @@ export default function BannerFixedBackground() {
 
     if (androidPequeno) return "230px";
     if (mobilePequeno) return "270px";
-    if (mobileMedio) return "440px";
+    if (mobileMedio) return "460px";
     if (mobileGrande) return "540px";
 
     if (tabletPequeno) return "730px";
