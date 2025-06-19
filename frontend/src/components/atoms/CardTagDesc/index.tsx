@@ -43,7 +43,7 @@ function CardTagDesc({
 
         <Box display={'flex'} gap='10px' flexWrap={'wrap'}>
           {info?.areas?.map((area: { id: number, nome: string }) => (
-            <ButtonTag key={area.id}>{area.nome}</ButtonTag>
+            <ButtonTag noAnimation key={area.id}>{area.nome}</ButtonTag>
           ))}
         </Box>
         <Box display="flex" flexDirection="column" gap="4px">
@@ -99,7 +99,7 @@ function CardTagDesc({
 
         <Box display={'flex'} gap='10px' flexWrap={'wrap'}>
           {info?.areas?.map((area: { id: number, nome: string }) => (
-            <ButtonTag key={area.id}>{area.nome}</ButtonTag>
+            <ButtonTag noAnimation key={area.id}>{area.nome}</ButtonTag>
           ))}
         </Box>
         <Box display="flex" flexDirection="column" gap="4px">
@@ -155,7 +155,7 @@ function CardTagDesc({
 
         <Box display={'flex'} gap='10px' flexWrap={'wrap'}>
           {info?.areas?.map((area: { id: number, nome: string }) => (
-            <ButtonTag key={area.id}>{area.nome}</ButtonTag>
+            <ButtonTag noAnimation key={area.id}>{area.nome}</ButtonTag>
           ))}
         </Box>
         <Box display="flex" flexDirection="column" gap="4px">
