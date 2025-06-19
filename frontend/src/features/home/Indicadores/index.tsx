@@ -53,14 +53,12 @@ export default function BannerFixedBackground() {
     if (desktopGrande) return "1008px";
     if (desktopUltra) return "1512px";
 
-
     return "1512px"; // fallback
   };
 
   const paddingBottom = () => {
     if (iPad) return "510px"
     if (Laptop) return "630px"
-
 
     if (androidPequeno) return "230px";
     if (mobilePequeno) return "270px";
