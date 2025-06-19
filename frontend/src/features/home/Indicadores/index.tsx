@@ -1,194 +1,74 @@
-import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
-import React, { useEffect, useRef, useState } from 'react'
-import { useIndicadoresQuery } from '@/clients/api/indicadores'
-import { useBannerQuery } from '@/clients/api/banners'
-import { storageUrl } from '@/constants/storageDomain'
-import { sanitizeHtml } from '@/utils/stripHtmlTags'
-import { useWindowDimensions } from '@/hooks/useDimensions'
+"use client";
 
-export default function Indicadores() {
-  const sectionRef = useRef<HTMLDivElement>(null)
-  const boxRightRef = useRef<HTMLDivElement>(null)
-  const [changePosition, setChangePosition] = useState<boolean>(false)
+import { useBannerQuery } from "@/clients/api/banners";
+import { useIndicadoresQuery } from "@/clients/api/indicadores";
+import { storageUrl } from "@/constants/storageDomain";
+import { sanitizeHtml } from "@/utils/stripHtmlTags";
+import { Box, Typography } from "@mui/material";
 
-  const [_, setShowFixedText] = useState(false)
+export default function BannerFixedBackground() {
+  const { data: bannerData } = useBannerQuery("indicadores");
   const { data } = useIndicadoresQuery()
-  const { data: bannerData } = useBannerQuery("indicadores")
-  const { height, width } = useWindowDimensions()
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const section = sectionRef.current
-      if (!section) return
-
-      const rect = section.getBoundingClientRect()
-      const windowHeight = window.innerHeight
-
-      const offsetStart = windowHeight * 0.3
-      const offsetEnd = windowHeight * 0.1
-
-      const startReached = rect.top <= windowHeight - offsetStart
-      const endReached = rect.bottom <= windowHeight - offsetEnd
-
-      setShowFixedText(startReached && !endReached)
-    }
-
-    window.addEventListener('scroll', handleScroll)
-    handleScroll()
-
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const boxRight = boxRightRef.current
-      if (!boxRight) return
-
-      const rect = boxRight.getBoundingClientRect()
-      const windowHeight = window.innerHeight
-
-      if (rect.bottom <= windowHeight) {
-        setChangePosition(true)
-      } else {
-        setChangePosition(false)
-      }
-    }
-
-    window.addEventListener('scroll', handleScroll)
-    handleScroll()
-
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  const dimensions = () => {
-    if (width < 431 && height < 916) {
-      return "0px"
-    }
-    if (width < 835 && height < 1281) {
-      if (changePosition) {
-        return "0vh"
-      } else {
-        return "-30px"
-      }
-    }
-    if (width < 1367 && height < 769) {
-      return "-130px"
-    }
-    if (width < 1921 && height < 1081) {
-      return "0px"
-    }
-    return "-54px"
-  }
-
-  const maxHeight = () => {
-    if (width < 431 && height < 916) {
-      // if (changePosition) {
-      //   return "2170px"
-      // } else {
-      return "2170px"
-      // }
-    }
-    if (width < 835 && height < 1281) {
-      return "3230px"
-    }
-    if (width < 1367 && height < 769) {
-      return "2000px"
-    }
-    if (width < 1921 && height < 1081) {
-      if (changePosition) {
-        return "2580px"
-      } else {
-        return "2790px"
-      }
-    }
-  }
-
-  const marginTopLabel = () => {
-    if (width < 431 && height < 916) {
-      return "0px"
-    }
-    if (width < 835 && height < 1281) {
-      if (changePosition) {
-        return "360px"
-      }
-      return "0px"
-    }
-    if (width < 1367 && height < 769) {
-      return "3230px"
-    }
-    return "0px"
-  }
 
   return (
     <Box
-      ref={sectionRef}
       sx={{
-        backgroundColor: '#afafaf',
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
-        backgroundPosition: 'center top',
-        backgroundAttachment: 'fixed',
-        height: 'calc(300vh - 94px)',
-        position: 'relative',
-        borderRadius: '32px',
+        height: "calc(300vh - 94px)",
+        width: "100%",
         backgroundImage: `
-        linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
-        url("${storageUrl}/${bannerData?.[0].url_img}")
-      `,
+          linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+          url("${storageUrl}/${bannerData?.[0]?.url_img}")
+        `,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed",
+        position: "relative",
       }}
     >
-      <Box width="100%" height={"120px"} />
       <Box
         sx={{
-          position: 'sticky',
-          top: '200px',
-          zIndex: 2,
-          marginLeft: { xs: '16px', sm: "16px", md: "16px", lg: "90px" },
-          maxWidth: { xs: '157px', sm: "430px", md: "430px", lg: "445px" },
-          display: "flex",
-          flexDirection: "column",
-          transition: 'max-height 0.4s ease',
-          marginBottom: marginTopLabel()
+          position: "sticky",
+          top: "150px",
+          marginLeft: { xs: "16px", sm: "16px", md: "16px", lg: "90px" },
+          maxWidth: { xs: "157px", sm: "430px", md: "430px", lg: "445px" },
+          paddingTop: "100px",
+          zIndex: 1,
         }}
       >
         <Typography
           sx={{
-            typography: { xs: 'h4', sm: 'h4', md: 'h3', lg: 'h3' },
-            color: '#f6f6f6',
-            textAlign: 'left',
-            marginBottom: '500px',
-            fontSize: '32px',
-            borderRadius: '20px',
+            typography: { xs: "h4", sm: "h4", md: "h3", lg: "h3" },
+            color: "#f6f6f6",
+            textAlign: "left",
+            fontSize: "32px",
           }}
           textTransform="none"
-          dangerouslySetInnerHTML={{ __html: sanitizeHtml(bannerData?.[0]?.titulo ?? "Sem título de teste 1 2 3 4 5") }}
+          dangerouslySetInnerHTML={{
+            __html: sanitizeHtml(
+              bannerData?.[0]?.titulo ?? "Sem título de teste"
+            ),
+          }}
         />
       </Box>
+
       <Box
-        ref={boxRightRef}
         sx={{
-          position: 'sticky',
-          top: '200px',
-          zIndex: 3,
-          display: "flex",
+          position: "absolute",
+          top: "120px",
+          marginRight: { xs: "16px", sm: "16px", md: "16px", lg: "90px" },
           right: 0,
-          width: "100%",
-          justifyContent: "flex-end",
-          marginTop: "-660px",
-          transition: 'max-height 0.4s ease',
-          maxHeight: maxHeight()
+          maxWidth: { xs: "157px", sm: "430px", md: "430px", lg: "445px" },
+          zIndex: 2,
         }}
-        pb={{ xs: "15vh", sm: "0px" }}
       >
         <Box
           maxWidth={{ xs: '200px', sm: "40vw", md: "470px", lg: "500px" }}
           width="100%"
           display={"flex"}
           flexDirection={"column"}
-          gap={{ xs: "60vh", sm: "70vh" }}
+          gap={"calc(100vh - 94px)"}
           mr={{ xs: '0px', sm: "44px", md: "44px", lg: "80px" }}
-          mt={{ xs: '-110px', sm: "0px", md: "0px", lg: "0px" }}
+          mt={{ xs: '0px', sm: "0px", md: "0px", lg: "0px" }}
           justifyContent={"space-between"}
         >
           {data?.map((item, index) => (
@@ -201,10 +81,7 @@ export default function Indicadores() {
               borderRadius="32px"
               maxWidth={{ xs: '100%', sm: '500px' }}
               minWidth={{ xs: '148px', sm: '200px' }}
-              sx={{
-                transition: 'margin-top 0.4s ease',
-                marginTop: index === 2 ? dimensions() : '0px',
-              }}
+              marginTop={{ xs: index === 2 ? "0px" : "", sm: index === 2 ? "100px" : "", md: index === 2 ? "-180px" : "" }}
             >
               <Typography variant="h1" color="primary" pb="8px">
                 {item.quantidade}
@@ -219,9 +96,8 @@ export default function Indicadores() {
               </Typography>
             </Box>
           ))}
-          <Box width="100%" height={"10px"} />
         </Box>
       </Box>
     </Box>
-  )
+  );
 }
