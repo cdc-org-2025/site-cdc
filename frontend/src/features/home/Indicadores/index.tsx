@@ -60,7 +60,7 @@ export default function Indicadores() {
           top: '200px',
           zIndex: 2,
           marginLeft: { xs: '16px', sm: "16px", md: "16px", lg: "90px" },
-          maxWidth: { xs: '200px', sm: "40vw", md: "300px", lg: "445px" },
+          maxWidth: { xs: '157px', sm: "430px", md: "430px", lg: "445px" },
           display: "flex",
           flexDirection: "column"
         }}
@@ -98,7 +98,7 @@ export default function Indicadores() {
           gap="70vh"
           mr={{ xs: '0px', sm: "44px", md: "44px", lg: "80px" }}
           maxHeight={"2550px"}
-          mt={{ xs: '-60px', sm: "-60px", md: "-60px", lg: "0px" }}
+          mt={{ xs: '-110px', sm: "0px", md: "0px", lg: "0px" }}
         >
           {data?.map((item) => (
             <Box
