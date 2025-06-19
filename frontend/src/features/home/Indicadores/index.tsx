@@ -110,7 +110,7 @@ export default function Indicadores() {
               borderRadius="32px"
               maxWidth={{ xs: '100%', sm: '500px' }}
               minWidth={{ xs: '148px', sm: '200px' }}
-              mt={index === 2 ? "180px" : "0px"}
+              mt={{ xs: index === 2 ? "60px" : "0px", sm: index === 2 ? "180px" : "0px" }}
             >
               <Typography variant="h1" color="primary" pb="8px">
                 {item.quantidade}
