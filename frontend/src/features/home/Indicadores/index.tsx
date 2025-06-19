@@ -141,9 +141,9 @@ export default function Indicadores() {
                 transition: 'margin-top 0.4s ease',
                 mt: {
                   xs: index === 2 ? "-50px" : "0px",
-                  sm: index === 2 ? (changePosition ? "17vh" : "14vh") : "0px",
-                  md: index === 2 ? (changePosition ? "17vh" : "14vh") : "0px",
-                  lg: index === 2 ? (changePosition ? "17vh" : "14vh") : "0px",
+                  sm: index === 2 ? (changePosition ? "150px" : "115px") : "0px",
+                  md: index === 2 ? (changePosition ? "150px" : "115px") : "0px",
+                  lg: index === 2 ? (changePosition ? "150px" : "115px") : "0px",
                 },
               }}
             >
