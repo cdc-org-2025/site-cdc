@@ -90,6 +90,7 @@ export default function Indicadores() {
           marginTop: "-660px",
         }}
         pb={{ xs: "15vh", sm: "0px" }}
+        maxHeight={{ xs: 'auto', sm: "2500px", md: "2500px", lg: "2500px" }}
       >
         <Box
           maxWidth={{ xs: '200px', sm: "40vw", md: "470px", lg: "500px" }}
@@ -112,9 +113,9 @@ export default function Indicadores() {
               minWidth={{ xs: '148px', sm: '200px' }}
               mt={{
                 xs: index === 2 ? "-50px" : "0px",
-                sm: index === 2 ? "180px" : "0px",
-                md: index === 2 ? "180px" : "0px",
-                lg: index === 2 ? "170px" : "0px",
+                sm: index === 2 ? "110px" : "0px",
+                md: index === 2 ? "110px" : "0px",
+                lg: index === 2 ? "110px" : "0px",
               }}
             >
               <Typography variant="h1" color="primary" pb="8px">
