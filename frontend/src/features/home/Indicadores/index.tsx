@@ -96,7 +96,7 @@ export default function Indicadores() {
           display={"flex"}
           flexDirection={"column"}
           gap="70vh"
-          mr={{ xs: '20px', sm: "44px", md: "44px", lg: "80px" }}
+          mr={{ xs: '0px', sm: "44px", md: "44px", lg: "80px" }}
           maxHeight={"2550px"}
           mt={{ xs: '-60px', sm: "-60px", md: "-60px", lg: "0px" }}
         >
