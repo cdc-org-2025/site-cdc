@@ -60,7 +60,7 @@ export default function Indicadores() {
           top: '200px',
           zIndex: 2,
           marginLeft: { xs: '16px', sm: "16px", md: "16px", lg: "90px" },
-          maxWidth: { xs: '200px', sm: "40vw", md: "300px", lg: "445px" },
+          maxWidth: { xs: '157px', sm: "430px", md: "430px", lg: "445px" },
           display: "flex",
           flexDirection: "column"
         }}
@@ -96,10 +96,11 @@ export default function Indicadores() {
           display={"flex"}
           flexDirection={"column"}
           gap="70vh"
-          pt="100px"
-          mr={{ xs: '20px', sm: "44px", md: "44px", lg: "80px" }}
+          mr={{ xs: '0px', sm: "44px", md: "44px", lg: "80px" }}
+          maxHeight={"2550px"}
+          mt={{ xs: '-110px', sm: "0px", md: "0px", lg: "0px" }}
         >
-          {data?.map((item) => (
+          {data?.map((item, index) => (
             <Box
               key={item.id}
               p="16px"
@@ -109,6 +110,7 @@ export default function Indicadores() {
               borderRadius="32px"
               maxWidth={{ xs: '100%', sm: '500px' }}
               minWidth={{ xs: '148px', sm: '200px' }}
+              mt={{ xs: index === 2 ? "60px" : "0px", sm: index === 2 ? "180px" : "0px" }}
             >
               <Typography variant="h1" color="primary" pb="8px">
                 {item.quantidade}

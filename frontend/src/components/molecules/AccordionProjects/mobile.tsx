@@ -136,7 +136,7 @@ export default function AccordionProjectsMobile({
                   color={'text.primary'}
                   variant="subtitle1"
                   lineHeight="150%"
-                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(expandedAccordion?.descricao ?? '') }}
+                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(expandedAccordion?.resumo ?? '') }}
                 />
                 <Box
                   display="flex"

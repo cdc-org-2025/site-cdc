@@ -15,7 +15,7 @@ export default function LatestNews({ programa, listNoticia }: { programa?: boole
   const { push } = useRouter()
 
   return (
-    <Box px={{ xs: '16px', md: '32px' }} mt="64px" pb="40px" width="100%" maxWidth={"100vw"}>
+    <Box px={{ xs: '16px', md: '32px' }} mt="64px" pb="40px" width="100%" maxWidth={"100vw"} >
       {programa && (
         <VectorRoundedLines right={0} rotate margin="60px 0px 0px 0px" />
       )}

@@ -111,7 +111,7 @@ export default function ProgramaUniquePage() {
         <Typography variant='h1' color={"primary"} textAlign={"center"}>Sem descrição disponivel</Typography>
       )}
       <LatestNews listNoticia={listNoticias?.data} programa />
-      {listTransparencia?.data?.length && (
+      {data?.areas.length && listTransparencia?.data?.length && (
         <Box px={{ xs: '16px', md: '32px' }} mt="64px" pb={{ xs: '80px', md: '160px' }} width="100%" maxWidth={"100vw"}>
           <Transparency sectionInfo={transparencySectionInfo?.[0]} listTransparencia={listTransparencia} />
         </Box>

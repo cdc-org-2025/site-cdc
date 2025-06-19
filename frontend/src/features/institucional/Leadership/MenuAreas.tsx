@@ -66,6 +66,7 @@ export default function MenuAreas({
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
             onClick={handleClickMenu}
+            noAnimation
             endIcon={
               open ? (
                 <ExpandLessIcon htmlColor="#222" fontSize="small" />
@@ -135,6 +136,7 @@ export default function MenuAreas({
                   )
                 }
                 onClick={() => handleAreasSelect(area)}
+                noAnimation
               >
                 {area?.nome}
               </ButtonTag>
