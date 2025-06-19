@@ -8,6 +8,9 @@ import { sanitizeHtml } from '@/utils/stripHtmlTags'
 
 export default function Indicadores() {
   const sectionRef = useRef<HTMLDivElement>(null)
+  const boxRightRef = useRef<HTMLDivElement>(null) // <- Ref da box da direita
+  const [changePosition, setChangePosition] = useState<boolean>(false)
+
   const [_, setShowFixedText] = useState(false)
   const { data } = useIndicadoresQuery()
   const { data: bannerData } = useBannerQuery("indicadores")
@@ -27,6 +30,27 @@ export default function Indicadores() {
       const endReached = rect.bottom <= windowHeight - offsetEnd
 
       setShowFixedText(startReached && !endReached)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    handleScroll()
+
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const boxRight = boxRightRef.current
+      if (!boxRight) return
+
+      const rect = boxRight.getBoundingClientRect()
+      const windowHeight = window.innerHeight
+
+      if (rect.bottom <= windowHeight) {
+        setChangePosition(true)
+      } else {
+        setChangePosition(false)
+      }
     }
 
     window.addEventListener('scroll', handleScroll)
@@ -79,6 +103,7 @@ export default function Indicadores() {
         />
       </Box>
       <Box
+        ref={boxRightRef}
         sx={{
           position: 'sticky',
           top: '200px',
@@ -112,11 +137,14 @@ export default function Indicadores() {
               borderRadius="32px"
               maxWidth={{ xs: '100%', sm: '500px' }}
               minWidth={{ xs: '148px', sm: '200px' }}
-              mt={{
-                xs: index === 2 ? "-50px" : "0px",
-                sm: index === 2 ? "110px" : "0px",
-                md: index === 2 ? "110px" : "0px",
-                lg: index === 2 ? "12vh" : "0px",
+              sx={{
+                transition: 'margin-top 0.4s ease',
+                mt: {
+                  xs: index === 2 ? "-50px" : "0px",
+                  sm: index === 2 ? (changePosition ? "17vh" : "10vh") : "0px",
+                  md: index === 2 ? (changePosition ? "17vh" : "10vh") : "0px",
+                  lg: index === 2 ? (changePosition ? "17vh" : "10vh") : "0px",
+                },
               }}
             >
               <Typography variant="h1" color="primary" pb="8px">
