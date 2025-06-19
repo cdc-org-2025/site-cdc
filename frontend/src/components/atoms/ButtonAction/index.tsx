@@ -14,6 +14,7 @@ interface IButtonAction {
   variant?: 'text' | 'contained' | 'outlined'
   borderColor?: string
   fullWidth?: boolean
+  noAnimation?: boolean
 }
 
 export default function ButtonAction({
@@ -27,6 +28,7 @@ export default function ButtonAction({
   variant = 'contained',
   borderColor,
   fullWidth = true,
+  noAnimation = false
 }: IButtonAction) {
   return (
     <Button
@@ -41,7 +43,7 @@ export default function ButtonAction({
         color: "#222",
         '&:hover': {
           color: "#222",
-          backgroundColor: '#cb7a01',
+          backgroundColor: noAnimation ? "transparent" : '#cb7a01',
         },
       }}
       onClick={onClick}

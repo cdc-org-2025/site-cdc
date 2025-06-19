@@ -139,7 +139,7 @@ export default function ButtonAccessible() {
             >
               <RemoveCircleOutlineIcon style={{ width: 25 }} htmlColor='#52c1ee' />
             </IconButton>
-            <Typography fontSize="20px">A a</Typography>
+            <Typography fontSize="20px">a A</Typography>
             <IconButton
               size="small"
               aria-label="Aumentar fonte"
@@ -173,7 +173,7 @@ export default function ButtonAccessible() {
               <RemoveCircleOutlineIcon style={{ width: 25 }} htmlColor='#52c1ee' />
             </IconButton>
             <Typography fontSize="20px">
-              <span style={{ fontWeight: 700 }}>A</span> A
+              A <span style={{ fontWeight: 700 }}>A</span>
             </Typography>
             <IconButton
               size="small"

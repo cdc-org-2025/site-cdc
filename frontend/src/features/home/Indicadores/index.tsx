@@ -96,8 +96,8 @@ export default function Indicadores() {
           display={"flex"}
           flexDirection={"column"}
           gap="70vh"
-          pt="100px"
           mr={{ xs: '20px', sm: "44px", md: "44px", lg: "80px" }}
+          maxHeight={"2550px"}
         >
           {data?.map((item) => (
             <Box

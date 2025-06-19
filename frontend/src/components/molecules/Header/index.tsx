@@ -30,7 +30,7 @@ export default function Header() {
         display="flex"
         justifyContent="space-between"
         alignItems="center"
-        p={{ xs: "16px ", md: "16px 32px" }}
+        p={{ xs: "10px ", md: "16px 32px" }}
         height="94px"
         position="fixed"
         top={0}
@@ -49,7 +49,7 @@ export default function Header() {
         >
           <Image
             priority
-            height={isMobile ? 44 : 62}
+            height={isMobile ? 60 : 80}
             src={LogoCDC}
             alt="Logo Centro de Desenvolvimento Social"
             onClick={() => push("/")}

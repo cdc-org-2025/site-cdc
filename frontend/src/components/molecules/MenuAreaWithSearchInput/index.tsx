@@ -83,6 +83,7 @@ export default function MenuAreasWithSearchInput({
         >
           <Box maxWidth="128px" width="100%" height="44px">
             <ButtonTag
+              noAnimation
               height="44px"
               aria-controls={open ? 'basic-menu' : undefined}
               aria-haspopup="true"
@@ -167,6 +168,7 @@ export default function MenuAreasWithSearchInput({
                     )
                   }
                   onClick={() => handleAreasSelect(item.nome)}
+                  noAnimation
                 >
                   {item.nome}
                 </ButtonTag>
