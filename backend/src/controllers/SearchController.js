@@ -24,13 +24,13 @@ class SearchController {
       // 2. Prepara a cláusula de busca por título (se houver)
       const whereClause = {};
       if (q && q.trim() !== '') {
-        whereClause.titulo = { [Op.like]: `%${q}%` };
+        whereClause.titulo = { [Op.iLike]: `%${q}%` };
       }
 
       // 3. Executa as buscas em paralelo
       const [noticias, transparencias, programas, todasAreas] = await Promise.all([
         db.Noticia.findAll({ where: whereClause }),
-        db.Transparencia.findAll({ where: whereClause }),
+        db.Publicacao.findAll({ where: whereClause }),
         db.Programa.findAll({ where: whereClause }),
         db.Area.findAll({ attributes: ['id', 'nome'] }), // Busca todas as áreas para mapeamento
       ]);
