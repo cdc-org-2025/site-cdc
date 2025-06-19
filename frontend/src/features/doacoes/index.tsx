@@ -40,8 +40,7 @@ export default function Doacoes() {
           lineHeight={'120%'}
           maxWidth="900px"
         >
-          O CDC continua ativo graças ao apoio de pessoas como você. Apoie com
-          qualquer valor e suporte a luta pela democracia e cidadania.
+          Mesmo que seja pouco, pode ajudar muito. Novas contribuições são sempre bem vindas!
         </Typography>
       </AnimationSplitText>
       {data?.map((item) => (

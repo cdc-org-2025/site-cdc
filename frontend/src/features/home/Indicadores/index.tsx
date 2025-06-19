@@ -100,7 +100,7 @@ export default function Indicadores() {
           maxHeight={"2550px"}
           mt={{ xs: '-110px', sm: "0px", md: "0px", lg: "0px" }}
         >
-          {data?.map((item) => (
+          {data?.map((item, index) => (
             <Box
               key={item.id}
               p="16px"
@@ -110,6 +110,7 @@ export default function Indicadores() {
               borderRadius="32px"
               maxWidth={{ xs: '100%', sm: '500px' }}
               minWidth={{ xs: '148px', sm: '200px' }}
+              mt={index === 2 ? "180px" : "0px"}
             >
               <Typography variant="h1" color="primary" pb="8px">
                 {item.quantidade}
