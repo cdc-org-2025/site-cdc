@@ -5,15 +5,17 @@ import { useIndicadoresQuery } from '@/clients/api/indicadores'
 import { useBannerQuery } from '@/clients/api/banners'
 import { storageUrl } from '@/constants/storageDomain'
 import { sanitizeHtml } from '@/utils/stripHtmlTags'
+import { useWindowDimensions } from '@/hooks/useDimensions'
 
 export default function Indicadores() {
   const sectionRef = useRef<HTMLDivElement>(null)
-  const boxRightRef = useRef<HTMLDivElement>(null) // <- Ref da box da direita
+  const boxRightRef = useRef<HTMLDivElement>(null)
   const [changePosition, setChangePosition] = useState<boolean>(false)
 
   const [_, setShowFixedText] = useState(false)
   const { data } = useIndicadoresQuery()
   const { data: bannerData } = useBannerQuery("indicadores")
+  const { height, width } = useWindowDimensions()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -59,6 +61,65 @@ export default function Indicadores() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  const dimensions = () => {
+    if (width < 431 && height < 916) {
+      return "0px"
+    }
+    if (width < 835 && height < 1281) {
+      if (changePosition) {
+        return "0vh"
+      } else {
+        return "-30px"
+      }
+    }
+    if (width < 1367 && height < 769) {
+      return "-130px"
+    }
+    if (width < 1921 && height < 1081) {
+      return "0px"
+    }
+    return "-54px"
+  }
+
+  const maxHeight = () => {
+    if (width < 431 && height < 916) {
+      // if (changePosition) {
+      //   return "2170px"
+      // } else {
+      return "2170px"
+      // }
+    }
+    if (width < 835 && height < 1281) {
+      return "3230px"
+    }
+    if (width < 1367 && height < 769) {
+      return "2000px"
+    }
+    if (width < 1921 && height < 1081) {
+      if (changePosition) {
+        return "2580px"
+      } else {
+        return "2790px"
+      }
+    }
+  }
+
+  const marginTopLabel = () => {
+    if (width < 431 && height < 916) {
+      return "0px"
+    }
+    if (width < 835 && height < 1281) {
+      if (changePosition) {
+        return "360px"
+      }
+      return "0px"
+    }
+    if (width < 1367 && height < 769) {
+      return "3230px"
+    }
+    return "0px"
+  }
+
   return (
     <Box
       ref={sectionRef}
@@ -86,7 +147,9 @@ export default function Indicadores() {
           marginLeft: { xs: '16px', sm: "16px", md: "16px", lg: "90px" },
           maxWidth: { xs: '157px', sm: "430px", md: "430px", lg: "445px" },
           display: "flex",
-          flexDirection: "column"
+          flexDirection: "column",
+          transition: 'max-height 0.4s ease',
+          marginBottom: marginTopLabel()
         }}
       >
         <Typography
@@ -113,9 +176,10 @@ export default function Indicadores() {
           width: "100%",
           justifyContent: "flex-end",
           marginTop: "-660px",
+          transition: 'max-height 0.4s ease',
+          maxHeight: maxHeight()
         }}
         pb={{ xs: "15vh", sm: "0px" }}
-        maxHeight={{ xs: 'auto', sm: "2500px", md: "2500px", lg: "2500px" }}
       >
         <Box
           maxWidth={{ xs: '200px', sm: "40vw", md: "470px", lg: "500px" }}
@@ -139,12 +203,7 @@ export default function Indicadores() {
               minWidth={{ xs: '148px', sm: '200px' }}
               sx={{
                 transition: 'margin-top 0.4s ease',
-                mt: {
-                  xs: index === 2 ? "-50px" : "0px",
-                  sm: index === 2 ? (changePosition ? "150px" : "115px") : "0px",
-                  md: index === 2 ? (changePosition ? "150px" : "115px") : "0px",
-                  lg: index === 2 ? (changePosition ? "150px" : "115px") : "0px",
-                },
+                marginTop: index === 2 ? dimensions() : '0px',
               }}
             >
               <Typography variant="h1" color="primary" pb="8px">

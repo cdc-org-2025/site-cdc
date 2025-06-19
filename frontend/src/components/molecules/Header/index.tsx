@@ -1,6 +1,6 @@
 'use client'
 import Image from 'next/image'
-import LogoCDC from '../../../assets/logo_cdc.svg'
+import LogoCDC from '../../../assets/logo_cdc_reduzido.svg'
 import ButtonAction from '@/components/atoms/ButtonAction'
 import ButtonSearch from '@/components/atoms/ButtonSearch'
 import MenuIcon from '@mui/icons-material/Menu'
@@ -49,7 +49,7 @@ export default function Header() {
         >
           <Image
             priority
-            height={isMobile ? 60 : 90}
+            height={isMobile ? 80 : 90}
             src={LogoCDC}
             alt="Logo Centro de Desenvolvimento Social"
             onClick={() => push("/")}
