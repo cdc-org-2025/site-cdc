@@ -7,6 +7,7 @@ export const useResponsiveValues = () => {
     { name: "iPad", match: width === 1024 && height === 768, gap: "600px", padding: "510px" },
     { name: "Laptop", match: width === 1440 && height === 900, gap: "740px", padding: "630px" },
     { name: "iPhone11", match: width === 414 && height === 896, gap: "640px", padding: "400px" },
+    { name: "iPhone11OpenUrl", match: width === 414 && height === 719, gap: "460px", padding: "230px" },
     { name: "monitor14", match: width === 1366 && height === 600, gap: "430px", padding: "350px" },
     { name: "adapter", match: width === 1920 && height === 950, gap: "780px", padding: "690px" },
 
