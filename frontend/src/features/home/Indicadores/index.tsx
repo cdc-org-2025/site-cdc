@@ -24,6 +24,7 @@ export default function BannerFixedBackground() {
 
   const iPad = width === 1024 && height === 768;
   const Laptop = width === 1440 && height === 900;
+  const iPhone11 = width === 414 && height === 896;
 
   const notebookPequeno = width <= 1366 && height <= 768;
   const notebookMedio = width <= 1600 && height <= 900;
@@ -36,6 +37,7 @@ export default function BannerFixedBackground() {
   const gapCards = () => {
     if (iPad) return "600px"
     if (Laptop) return "740px"
+    if (iPhone11) return "640px"
 
     if (androidPequeno) return "400px";
     if (mobilePequeno) return "420px";
@@ -60,6 +62,7 @@ export default function BannerFixedBackground() {
   const paddingBottom = () => {
     if (iPad) return "510px"
     if (Laptop) return "630px"
+    if (iPhone11) return "400px"
 
     if (androidPequeno) return "230px";
     if (mobilePequeno) return "270px";
