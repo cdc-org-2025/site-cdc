@@ -1,10 +1,15 @@
 "use client";
-
 import { useBannerQuery } from "@/clients/api/banners";
 import { useIndicadoresQuery } from "@/clients/api/indicadores";
 import { storageUrl } from "@/constants/storageDomain";
 import { sanitizeHtml } from "@/utils/stripHtmlTags";
 import { Box, Typography } from "@mui/material";
+import { Lato } from 'next/font/google'
+
+const lato = Lato({
+  subsets: ['latin'],
+  weight: '400',
+})
 
 export default function BannerFixedBackground() {
   const { data: bannerData } = useBannerQuery("indicadores");
@@ -37,14 +42,21 @@ export default function BannerFixedBackground() {
           pt: "88px"
         }}
       >
-        <Typography
+        <Box
           sx={{
-            typography: { xs: "h4", sm: "h4", md: "h3", lg: "h3" },
-            color: "#f6f6f6",
-            textAlign: "left",
-            fontSize: "32px",
+            fontFamily: `${lato.style.fontFamily}, "Source Sans Pro", sans-serif !important`,
+            textAlign: 'left',
+            '& h1': {
+              lineHeight: 1.2,
+              fontWeight: 700,
+              letterSpacing: '0px',
+              verticalAlign: 'middle',
+              // 🔥 Força sobrescrever inline
+              '&[style]': {
+                fontSize: { xs: '28px !important', sm: '30px !important', md: '38px !important', lg: '48px !important' },
+              },
+            },
           }}
-          textTransform="none"
           dangerouslySetInnerHTML={{
             __html: sanitizeHtml(
               bannerData?.[0]?.titulo ?? "Sem título de teste"
@@ -55,7 +67,7 @@ export default function BannerFixedBackground() {
 
       <Box
         sx={{
-          marginRight: { xs: "16px", sm: "16px", md: "16px", lg: "90px" },
+          marginRight: { xs: "0px", sm: "16px", md: "16px", lg: "90px" },
           maxWidth: { xs: "157px", sm: "430px", md: "430px", lg: "445px" },
           zIndex: 2,
           paddingTop: "100px"
