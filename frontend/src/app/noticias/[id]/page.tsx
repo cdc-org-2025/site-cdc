@@ -11,6 +11,8 @@ import CardTagDesc from '@/components/atoms/CardTagDesc'
 import AnimetedSlide from '@/components/animations/slide'
 import { Lato } from 'next/font/google'
 import { storageUrl } from '@/constants/storageDomain'
+import { useContext } from 'react'
+import { SettingsContext } from '@/context/settingsContext'
 
 const lato = Lato({
   subsets: ['latin'],
@@ -25,6 +27,7 @@ export default function NoticiasUniquePage() {
   const { data: listNoticias } = useNoticiasAreaQuery({ area_id: idsArea })
   const { palette: { primary: { main } } } = useTheme()
   const { push } = useRouter()
+  const { fontScale, fontWeightScale } = useContext(SettingsContext)
 
   const dataFormatada = dayjs(data?.data_publicacao).format('D [de] MMMM [de] YYYY')
 
@@ -55,11 +58,18 @@ export default function NoticiasUniquePage() {
             </Box>
             <Box
               sx={{
+                fontSize: `${fontScale}rem !important`,
+                fontWeight: `${fontWeightScale * 400} !important`,
                 fontFamily: `${lato.style.fontFamily}, "Source Sans Pro", sans-serif !important`,
+                lineHeight: '1.5 !important',
+                '&, & *': {
+                  fontSize: `${fontScale}rem !important`,
+                  fontWeight: `${fontWeightScale * 400} !important`,
+                  fontFamily: `${lato.style.fontFamily}, "Source Sans Pro", sans-serif !important`,
+                  lineHeight: '1.5 !important',
+                },
               }}
-              dangerouslySetInnerHTML={{
-                __html: sanitizeHtml(data.html_original),
-              }}
+              dangerouslySetInnerHTML={{ __html: sanitizeHtml(data.html_original) }}
             />
             <Box
               pt="64px"

@@ -126,8 +126,11 @@ export default function HomePage() {
               md: 'block',
             }}
           >
-            <Image src={OrganicShapeScircle} alt="organic shape" />
+            <AnimetedSlide distance={100} tension={10} friction={5} threshold={0.8}>
+              <Image src={OrganicShapeScircle} alt="organic shape" />
+            </AnimetedSlide>
           </Box>
+
           <Box
             position="absolute"
             left={0}

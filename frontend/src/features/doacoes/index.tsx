@@ -77,7 +77,7 @@ export default function Doacoes() {
                 {item.chave_pix ?? "Aguardando informações..."}
               </Typography>
               <Box display={'flex'} flexDirection={'column'} alignItems={'center'}>
-                <Typography variant='overline' textTransform={'none'} lineHeight={'150%'}>Banco: {item.banco}</Typography>
+                <Typography variant='overline' textTransform={'none'} lineHeight={'150%'}>Conta Corrente: {item.banco}</Typography>
                 <Typography variant='overline' textTransform={'none'} lineHeight={'150%'}>Agência: {item.agencia}</Typography>
                 <Typography variant='overline' textTransform={'none'} lineHeight={'150%'}>Titular da conta: {item.titular_conta}</Typography>
               </Box>

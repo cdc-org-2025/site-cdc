@@ -15,6 +15,8 @@ import Grid from '@mui/material/Grid'
 import VectorRoundedLines from '@/components/atoms/VectorRoundedLines'
 import { sanitizeHtml } from '@/utils/stripHtmlTags'
 import { useConteudoSecaoQuery } from '@/clients/api/conteudo-secao'
+import { useContext } from 'react'
+import { SettingsContext } from '@/context/settingsContext'
 
 const lato = Lato({
   subsets: ['latin'],
@@ -29,6 +31,7 @@ export default function ProgramaUniquePage() {
   const { data: listNoticias } = useNoticiasAreaQuery({ area_id: idsArea })
   const listImagePrograms = data?.imagens
   const { data: transparencySectionInfo } = useConteudoSecaoQuery("transparencia")
+  const { fontScale, fontWeightScale } = useContext(SettingsContext)
 
   const Banner = {
     id: 1,
@@ -57,12 +60,18 @@ export default function ProgramaUniquePage() {
                 </Typography>
                 <Box
                   sx={{
+                    fontSize: `${fontScale}rem !important`,
+                    fontWeight: `${fontWeightScale * 400} !important`,
                     fontFamily: `${lato.style.fontFamily}, "Source Sans Pro", sans-serif !important`,
-                    lineHeight: "150%"
+                    lineHeight: '1.5 !important',
+                    '&, & *': {
+                      fontSize: `${fontScale}rem !important`,
+                      fontWeight: `${fontWeightScale * 400} !important`,
+                      fontFamily: `${lato.style.fontFamily}, "Source Sans Pro", sans-serif !important`,
+                      lineHeight: '1.5 !important',
+                    },
                   }}
-                  dangerouslySetInnerHTML={{
-                    __html: sanitizeHtml(data?.descricao),
-                  }}
+                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(data?.descricao) }}
                 />
               </Box>
             </Grid>
