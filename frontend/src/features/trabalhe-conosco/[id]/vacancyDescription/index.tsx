@@ -1,7 +1,7 @@
-import { sanitizeHtml } from '@/utils/stripHtmlTags';
 import React from 'react'
 import { Lato } from 'next/font/google'
 import Box from '@mui/material/Box';
+import { sanitizeHtml } from '@/utils/scriptHtmlSanitize';
 
 const lato = Lato({
   subsets: ['latin'],

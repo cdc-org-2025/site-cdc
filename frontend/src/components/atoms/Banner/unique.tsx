@@ -3,7 +3,7 @@ import React from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { useTheme } from '@mui/material'
-import { sanitizeHtml } from '@/utils/stripHtmlTags'
+import SanitizedHtmlBox from '@/utils/stripHtmlTags'
 
 export interface IBannerUnique {
   Banner: TypeBannerUnique
@@ -73,8 +73,10 @@ export default function BannerUnique({ Banner }: IBannerUnique) {
               }}
               color={'primary.light'}
             >
-              <div
-                dangerouslySetInnerHTML={{ __html: sanitizeHtml(Banner?.title) }}
+              <SanitizedHtmlBox
+                initialFontScale={2.7}
+                initialFontWeightScale={700}
+                html={Banner?.title}
               />
               {Banner.highlight && (
                 <Typography

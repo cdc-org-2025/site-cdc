@@ -25,9 +25,9 @@ export default function LatestNews({ programa, listNoticia }: { programa?: boole
         alignItems="center"
         mb="24px"
       >
-        <AnimationSplitText>
+        <AnimationSplitText initialFontWeight={700}>
           <Typography
-            variant={"h3"}
+            variant="h3"
             fontSize={{ xs: '28px', md: '1.94rem' }}
             color="primary"
             textTransform="none"

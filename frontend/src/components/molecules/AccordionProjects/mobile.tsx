@@ -9,8 +9,8 @@ import AddIcon from '@mui/icons-material/Add'
 import AnimetedSlide from '@/components/animations/slide'
 import { IPrograma } from '@/clients/api/programas'
 import { useRouter } from 'next/navigation'
-import { sanitizeHtml } from '@/utils/stripHtmlTags'
 import { storageUrl } from '@/constants/storageDomain'
+import SanitizedHtmlBox from '@/utils/stripHtmlTags'
 
 export default function AccordionProjectsMobile({
   projectList,
@@ -131,13 +131,7 @@ export default function AccordionProjectsMobile({
                 >
                   {expandedAccordion?.subtitulo}
                 </Typography>
-                <Typography
-                  textTransform="none"
-                  color={'text.primary'}
-                  variant="subtitle1"
-                  lineHeight="150%"
-                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(expandedAccordion?.resumo ?? '') }}
-                />
+                <SanitizedHtmlBox html={expandedAccordion?.resumo} />
                 <Box
                   display="flex"
                   justifyContent="flex-end"

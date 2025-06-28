@@ -9,7 +9,6 @@ import ListCards from '@/components/molecules/ListCards'
 import MenuAreasWithSearchInput from '@/components/molecules/MenuAreaWithSearchInput'
 import HeaderBannerUnique from '@/components/templates/HeaderBannerUnique'
 import { storageUrl } from '@/constants/storageDomain'
-import { sanitizeHtml } from '@/utils/stripHtmlTags'
 import { CircularProgress, Typography } from '@mui/material'
 import Box from '@mui/material/Box'
 import { useSearchParams } from 'next/navigation'
@@ -20,7 +19,7 @@ export default function ResultadosPage() {
 
   const Banner: TypeBannerUnique = {
     id: dataBanner?.[0]?.id,
-    title: dataBanner?.[0]?.titulo ? sanitizeHtml(dataBanner?.[0]?.titulo) : 'Sem título',
+    title: dataBanner?.[0]?.titulo,
     image: `${storageUrl}/${dataBanner?.[0].url_img}`,
   }
 

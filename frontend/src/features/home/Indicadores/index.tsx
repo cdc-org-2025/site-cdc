@@ -2,14 +2,8 @@
 import { useBannerQuery } from "@/clients/api/banners";
 import { useIndicadoresQuery } from "@/clients/api/indicadores";
 import { storageUrl } from "@/constants/storageDomain";
-import { sanitizeHtml } from "@/utils/stripHtmlTags";
+import SanitizedHtmlBox from "@/utils/stripHtmlTags";
 import { Box, Typography } from "@mui/material";
-import { Lato } from 'next/font/google'
-
-const lato = Lato({
-  subsets: ['latin'],
-  weight: '400',
-})
 
 export default function BannerFixedBackground() {
   const { data: bannerData } = useBannerQuery("indicadores");
@@ -42,27 +36,7 @@ export default function BannerFixedBackground() {
           pt: "88px"
         }}
       >
-        <Box
-          sx={{
-            fontFamily: `${lato.style.fontFamily}, "Source Sans Pro", sans-serif !important`,
-            textAlign: 'left',
-            '& h1': {
-              lineHeight: 1.2,
-              fontWeight: 700,
-              letterSpacing: '0px',
-              verticalAlign: 'middle',
-              // 🔥 Força sobrescrever inline
-              '&[style]': {
-                fontSize: { xs: '28px !important', sm: '30px !important', md: '38px !important', lg: '48px !important' },
-              },
-            },
-          }}
-          dangerouslySetInnerHTML={{
-            __html: sanitizeHtml(
-              bannerData?.[0]?.titulo ?? "Sem título de teste"
-            ),
-          }}
-        />
+        <SanitizedHtmlBox indicadores html={bannerData?.[0]?.titulo} />
       </Box>
 
       <Box

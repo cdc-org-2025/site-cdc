@@ -9,7 +9,6 @@ import { useOportunidadeQuery } from '@/clients/api/oportunidades'
 import VectorRoundedLines from '@/components/atoms/VectorRoundedLines'
 import { useBannerQuery } from '@/clients/api/banners'
 import { storageUrl } from '@/constants/storageDomain'
-import { sanitizeHtml } from '@/utils/stripHtmlTags'
 
 export default function TrabalheConoscoVagaPage() {
   const { id } = useParams()
@@ -18,7 +17,7 @@ export default function TrabalheConoscoVagaPage() {
 
   const Banner = {
     id: dataBanner?.[0]?.id,
-    title: data?.titulo ? sanitizeHtml(data?.titulo) : "Sem título",
+    title: data?.titulo,
     image: `${storageUrl}/${dataBanner?.[0].url_img}`,
   }
 
