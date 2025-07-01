@@ -138,7 +138,6 @@ export default function HomePage() {
           </Box>
         </Box>
       ))}
-
       <Box
         pt={{ xs: '40px', md: '80px' }}
         pb="40px"
