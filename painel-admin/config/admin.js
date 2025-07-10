@@ -514,7 +514,7 @@ export const adminJs = new AdminJS({
                     subtitulo: { type: 'textarea' },
                     resumo: { type: 'textarea' },
                     descricao: { type: 'richtext', components: { edit: Components.ProgramaEditor, list: Components.NoticiaPreview } },
-                    is_ativo: { label: 'Ativo?' },
+                    is_ativo: { isTitle: false, components: { edit: Components.ToggleAtivo } },
 
                     area_ids: { isVisible: false },
                     areaDeAtuacao: areaDeAtuacaoProperty,
@@ -1000,6 +1000,8 @@ export const adminJs = new AdminJS({
             }
         },
         { resource: models.ConteudoSecao, options: { navigation: 'Configurações' } },
+        { resource: models.Rodape, options: { navigation: 'Configurações' } },
+
 
 
 

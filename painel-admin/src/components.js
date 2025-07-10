@@ -17,7 +17,7 @@ const Components = {
   TextoPreview: componentLoader.add("TextoPreview", "./components/textoShow.jsx"),
   ImageEditor: componentLoader.add("ImageEditor", "./components/imagemEdit.jsx"),
   CapaTituloEditor: componentLoader.add("CapaTituloEditor", "./components/editorTituloCapa.jsx"),
-
+  ToggleAtivo: componentLoader.add("ToggleAtivo", "./components/toggleAtivo.jsx")
 };
 
 export { componentLoader, Components };

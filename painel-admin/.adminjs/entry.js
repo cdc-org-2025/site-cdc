@@ -27,6 +27,8 @@ import ImageEditor from '../src/components/imagemEdit'
 AdminJS.UserComponents.ImageEditor = ImageEditor
 import CapaTituloEditor from '../src/components/editorTituloCapa'
 AdminJS.UserComponents.CapaTituloEditor = CapaTituloEditor
+import ToggleAtivo from '../src/components/toggleAtivo'
+AdminJS.UserComponents.ToggleAtivo = ToggleAtivo
 import UploadEditComponent from '../node_modules/@adminjs/upload/build/features/upload-file/components/UploadEditComponent'
 AdminJS.UserComponents.UploadEditComponent = UploadEditComponent
 import UploadListComponent from '../node_modules/@adminjs/upload/build/features/upload-file/components/UploadListComponent'

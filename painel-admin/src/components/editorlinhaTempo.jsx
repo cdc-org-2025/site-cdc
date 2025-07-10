@@ -6,7 +6,6 @@ import SunEditor from 'suneditor-react';
 const ConteudoRichTextLimitado = (props) => {
   const { onChange, property, record } = props;
 
-  console.log('record.params Noticias', record.params)
   const initialData = record.params['conteudo'] || {
     titulo: '',
     conteudo: '<p><br></p>',

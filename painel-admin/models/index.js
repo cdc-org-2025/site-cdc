@@ -20,6 +20,7 @@ import { Programa } from './programa.js';
 import { ProgramaImagens } from './programa_imagens.js';
 import { Publicacao } from './publicacao.js';
 import { PublicacaoImagens } from './publicacao_imagens.js';
+import Rodape from './rodape.js';
 import { Transparencia } from './transparencia.js';
 
 export function initializeModels(sequelize) {
@@ -45,7 +46,8 @@ export function initializeModels(sequelize) {
     Organizacao: Organizacao.init(sequelize),
     OrganizacaoImagem: OrganizacaoImagem.init(sequelize),
     Capa: Capa.init(sequelize),
-    ConteudoSecao: ConteudoSecao.init(sequelize)
+    ConteudoSecao: ConteudoSecao.init(sequelize),
+    Rodape: Rodape.init(sequelize)
   };
 
   Object.values(models).forEach(model => {
