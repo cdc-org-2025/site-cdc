@@ -15,9 +15,17 @@ export default function TextfieldSearch({
   placeholder = 'Pesquisar',
   onSearch,
 }: ITextfieldSearch) {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (onSearch) {
+      onSearch(value)
+    }
+  }
+
   return (
     <Box
       component="form"
+      onSubmit={handleSubmit}
       height="44px"
       width="100%"
       maxWidth="400px"
@@ -50,9 +58,9 @@ export default function TextfieldSearch({
         type="text"
         placeholder={placeholder}
         onChange={(e) => setValue(e.target.value)}
-        style={{ width: "100%" }}
+        style={{ width: '100%' }}
       />
-      <IconButton size="small" onClick={onSearch}>
+      <IconButton size="small" onClick={() => onSearch?.(value)}>
         <SearchIcon fontSize="small" />
       </IconButton>
     </Box>

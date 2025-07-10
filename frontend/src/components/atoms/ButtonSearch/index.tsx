@@ -26,6 +26,12 @@ export default function ButtonSearch() {
     handleClose()
     push(`/resultados?pesquisa=${inputText}`)
   }
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    onSearch()
+  }
+
   return (
     <>
       <IconButton
@@ -63,17 +69,19 @@ export default function ButtonSearch() {
             <CloseIcon color="inherit" />
           </IconButton>
           <Box
+            component="form"
+            onSubmit={handleSubmit}
             display="flex"
             justifyContent="space-between"
             alignItems="center"
-            gap={{ xs: '8px', md: "48px" }}
+            gap={{ xs: '8px', md: '48px' }}
             width="100%"
-            mx={{ xs: '26px', md: "80px" }}
+            mx={{ xs: '26px', md: '80px' }}
           >
             <input
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
-              placeholder="O que você esta procurando?"
+              placeholder="O que você está procurando?"
               style={{
                 height: '44px',
                 width: '100%',
@@ -88,7 +96,7 @@ export default function ButtonSearch() {
               type="text"
             />
             <Box maxWidth="120px">
-              <ButtonAction onClick={onSearch}>Pesquisar</ButtonAction>
+              <ButtonAction type="submit">Pesquisar</ButtonAction>
             </Box>
           </Box>
         </Backdrop>

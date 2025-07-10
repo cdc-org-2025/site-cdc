@@ -10,6 +10,7 @@ import CircleIcon from '@mui/icons-material/Circle'
 import { useRouter } from 'next/navigation'
 import { storageUrl } from '@/constants/storageDomain'
 import { INoticiasResponse } from '@/clients/api/noticias'
+import AnimationSplitText from '@/components/animations/splitText'
 
 export default function Banner({ data }: { data?: INoticiasResponse }) {
   const { push } = useRouter()
@@ -135,34 +136,17 @@ export default function Banner({ data }: { data?: INoticiasResponse }) {
               alignItems="flex-start"
               width="100%"
             >
-              <Typography
-                maxWidth="790px"
-                lineHeight="120%"
-                variant="h2"
-                sx={{
-                  fontSize: {
-                    sm: '2.67rem',
-                  },
-                }}
-                color={'primary.light'}
-              >
-                {banner?.title}
-                {banner?.highlight && (
-                  <Typography
-                    variant="h2"
-                    color="secondary.light"
-                    sx={{
-                      fontSize: {
-                        sm: '2.67rem',
-                      },
-                    }}
-                    component="span"
-                  >
-                    {' '}
-                    {banner?.highlight}
-                  </Typography>
-                )}
-              </Typography>
+              <AnimationSplitText initialFontWeight={700} delay={0} threshold={0}>
+                <Typography
+                  maxWidth="790px"
+                  lineHeight="120%"
+                  fontSize={{ xs: "40px", lg: "48px" }}
+                  color={'primary.light'}
+                >
+                  {banner?.title}
+                </Typography>
+              </AnimationSplitText>
+
               <Box>
                 <ButtonAction
                   onClick={() => push(banner?.link)}

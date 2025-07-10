@@ -1,13 +1,23 @@
 'use client'
-import React, { useEffect, useRef, useState, ReactElement, cloneElement } from 'react'
+
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  ReactElement,
+  cloneElement,
+  useContext,
+} from 'react'
 import { TypographyProps } from '@mui/material'
+import { SettingsContext } from '@/context/settingsContext'
 
 interface SplitTextProps {
   children: ReactElement<TypographyProps>
   delay?: number
   threshold?: number
   rootMargin?: string
-  direction?: 'up' | 'down' // novo
+  direction?: 'up' | 'down'
+  initialFontWeight?: number
 }
 
 const AnimationSplitText: React.FC<SplitTextProps> = ({
@@ -16,7 +26,9 @@ const AnimationSplitText: React.FC<SplitTextProps> = ({
   threshold = 0.6,
   rootMargin = '0px',
   direction = 'up',
+  initialFontWeight = 700,
 }) => {
+  const { fontScale, fontWeightScale } = useContext(SettingsContext)
   const markerRef = useRef<HTMLSpanElement>(null)
   const [inView, setInView] = useState(false)
 
@@ -42,11 +54,49 @@ const AnimationSplitText: React.FC<SplitTextProps> = ({
     return ''
   }
 
+  const scaleFontSize = (value: string): string => {
+    const remMatch = value.match(/^([\d.]+)rem$/)
+    const pxMatch = value.match(/^([\d.]+)px$/)
+
+    if (remMatch) {
+      const scaled = parseFloat(remMatch[1]) * fontScale
+      return `${scaled}rem`
+    } else if (pxMatch) {
+      const scaled = parseFloat(pxMatch[1]) * fontScale
+      return `${scaled}px`
+    }
+
+    return value // fallback (ex: em, %, etc.)
+  }
+
+  const scaleFontSizeProp = (
+    fontSize: any['fontSize']
+  ): TypographyProps['fontSize'] => {
+    if (typeof fontSize === 'string') return scaleFontSize(fontSize)
+    if (typeof fontSize === 'number') return `${fontSize * fontScale}px`
+
+    if (typeof fontSize === 'object') {
+      const scaled: Record<string, string> = {}
+      for (const key in fontSize) {
+        scaled[key] = scaleFontSize(String(fontSize[key]))
+      }
+      return scaled
+    }
+
+    return undefined
+  }
+
   const content = extractText(children)
   const words = content.split(' ')
   const initialTranslate = direction === 'up' ? 'translateY(20px)' : 'translateY(-20px)'
 
+  const originalFontSize = children.props.fontSize
+  const scaledFontSize = scaleFontSizeProp(originalFontSize)
+  const scaledFontWeight = initialFontWeight * fontWeightScale
+
   return cloneElement(children, {
+    fontSize: scaledFontSize,
+    fontWeight: scaledFontWeight,
     children: (
       <>
         <span ref={markerRef} style={{ display: 'inline-block', width: 1, height: 1 }} />

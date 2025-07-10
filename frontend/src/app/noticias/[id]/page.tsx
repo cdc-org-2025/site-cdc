@@ -4,18 +4,13 @@ import HeaderBannerUnique from '@/components/templates/HeaderBannerUnique'
 import { useParams, useRouter } from 'next/navigation'
 import { INoticias, useNoticiaQuery, useNoticiasAreaQuery } from '@/clients/api/noticias'
 import { Box, Grid, Typography, useTheme } from '@mui/material'
-import { sanitizeHtml } from '@/utils/stripHtmlTags'
 import dayjs from 'dayjs'
 import 'dayjs/locale/pt-br'
 import CardTagDesc from '@/components/atoms/CardTagDesc'
 import AnimetedSlide from '@/components/animations/slide'
-import { Lato } from 'next/font/google'
 import { storageUrl } from '@/constants/storageDomain'
+import SanitizedHtmlBox from '@/utils/stripHtmlTags'
 
-const lato = Lato({
-  subsets: ['latin'],
-  weight: '400',
-})
 dayjs.locale('pt-br')
 
 export default function NoticiasUniquePage() {
@@ -30,7 +25,7 @@ export default function NoticiasUniquePage() {
 
   const Banner = {
     id: 1,
-    title: data?.titulo ? sanitizeHtml(data?.titulo) : "Sem título",
+    title: data?.titulo,
     image: `${storageUrl}/${data?.imagem_capa}`,
   }
 
@@ -53,14 +48,7 @@ export default function NoticiasUniquePage() {
                 </Typography>
               ))}
             </Box>
-            <Box
-              sx={{
-                fontFamily: `${lato.style.fontFamily}, "Source Sans Pro", sans-serif !important`,
-              }}
-              dangerouslySetInnerHTML={{
-                __html: sanitizeHtml(data.html_original),
-              }}
-            />
+            <SanitizedHtmlBox html={data.html_original} />
             <Box
               pt="64px"
             >

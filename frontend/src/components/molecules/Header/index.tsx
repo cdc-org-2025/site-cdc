@@ -49,7 +49,7 @@ export default function Header() {
         >
           <Image
             priority
-            height={isMobile ? 60 : 90}
+            height={isMobile ? 50 : 90}
             src={LogoCDC}
             alt="Logo Centro de Desenvolvimento Social"
             onClick={() => push("/")}

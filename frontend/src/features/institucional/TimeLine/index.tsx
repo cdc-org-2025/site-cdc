@@ -9,8 +9,8 @@ import AnimationSplitText from '@/components/animations/splitText'
 import AnimetedSlide from '@/components/animations/slide'
 import AnimatedFade from '@/components/animations/fade'
 import { ILinhaTempo } from '@/clients/api/linha-tempo'
-import { sanitizeHtml } from '@/utils/stripHtmlTags'
 import { isStorage } from '@/helpers/isStorage'
+import { sanitizeHtml } from '@/utils/scriptHtmlSanitize'
 
 export default function Timeline({ listTimeLine }: { listTimeLine?: ILinhaTempo[] }) {
   const {
@@ -44,13 +44,15 @@ export default function Timeline({ listTimeLine }: { listTimeLine?: ILinhaTempo[
             {item.titulo}
           </Typography>
         </AnimationSplitText>
-        <Typography
-          variant="overline"
-          textTransform="none"
-          color="text.primary"
-          lineHeight="150%"
-          dangerouslySetInnerHTML={{ __html: sanitizeHtml(item?.conteudo || '') }}
-        />
+        <AnimetedSlide>
+          <Typography
+            variant="overline"
+            textTransform="none"
+            color="text.primary"
+            lineHeight="150%"
+            dangerouslySetInnerHTML={{ __html: sanitizeHtml(item?.conteudo || '') }}
+          />
+        </AnimetedSlide>
         <Box display="flex" flexDirection="column" gap="24px" width="100%">
           {item.imagens[0] && (
             <AnimetedSlide>

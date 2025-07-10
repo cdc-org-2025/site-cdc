@@ -6,20 +6,14 @@ import Box from '@mui/material/Box'
 import { useProgramaQuery } from '@/clients/api/programas'
 import LatestNews from '@/components/molecules/LastestNews'
 import Transparency from '@/features/institucional/Transparency'
-import { Lato } from 'next/font/google'
 import { storageUrl } from '@/constants/storageDomain'
 import Typography from '@mui/material/Typography'
 import { useTransparenciaAreaQuery } from '@/clients/api/transparencia'
 import { useNoticiasAreaQuery } from '@/clients/api/noticias'
 import Grid from '@mui/material/Grid'
 import VectorRoundedLines from '@/components/atoms/VectorRoundedLines'
-import { sanitizeHtml } from '@/utils/stripHtmlTags'
+import SanitizedHtmlBox from '@/utils/stripHtmlTags'
 import { useConteudoSecaoQuery } from '@/clients/api/conteudo-secao'
-
-const lato = Lato({
-  subsets: ['latin'],
-  weight: '400',
-})
 
 export default function ProgramaUniquePage() {
   const { id } = useParams()
@@ -32,7 +26,7 @@ export default function ProgramaUniquePage() {
 
   const Banner = {
     id: 1,
-    title: data?.titulo ? sanitizeHtml(data?.titulo) : 'Sem título',
+    title: data?.titulo,
     image: `${storageUrl}/${data?.url_image_capa}`,
     highlight: data?.subtitulo
   }
@@ -55,15 +49,7 @@ export default function ProgramaUniquePage() {
                 <Typography variant='h3' color="primary" pb="16px">
                   Sobre o programa
                 </Typography>
-                <Box
-                  sx={{
-                    fontFamily: `${lato.style.fontFamily}, "Source Sans Pro", sans-serif !important`,
-                    lineHeight: "150%"
-                  }}
-                  dangerouslySetInnerHTML={{
-                    __html: sanitizeHtml(data?.descricao),
-                  }}
-                />
+                <SanitizedHtmlBox html={data?.descricao} />
               </Box>
             </Grid>
             <Grid item xs={12} sm={12} md={6}>
@@ -111,11 +97,11 @@ export default function ProgramaUniquePage() {
         <Typography variant='h1' color={"primary"} textAlign={"center"}>Sem descrição disponivel</Typography>
       )}
       <LatestNews listNoticia={listNoticias?.data} programa />
-      {data?.areas.length && listTransparencia?.data?.length && (
+      {data?.areas.length && listTransparencia?.data?.length ? (
         <Box px={{ xs: '16px', md: '32px' }} mt="64px" pb={{ xs: '80px', md: '160px' }} width="100%" maxWidth={"100vw"}>
           <Transparency sectionInfo={transparencySectionInfo?.[0]} listTransparencia={listTransparencia} />
         </Box>
-      )}
+      ) : ""}
       <Footer />
     </>
   )

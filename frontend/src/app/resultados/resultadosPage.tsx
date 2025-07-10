@@ -9,7 +9,7 @@ import ListCards from '@/components/molecules/ListCards'
 import MenuAreasWithSearchInput from '@/components/molecules/MenuAreaWithSearchInput'
 import HeaderBannerUnique from '@/components/templates/HeaderBannerUnique'
 import { storageUrl } from '@/constants/storageDomain'
-import { sanitizeHtml } from '@/utils/stripHtmlTags'
+import { CircularProgress, Typography } from '@mui/material'
 import Box from '@mui/material/Box'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -19,13 +19,13 @@ export default function ResultadosPage() {
 
   const Banner: TypeBannerUnique = {
     id: dataBanner?.[0]?.id,
-    title: dataBanner?.[0]?.titulo ? sanitizeHtml(dataBanner?.[0]?.titulo) : 'Sem título',
+    title: dataBanner?.[0]?.titulo,
     image: `${storageUrl}/${dataBanner?.[0].url_img}`,
   }
 
   const searchParams = useSearchParams()
   const termoDePesquisa = searchParams.get('pesquisa')
-  const { data } = usePesquisaQuery(termoDePesquisa)
+  const { data, isLoading: isLoadingPesquisa } = usePesquisaQuery(termoDePesquisa)
   const [fieldSearch, setFieldSearch] = useState('')
   const [areaSelect, setAreaSelect] = useState<string[]>([])
   const [listPesquisas, setListPesquisas] = useState<IPesquisa[]>([])
@@ -82,7 +82,20 @@ export default function ResultadosPage() {
             />
           </Box>
         </ZoomOutOnView>
-        <ListCards page="/resultados" list={listPesquisas} />
+        {isLoadingPesquisa ? (
+          <Box width={"100%"} display={"flex"} justifyContent={"center"}>
+            <CircularProgress size={100} />
+          </Box>
+        ) : (
+          listPesquisas.length ? (
+            <ListCards page="/resultados" list={listPesquisas} />
+          ) : (
+            <Typography variant="h3" lineHeight={'120%'} textAlign={'center'}>
+              Não foram encontrados resultados para essa pesquisa.
+            </Typography>
+          )
+        )}
+
       </Box>
       <Footer />
     </>

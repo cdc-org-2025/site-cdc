@@ -18,7 +18,7 @@ export default function TrabalheConoscoPage() {
         lineHeight="150%"
         textAlign="center"
         width="100%"
-        color={'primary.dark'}
+        color={'primary.main'}
       >
         Oportunidades
       </Typography>

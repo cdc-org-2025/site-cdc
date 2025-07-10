@@ -20,6 +20,7 @@ import { useOrganizacaoListQuery } from '@/clients/api/organizacao'
 import { isStorage } from '@/helpers/isStorage'
 import { useNoticiasListQuery } from '@/clients/api/noticias'
 import { useConteudoSecaoQuery } from '@/clients/api/conteudo-secao'
+import SanitizedHtmlBox from '@/utils/stripHtmlTags'
 
 export default function HomePage() {
   const { data: cardOption } = useCardsInformativosListQuery()
@@ -78,16 +79,7 @@ export default function HomePage() {
                 {card.titulo}
               </Typography>
             </AnimationSplitText>
-            <AnimationSplitText delay={20}>
-              <Typography
-                color="text.primary"
-                textTransform="none"
-                variant="overline"
-                lineHeight="150%"
-              >
-                {card.descricao}
-              </Typography>
-            </AnimationSplitText>
+            <SanitizedHtmlBox html={card.descricao} />
           </Box>
           <Box
             display="flex"
@@ -126,8 +118,11 @@ export default function HomePage() {
               md: 'block',
             }}
           >
-            <Image src={OrganicShapeScircle} alt="organic shape" />
+            <AnimetedSlide distance={100} tension={10} friction={5} threshold={0.8}>
+              <Image src={OrganicShapeScircle} alt="organic shape" />
+            </AnimetedSlide>
           </Box>
+
           <Box
             position="absolute"
             left={0}
@@ -143,7 +138,6 @@ export default function HomePage() {
           </Box>
         </Box>
       ))}
-
       <Box
         pt={{ xs: '40px', md: '80px' }}
         pb="40px"

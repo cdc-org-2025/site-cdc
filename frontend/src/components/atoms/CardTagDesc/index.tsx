@@ -43,7 +43,7 @@ function CardTagDesc({
 
         <Box display={'flex'} gap='10px' flexWrap={'wrap'}>
           {info?.areas?.map((area: { id: number, nome: string }) => (
-            <ButtonTag key={area.id}>{area.nome}</ButtonTag>
+            <ButtonTag noAnimation key={area.id}>{area.nome}</ButtonTag>
           ))}
         </Box>
         <Box display="flex" flexDirection="column" gap="4px">
@@ -99,7 +99,7 @@ function CardTagDesc({
 
         <Box display={'flex'} gap='10px' flexWrap={'wrap'}>
           {info?.areas?.map((area: { id: number, nome: string }) => (
-            <ButtonTag key={area.id}>{area.nome}</ButtonTag>
+            <ButtonTag noAnimation key={area.id}>{area.nome}</ButtonTag>
           ))}
         </Box>
         <Box display="flex" flexDirection="column" gap="4px">
@@ -155,7 +155,7 @@ function CardTagDesc({
 
         <Box display={'flex'} gap='10px' flexWrap={'wrap'}>
           {info?.areas?.map((area: { id: number, nome: string }) => (
-            <ButtonTag key={area.id}>{area.nome}</ButtonTag>
+            <ButtonTag noAnimation key={area.id}>{area.nome}</ButtonTag>
           ))}
         </Box>
         <Box display="flex" flexDirection="column" gap="4px">
@@ -260,7 +260,7 @@ function CardTagDesc({
             height: '100%',
             backgroundImage: `url("${storageUrl}/${info?.imagem_capa ?? info?.url_imagem ?? info?.url_image_capa}")`,
             backgroundColor: 'gray',
-            backgroundSize: '100%',
+            backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
             transition: 'background-size 0.3s ease-in-out',
