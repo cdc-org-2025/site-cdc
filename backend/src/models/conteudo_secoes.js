@@ -19,7 +19,8 @@ class ConteudoSecao extends Model {
           'transparencia',
           'indicadores',
           'institucional',
-          'perguntas_frequentes'
+          'perguntas_frequentes',
+          'doacao'
         ),
         allowNull: false,
         unique: true, // se quiser garantir uma seção única
