@@ -25,6 +25,7 @@ import organizacao from './organizacao.js'
 import banners from './banners.js'
 import conteudoSecao from './conteudo_secao.js'
 import search from './search.js'
+import rodape from './rodape.js'
 
 const router = Router();
 
@@ -49,6 +50,7 @@ router.use("/organizacao", organizacao )
 router.use("/banner", banners)
 router.use("/conteudo-secao", conteudoSecao),
 router.use("/pesquisa", search)
+router.use("/rodape", rodape)
 
 
 export default router;
