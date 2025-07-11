@@ -18,6 +18,22 @@ class Rodape extends Model {
       cnpj: {
         type: DataTypes.STRING(20),
         allowNull: false,
+      },
+      link_facebook: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
+      },
+      link_youtube: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
+      },
+      link_instagram: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
+      },
+      link_linkedin: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
       }
     }, {
       sequelize,
