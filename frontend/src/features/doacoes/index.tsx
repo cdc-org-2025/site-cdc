@@ -7,9 +7,11 @@ import Typography from '@mui/material/Typography'
 import React from 'react'
 import { storageUrl } from '@/constants/storageDomain'
 import { useTheme } from '@mui/material'
+import { useConteudoSecaoQuery } from '@/clients/api/conteudo-secao'
 
 export default function Doacoes() {
   const { data } = useDadosBancariosQuery()
+  const { data: dataConteudoSecao } = useConteudoSecaoQuery("doacao")
   const { palette: { background } } = useTheme()
 
   return (
@@ -28,7 +30,7 @@ export default function Doacoes() {
           textAlign={'center'}
           lineHeight={'120%'}
         >
-          O Centro de Desenvolvimento e Cidadania precisa de você!
+          {dataConteudoSecao?.[0]?.titulo}
         </Typography>
       </AnimationSplitText>
       <AnimationSplitText>
@@ -40,7 +42,7 @@ export default function Doacoes() {
           lineHeight={'120%'}
           maxWidth="900px"
         >
-          Mesmo que seja pouco, pode ajudar muito. Novas contribuições são sempre bem vindas!
+          {dataConteudoSecao?.[0]?.resumo}
         </Typography>
       </AnimationSplitText>
       {data?.map((item) => (
