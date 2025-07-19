@@ -9,4 +9,5 @@ export interface IRodape {
   link_youtube: string;
   link_instagram: string;
   link_linkedin: string;
+  email?: string;
 }

@@ -33,7 +33,6 @@ const extractFontWeightFromHtml = (html?: string): number | null => {
 const SanitizedHtmlBox: FC<Props> = ({
   html,
   initialFontScale = 1,
-  initialFontWeightScale = 1,
   indicadores = false,
 }) => {
   const { fontScale, fontWeightScale } = useContext(SettingsContext)
@@ -46,7 +45,7 @@ const SanitizedHtmlBox: FC<Props> = ({
   const baseFontWeight = useMemo(() => {
     const extracted = extractFontWeightFromHtml(html)
     return extracted ?? 400
-  }, [html, initialFontWeightScale])
+  }, [html])
 
   const finalFontSize = baseFontSize * fontScale
   const finalFontWeight = baseFontWeight * fontWeightScale
@@ -127,7 +126,9 @@ const SanitizedHtmlBox: FC<Props> = ({
         '& *:not([style*="font-size"])': {
           fontSize: `${finalFontSize}rem`,
           fontFamily: `${lato.style.fontFamily}, "Source Sans Pro", sans-serif`,
-          // ❌ NÃO adicionamos fontWeight aqui!
+        },
+        '& *:not([style*="font-weight"])': {
+          fontWeight: finalFontWeight,
         },
 
         ...(indicadores && {

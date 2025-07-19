@@ -75,7 +75,6 @@ export default function BannerUnique({ Banner }: IBannerUnique) {
             >
               <SanitizedHtmlBox
                 initialFontScale={2.7}
-                initialFontWeightScale={700}
                 html={Banner?.title}
               />
               {Banner.highlight && (

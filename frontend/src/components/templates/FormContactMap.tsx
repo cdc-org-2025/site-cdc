@@ -16,6 +16,7 @@ import ZoomOutOnView from '../animations/zoomOutOnView'
 import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import { useConteudoSecaoQuery } from '@/clients/api/conteudo-secao'
+import { useRodapeQuery } from '@/clients/api/rodape'
 
 const schema = yup
   .object({
@@ -53,6 +54,8 @@ export default function FormContactMap() {
   })
   const { mutateAsync } = useContatoMutation();
   const { data: contatoSectionInfo } = useConteudoSecaoQuery("contato")
+  const { data } = useRodapeQuery()
+  const rodape = data?.[0]
 
   const [messageResponseForm, setmessageResponseForm] = useState<{
     sucesso?: boolean
@@ -137,14 +140,22 @@ export default function FormContactMap() {
       <Box display="flex" gap="16px" alignItems={"center"}>
         <Typography color="text.primary" display={"flex"} alignItems={"center"} variant="overline" textTransform={"none"}>
           <MailOutlineIcon style={{ height: 20 }} color="primary" />
-          cdc@cdc.org.br
+          {rodape?.email ?? "cdc@cdc.org.br"}
         </Typography>
         <Typography color="text.primary" display={"flex"} alignItems={"center"} variant="overline" textTransform={"none"}>
           <LocalPhoneOutlinedIcon style={{ height: 20 }} color="primary" />
-          (81) 3224-6963
+          {rodape?.telefone}
         </Typography>
       </Box>
-      <Typography color="text.primary" display={"flex"} alignItems={"center"} variant="overline" textTransform={"none"}> Aberto das 08h00 às 17h00</Typography>
+      <Typography
+        color="text.primary"
+        display={"flex"}
+        alignItems={"center"}
+        variant="overline"
+        textTransform={"none"}
+      >
+        Aberto das {rodape?.horario_funcionamento}
+      </Typography>
       <Box
         mt="32px"
         display="flex"
