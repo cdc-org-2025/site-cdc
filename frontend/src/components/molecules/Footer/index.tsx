@@ -12,11 +12,14 @@ import { useMenuOptions } from '@/hooks/useMenuOption'
 import { useRouter } from 'next/navigation'
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import LogoCDC from '../../../assets/logo_cdc.svg'
+import { useRodapeQuery } from '@/clients/api/rodape'
 
 export default function Footer() {
   const { handleSubMenuClick } = useNavigation()
   const menuWithProgramas = useMenuOptions()
   const { push } = useRouter()
+  const { data } = useRodapeQuery()
+  const rodape = data?.[0]
 
   return (
     <Box
@@ -46,20 +49,20 @@ export default function Footer() {
           variant="body2"
           color="secondary.dark"
         >
-          Rua Bispo Cardoso Ayres, 440 - Santo Amaro, Recife - PE, 50050-135
+          {rodape?.endereco}, CEP: {rodape?.cep}
         </Typography>
         <Typography
           variant="body2"
           color="secondary.dark"
         >
-          Telefone: (81) 3224-6963
+          Telefone: {rodape?.telefone}
         </Typography>
         <Typography
           variant="body2"
           color="secondary.dark"
           pb="6px"
         >
-          Horário de Funcionamento: 08h às 17h
+          Horário de Funcionamento: {rodape?.horario_funcionamento}
         </Typography>
         <Typography
           variant="body2"
@@ -67,7 +70,7 @@ export default function Footer() {
           style={{ opacity: "0.5" }}
           pb="30px"
         >
-          CNPJ 03.970.166/0001-29
+          CNPJ {rodape?.cnpj}
         </Typography>
 
         <Box
@@ -81,16 +84,16 @@ export default function Footer() {
             Redes sociais
           </Typography>
           <Box display="flex" gap="24px">
-            <a aria-label="Acessar facebook do CDC" title="Acessar facebook do CDC" href="https://web.facebook.com/cdc.osc/" target="_blank" rel="noopener noreferrer">
+            <a aria-label="Acessar facebook do CDC" title="Acessar facebook do CDC" href={rodape?.link_facebook} target="_blank" rel="noopener noreferrer">
               <Image priority src={FacebookLogo} alt="FacebookLogo" />
             </a>
-            <a aria-label="Acessar canal do YouTube CDC" title="Acessar canal do YouTube CDC" href="https://www.youtube.com/@cdc_osc" target="_blank" rel="noopener noreferrer">
+            <a aria-label="Acessar canal do YouTube CDC" title="Acessar canal do YouTube CDC" href={rodape?.link_youtube} target="_blank" rel="noopener noreferrer">
               <Box mt="-5px"><YouTubeIcon color='primary' /></Box>
             </a>
-            <a aria-label="Acessar instagram do CDC" title="Acessar instagram do CDC" href="https://www.instagram.com/cdc_osc/" target="_blank" rel="noopener noreferrer">
+            <a aria-label="Acessar instagram do CDC" title="Acessar instagram do CDC" href={rodape?.link_instagram} target="_blank" rel="noopener noreferrer">
               <Image priority src={InstagramLogo} alt="InstagramLogo" />
             </a>
-            <a aria-label="Acessar linkedin do CDC" title="Acessar linkedin do CDC" href="https://www.linkedin.com/company/centro-de-desenvolvimento-e-cidadania/" target="_blank" rel="noopener noreferrer">
+            <a aria-label="Acessar linkedin do CDC" title="Acessar linkedin do CDC" href={rodape?.link_linkedin} target="_blank" rel="noopener noreferrer">
               <Image priority src={LinkedinLogo} alt="LinkedinLogo" />
             </a>
           </Box>
