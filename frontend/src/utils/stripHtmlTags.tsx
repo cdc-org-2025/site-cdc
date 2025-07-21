@@ -33,7 +33,6 @@ const extractFontWeightFromHtml = (html?: string): number | null => {
 const SanitizedHtmlBox: FC<Props> = ({
   html,
   initialFontScale = 1,
-  initialFontWeightScale = 1,
   indicadores = false,
 }) => {
   const { fontScale, fontWeightScale } = useContext(SettingsContext)
@@ -45,13 +44,11 @@ const SanitizedHtmlBox: FC<Props> = ({
 
   const baseFontWeight = useMemo(() => {
     const extracted = extractFontWeightFromHtml(html)
-    return extracted ?? initialFontWeightScale
-  }, [html, initialFontWeightScale])
+    return extracted ?? 400
+  }, [html])
 
   const finalFontSize = baseFontSize * fontScale
   const finalFontWeight = baseFontWeight * fontWeightScale
-  const hasUserScaled = fontScale !== 1 || fontWeightScale !== 1
-
   const indicadoresFinalFontSize = baseFontSize * fontScale
   const indicadoresFontWeight = baseFontWeight * fontWeightScale
 
@@ -76,9 +73,16 @@ const SanitizedHtmlBox: FC<Props> = ({
     const parser = new DOMParser()
     const doc = parser.parseFromString(sanitized, 'text/html')
 
+    const normalizeFontWeight = (value: number): number => {
+      if (value < 500) return 400
+      if (value < 650) return 600
+      return 700
+    }
+
     const walk = (el: HTMLElement) => {
       const style = el.style
 
+      // Font Size
       if (style.fontSize) {
         const match = style.fontSize.match(/(\d+)(px|rem)/)
         if (match) {
@@ -90,11 +94,19 @@ const SanitizedHtmlBox: FC<Props> = ({
         }
       }
 
+      // Font Weight
       if (style.fontWeight) {
         const weight = parseInt(style.fontWeight)
         if (!isNaN(weight)) {
-          style.fontWeight = `${weight * fontWeightScale}`
+          const scaled = weight * fontWeightScale
+          const normalized = normalizeFontWeight(Math.round(scaled))
+          style.fontWeight = `${normalized}`
         }
+      }
+
+      // Color — preserva
+      if (style.color) {
+        style.color = style.color
       }
 
       Array.from(el.children).forEach(child => walk(child as HTMLElement))
@@ -109,16 +121,17 @@ const SanitizedHtmlBox: FC<Props> = ({
     <Box
       sx={{
         fontSize: `${finalFontSize}rem`,
-        fontWeight: `${finalFontWeight}`,
         fontFamily: `${lato.style.fontFamily}, "Source Sans Pro", sans-serif`,
 
-        '& *:not([style*="font-size"]):not([style*="font-weight"])': {
+        '& *:not([style*="font-size"])': {
           fontSize: `${finalFontSize}rem`,
-          fontWeight: `${finalFontWeight}`,
           fontFamily: `${lato.style.fontFamily}, "Source Sans Pro", sans-serif`,
         },
+        '& *:not([style*="font-weight"])': {
+          fontWeight: finalFontWeight,
+        },
 
-        ...(indicadores && hasUserScaled && {
+        ...(indicadores && {
           '& h1': {
             fontWeight: `${indicadoresFontWeight} !important`,
             lineHeight: 1.2,
