@@ -5,6 +5,7 @@ import Noticias from '@/features/noticias'
 import { useBannerQuery } from '@/clients/api/banners'
 import { storageUrl } from '@/constants/storageDomain'
 import { TypeBannerUnique } from '@/components/atoms/Banner/unique'
+import GoogleAnalytics from '@/components/GoogleAnalytics'
 
 export default function NoticiasPage() {
   const { data } = useBannerQuery("noticias")
@@ -17,6 +18,7 @@ export default function NoticiasPage() {
 
   return (
     <>
+      <GoogleAnalytics />
       <HeaderBannerUnique noneMobile Banner={Banner} />
       <Noticias />
       <Footer />

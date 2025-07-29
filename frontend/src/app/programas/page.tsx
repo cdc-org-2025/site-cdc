@@ -5,6 +5,7 @@ import Programas from '@/features/programas'
 import { useBannerQuery } from '@/clients/api/banners'
 import { storageUrl } from '@/constants/storageDomain'
 import { TypeBannerUnique } from '@/components/atoms/Banner/unique'
+import GoogleAnalytics from '@/components/GoogleAnalytics'
 
 export default function ProgramasPage() {
   const { data } = useBannerQuery("programas")
@@ -18,6 +19,7 @@ export default function ProgramasPage() {
 
   return (
     <>
+      <GoogleAnalytics />
       <HeaderBannerUnique noneMobile Banner={Banner} />
       <Programas />
       <Footer />

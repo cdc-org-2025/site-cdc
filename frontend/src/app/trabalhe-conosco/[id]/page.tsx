@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Footer from '@/components/molecules/Footer'
 import TrabalheConoscoVagaPage from '@/features/trabalhe-conosco/[id]'
+import GoogleAnalytics from '@/components/GoogleAnalytics'
 
 export const metadata: Metadata = {
   title: 'CDC - Trabalhe Conosco Vaga',
@@ -15,6 +16,7 @@ export const metadata: Metadata = {
 export default function TrabalheConoscoVaga() {
   return (
     <>
+      <GoogleAnalytics />
       <TrabalheConoscoVagaPage />
       <Footer />
     </>

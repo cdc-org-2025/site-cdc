@@ -5,6 +5,7 @@ import TrabalheConoscoPage from '@/features/trabalhe-conosco'
 import { useBannerQuery } from '@/clients/api/banners'
 import { storageUrl } from '@/constants/storageDomain'
 import { TypeBannerUnique } from '@/components/atoms/Banner/unique'
+import GoogleAnalytics from '@/components/GoogleAnalytics'
 
 export default function TrabalheConosco() {
   const { data } = useBannerQuery("trabalhe_conosco")
@@ -17,6 +18,7 @@ export default function TrabalheConosco() {
 
   return (
     <>
+      <GoogleAnalytics />
       <HeaderBannerUnique Banner={Banner} />
       <TrabalheConoscoPage />
       <Footer />
