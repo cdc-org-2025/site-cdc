@@ -34,6 +34,10 @@ class Rodape extends Model {
       link_linkedin: {
         type: DataTypes.STRING(255),
         allowNull: true,
+      },
+      telefone: {
+        type: DataTypes.TEXT(20),
+        allowNull: true
       }
     }, {
       sequelize,
