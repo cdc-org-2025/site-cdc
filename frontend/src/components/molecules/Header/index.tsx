@@ -25,7 +25,7 @@ export default function Header() {
 
   return (
     <>
-      <Box height="94px" width="100%" maxWidth="100vw" />
+      <Box mt="-24px" height="94px" width="100%" maxWidth="100vw" />
       <Box
         display="flex"
         justifyContent="space-between"
