@@ -9,6 +9,7 @@ import getTheme from "@/theme";
 import 'react-toastify/dist/ReactToastify.css';
 // import ButtonAccessible from "@/components/atoms/ButtonAccessible";
 import Script from 'next/script'
+import ButtonAccessible from "@/components/atoms/ButtonAccessible";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -58,7 +59,7 @@ function InnerRootLayout({ children }: { children: React.ReactNode }) {
           </Script>
         </head>
         <body>
-          {/* <ButtonAccessible /> */}
+          <ButtonAccessible />
           {/* Elemento obrigatório para o Google Translate funcionar */}
           <div id="google_translate_element"></div>
 
