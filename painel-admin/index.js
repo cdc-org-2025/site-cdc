@@ -9,6 +9,7 @@ import AdminJSExpress from '@adminjs/express'
 import path from 'path';
 import { fileURLToPath } from 'url'; // Necessário para ESM
 
+
 // Obter __dirname em módulos ESM
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -37,28 +38,6 @@ app.use(adminJs.options.rootPath, (req, res, next) => {
         res.redirect(`${adminJs.options.rootPath}/auth/google`)
     }
 })
-
-// const adminRouter = AdminJSExpress.buildAuthenticatedRouter(
-//     adminJs,
-//     {
-//       authenticate: async (email, password) => {
-//         if (
-//           email === "teste@teste.com" &&
-//           password === "123456"
-//         ) {
-//           return { email };
-//         }
-//         return null;
-//       },
-//       cookiePassword: process.env.SECRET_SESSION_KEY,
-//     },
-//     null,
-//     {
-//       resave: false,
-//       saveUninitialized: true,
-//       secret: process.env.SECRET_SESSION_KEY,
-//     }
-//   );
 
 app.use("/assets", express.static(path.join(__dirname, './assets')));
 app.use(authRoutes)

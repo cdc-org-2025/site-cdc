@@ -9,14 +9,9 @@ import readingTime from 'reading-time';
 import { Op } from 'sequelize'
 import { createImageUploadProperties } from '../helpers/admin.helper.js'
 
-
-
 AdminJS.registerAdapter({ Database, Resource })
 
 const models = initializeModels(sequelize)
-
-
-// No topo do seu arquivo admin.js
 
 const areaDeAtuacaoProperty = {
     reference: 'areas',
@@ -44,7 +39,187 @@ export const adminJs = new AdminJS({
                     nome: {
                         isTitle: true
                     }
+                },
+                // id: 'Area', // 👈 define o ID esperado para tradução
+            }
+        },
+        {
+            resource: models.Organizacao,
+            features: [
+                // Sua configuração do feature continua a mesma, está correta
+                createUploadFeature({
+                    folder: 'organizacao',
+                    file: 'uploadImagens',
+                    key: 'imagem_url', // <- Note que a key aqui é 'imagem_url'
+                    multiple: true,
+                }),
+            ],
+            options: {
+                navigation: 'Inicio',
+                id: 'Organizacao',
+                listProperties: ['id', 'titulo', 'descricao', 'imagem_url'],
+                newProperties: ['titulo', 'descricao', 'uploadImagens'],
+                editProperties: ['titulo', 'descricao', 'uploadImagens'],
+                showProperties: ['id', 'titulo', 'descricao', 'imagem_url'],
+
+                properties: {
+                    id: { isVisible: { list: true, edit: false, show: true, filter: true } },
+
+                    // A propriedade 'nome' foi renomeada para 'titulo' para corresponder ao seu Model
+                    titulo: {
+                        isTitle: true,
+                        isRequired: true,
+                    },
+                    descricao: {
+                        type: 'richtext',
+                        // components: {
+                        //     list: Components.TextoPreview,
+                        // }
+                    },
+
+                    // Suas propriedades de imagem, sem alterações
+                    uploadImagens: {
+                        label: 'Imagens',
+                        components: {
+                            edit: Components.ImageEditor,
+                        },
+                        isVisible: { list: false, show: false, filter: false, edit: true },
+                    },
+                    imagesToDelete: { isVisible: false },
+                    imagem_url: {
+                        label: "Imagens",
+                        isVisible: { list: true, show: true, edit: false, filter: false },
+                        components: {
+                            list: Components.ImageListPreview,
+                            show: Components.ImageListPreview,
+                        }
+                    }
+                },
+
+
+                // Substituímos suas actions antigas por esta lógica completa
+                actions: {
+                    new: {
+                        after: async (response, request, context) => {
+                            const { record } = context;
+                            if (!record || !record.isValid()) { return response; }
+
+                            const novasImagens = Object.entries(request.files || {})
+                                .filter(([key]) => key.startsWith('uploadImagens'))
+                                .map(([, file]) => file);
+
+                            if (novasImagens && novasImagens.length > 0) {
+                                for (const imagem of novasImagens) {
+                                    const filename = imagem.name.replace(/\s/g, '_');
+                                    const gcsPath = `organizacao/${record.id()}-${filename}`;
+
+                                    await models.OrganizacaoImagem.create({
+                                        organizacao_id: record.id(), // Chave estrangeira correta
+                                        imagem_url: gcsPath,         // Nome do campo de imagem correto
+                                    });
+                                }
+                            }
+                            return response;
+                        }
+                    },
+
+                    edit: {
+                        before: async (request, context) => {
+                            const { record } = context;
+                            if (record && record.id()) {
+                                const imagens = await models.OrganizacaoImagem.findAll({
+                                    where: { organizacao_id: record.id() }, // Chave estrangeira correta
+                                    raw: true,
+                                });
+                                // Renomeamos a propriedade para o componente ImageEditor funcionar
+                                // Ele espera 'url_imagem', mas seu model tem 'imagem_url'
+                                record.params.imagens = imagens.map(img => ({
+                                    id: img.id,
+                                    url_imagem: img.imagem_url, // Mapeamento de nome
+                                }));
+                            }
+                            return request;
+                        },
+                        after: async (response, request, context) => {
+                            const { record } = context;
+                            const { payload } = request;
+
+                            // 1. Lógica de exclusão
+                            const idsParaDeletar = Object.keys(payload)
+                                .filter(key => key.startsWith('imagesToDelete.'))
+                                .map(key => payload[key]);
+                            if (idsParaDeletar && idsParaDeletar.length > 0) {
+                                await models.OrganizacaoImagem.destroy({ where: { id: { [Op.in]: idsParaDeletar } } });
+                            }
+
+                            // 2. Lógica de upload
+                            const novasImagens = Object.entries(request.files || {})
+                                .filter(([key]) => key.startsWith('uploadImagens'))
+                                .map(([, file]) => file);
+                            if (novasImagens && novasImagens.length > 0) {
+                                for (const imagem of novasImagens) {
+                                    const filename = imagem.name.replace(/\s/g, '_');
+                                    const gcsPath = `organizacao/${record.id()}-${filename}`;
+                                    await models.OrganizacaoImagem.create({
+                                        organizacao_id: record.id(),
+                                        imagem_url: gcsPath,
+                                    });
+                                }
+                            }
+                            return response;
+                        }
+                    },
+
+                    list: {
+                        after: async (response) => {
+                            const recordIds = response.records.map(r => r.params.id);
+                            if (recordIds.length === 0) return response;
+
+                            const imagens = await models.OrganizacaoImagem.findAll({
+                                where: { organizacao_id: { [Op.in]: recordIds } }
+                            });
+
+                            const imagensMap = imagens.reduce((acc, img) => {
+                                const id = img.organizacao_id;
+                                if (!acc[id]) { acc[id] = []; }
+                                acc[id].push(img.imagem_url);
+                                return acc;
+                            }, {});
+
+                            for (const record of response.records) {
+                                const id = record.params.id;
+                                if (imagensMap[id]) {
+                                    record.params.imagem_url = imagensMap[id];
+                                }
+                            }
+                            return response;
+                        }
+                    },
+
+                    delete: {
+                        after: async (response, request, context) => {
+                            const { record } = context;
+                            await models.OrganizacaoImagem.destroy({ where: { organizacao_id: record.id() } });
+                            return response;
+                        }
+                    },
                 }
+            },
+        },
+        {
+            resource: models.Parceiro,
+            features: [
+                createUploadFeature({
+                    folder: 'parceiros',
+                    file: 'uploadImagem',
+                    key: 'url_imagem',
+                }),
+            ],
+            options: {
+                navigation: 'Inicio',
+                properties: {
+                    ...createImageUploadProperties()
+                },
             }
         },
         {
@@ -61,6 +236,7 @@ export const adminJs = new AdminJS({
             ],
             options: {
                 navigation: 'Informe-se',
+                id: 'Noticia',
                 actions: {
                     new: {
                         before: async (request) => {
@@ -156,7 +332,13 @@ export const adminJs = new AdminJS({
 
                 properties: {
                     titulo: { isTitle: true },
-                    conteudo: { type: 'richtext' },
+                    // conteudo: { type: 'richtext' },
+                    conteudo: {
+                        // type: 'richtext',
+                        components: {
+                            edit: Components.EditorLinhaTempo, // 👈 apontando para seu componente
+                        }
+                    },
                     ano: { type: 'number' },
 
                     // Propriedade de upload, agora com configuração de componente por ação
@@ -165,6 +347,7 @@ export const adminJs = new AdminJS({
                         components: {
                             // Ao EDITAR, usamos nosso componente customizado.
                             edit: Components.ImageEditor,
+                            list: Components.NoticiaPreview,
                             // Para a ação de NEW (criar), não especificamos nada.
                             // Isso faz com que o AdminJS use o componente PADRÃO 
                             // fornecido pelo createUploadFeature, que é exatamente o que queremos.
@@ -325,6 +508,7 @@ export const adminJs = new AdminJS({
             ],
             options: {
                 navigation: 'Institucional',
+                id: 'Lideranca',
 
                 properties: {
                     // Mantemos suas propriedades como estavam na última tentativa
@@ -401,48 +585,10 @@ export const adminJs = new AdminJS({
             }
         },
         {
-            resource: models.Oportunidade,
-            options: {
-                navigation: 'Institucional',
-                properties: {
-                    titulo: {
-                        isVisible: { list: true, edit: false, show: true }, // para esconder o campo padrão
-                    },
-                    descricao: {
-                        components: {
-                            edit: Components.OportunidadeEditor,
-                            list: Components.NoticiaPreview, // novo componente para a listagem
-
-                        }
-                    },
-                },
-                listProperties: [
-                    'titulo',
-                    'descricao'
-                ]
-            }
-
-        },
-        {
-            resource: models.Parceiro,
-            features: [
-                createUploadFeature({
-                    folder: 'parceiros',
-                    file: 'uploadImagem',
-                    key: 'url_imagem',
-                }),
-            ],
-            options: {
-                navigation: 'Parceiros',
-                properties: {
-                    ...createImageUploadProperties()
-                },
-            }
-        },
-        {
             resource: models.Transparencia,
             options: {
                 navigation: 'Institucional',
+                id: 'Transparencia',
                 properties: {
                     areaDeAtuacao: areaDeAtuacaoProperty,
                     area_ids: {
@@ -477,6 +623,48 @@ export const adminJs = new AdminJS({
                     key: 'url_imagem',
                 }),
             ],
+        },
+        {
+            resource: models.PerguntaFrequente,
+            options: {
+                navigation: 'Institucional',
+                listProperties: [
+                    'pergunta',
+                    'resposta'
+                ],
+                showProperties: [
+                    'pergunta',
+                    'resposta'
+                ],
+                editProperties: [
+                    'pergunta',
+                    'resposta'
+                ]
+            }
+        },
+        {
+            resource: models.Oportunidade,
+            options: {
+                navigation: 'Institucional',
+                id: 'Oportunidade',
+                properties: {
+                    titulo: {
+                        isVisible: { list: true, edit: false, show: true }, // para esconder o campo padrão
+                    },
+                    descricao: {
+                        components: {
+                            edit: Components.OportunidadeEditor,
+                            list: Components.NoticiaPreview, // novo componente para a listagem
+
+                        }
+                    },
+                },
+                listProperties: [
+                    'titulo',
+                    'descricao'
+                ]
+            }
+
         },
         {
             resource: models.Programa,
@@ -688,6 +876,7 @@ export const adminJs = new AdminJS({
             resource: models.DadosBancario,
             options: {
                 navigation: 'Configurações',
+                id: 'DadosBancario',
                 properties: {
                     ...createImageUploadProperties()
                 },
@@ -716,24 +905,6 @@ export const adminJs = new AdminJS({
 
         },
         {
-            resource: models.PerguntaFrequente,
-            options: {
-                navigation: 'Institucional',
-                listProperties: [
-                    'pergunta',
-                    'resposta'
-                ],
-                showProperties: [
-                    'pergunta',
-                    'resposta'
-                ],
-                editProperties: [
-                    'pergunta',
-                    'resposta'
-                ]
-            }
-        },
-        {
             resource: models.CardInformativo,
             features: [
                 createUploadFeature({
@@ -743,7 +914,7 @@ export const adminJs = new AdminJS({
                 }),
             ],
             options: {
-                navigation: 'Informativos',
+                navigation: 'Inicio',
                 properties: {
                     ...createImageUploadProperties()
 
@@ -768,174 +939,12 @@ export const adminJs = new AdminJS({
                 ]
             }
         },
-        { resource: models.Email, options: { navigation: 'Configurações' } },
-        {
-            resource: models.Organizacao,
-            features: [
-                // Sua configuração do feature continua a mesma, está correta
-                createUploadFeature({
-                    folder: 'organizacao',
-                    file: 'uploadImagens',
-                    key: 'imagem_url', // <- Note que a key aqui é 'imagem_url'
-                    multiple: true,
-                }),
-            ],
-            options: {
-                navigation: 'Configurações',
-
-                listProperties: ['id', 'titulo', 'descricao', 'imagem_url'],
-                newProperties: ['titulo', 'descricao', 'uploadImagens'],
-                editProperties: ['titulo', 'descricao', 'uploadImagens'],
-                showProperties: ['id', 'titulo', 'descricao', 'imagem_url'],
-
-                properties: {
-                    id: { isVisible: { list: true, edit: false, show: true, filter: true } },
-
-                    // A propriedade 'nome' foi renomeada para 'titulo' para corresponder ao seu Model
-                    titulo: {
-                        isTitle: true,
-                        isRequired: true,
-                    },
-                    descricao: {
-                        type: 'richtext',
-                        // components: {
-                        //     list: Components.TextoPreview,
-                        // }
-                    },
-
-                    // Suas propriedades de imagem, sem alterações
-                    uploadImagens: {
-                        label: 'Imagens',
-                        components: {
-                            edit: Components.ImageEditor,
-                        },
-                        isVisible: { list: false, show: false, filter: false, edit: true },
-                    },
-                    imagesToDelete: { isVisible: false },
-                    imagem_url: {
-                        label: "Imagens",
-                        isVisible: { list: true, show: true, edit: false, filter: false },
-                        components: {
-                            list: Components.ImageListPreview,
-                            show: Components.ImageListPreview,
-                        }
-                    }
-                },
-
-
-                // Substituímos suas actions antigas por esta lógica completa
-                actions: {
-                    new: {
-                        after: async (response, request, context) => {
-                            const { record } = context;
-                            if (!record || !record.isValid()) { return response; }
-
-                            const novasImagens = Object.entries(request.files || {})
-                                .filter(([key]) => key.startsWith('uploadImagens'))
-                                .map(([, file]) => file);
-
-                            if (novasImagens && novasImagens.length > 0) {
-                                for (const imagem of novasImagens) {
-                                    const filename = imagem.name.replace(/\s/g, '_');
-                                    const gcsPath = `organizacao/${record.id()}-${filename}`;
-
-                                    await models.OrganizacaoImagem.create({
-                                        organizacao_id: record.id(), // Chave estrangeira correta
-                                        imagem_url: gcsPath,         // Nome do campo de imagem correto
-                                    });
-                                }
-                            }
-                            return response;
-                        }
-                    },
-
-                    edit: {
-                        before: async (request, context) => {
-                            const { record } = context;
-                            if (record && record.id()) {
-                                const imagens = await models.OrganizacaoImagem.findAll({
-                                    where: { organizacao_id: record.id() }, // Chave estrangeira correta
-                                    raw: true,
-                                });
-                                // Renomeamos a propriedade para o componente ImageEditor funcionar
-                                // Ele espera 'url_imagem', mas seu model tem 'imagem_url'
-                                record.params.imagens = imagens.map(img => ({
-                                    id: img.id,
-                                    url_imagem: img.imagem_url, // Mapeamento de nome
-                                }));
-                            }
-                            return request;
-                        },
-                        after: async (response, request, context) => {
-                            const { record } = context;
-                            const { payload } = request;
-
-                            // 1. Lógica de exclusão
-                            const idsParaDeletar = Object.keys(payload)
-                                .filter(key => key.startsWith('imagesToDelete.'))
-                                .map(key => payload[key]);
-                            if (idsParaDeletar && idsParaDeletar.length > 0) {
-                                await models.OrganizacaoImagem.destroy({ where: { id: { [Op.in]: idsParaDeletar } } });
-                            }
-
-                            // 2. Lógica de upload
-                            const novasImagens = Object.entries(request.files || {})
-                                .filter(([key]) => key.startsWith('uploadImagens'))
-                                .map(([, file]) => file);
-                            if (novasImagens && novasImagens.length > 0) {
-                                for (const imagem of novasImagens) {
-                                    const filename = imagem.name.replace(/\s/g, '_');
-                                    const gcsPath = `organizacao/${record.id()}-${filename}`;
-                                    await models.OrganizacaoImagem.create({
-                                        organizacao_id: record.id(),
-                                        imagem_url: gcsPath,
-                                    });
-                                }
-                            }
-                            return response;
-                        }
-                    },
-
-                    list: {
-                        after: async (response) => {
-                            const recordIds = response.records.map(r => r.params.id);
-                            if (recordIds.length === 0) return response;
-
-                            const imagens = await models.OrganizacaoImagem.findAll({
-                                where: { organizacao_id: { [Op.in]: recordIds } }
-                            });
-
-                            const imagensMap = imagens.reduce((acc, img) => {
-                                const id = img.organizacao_id;
-                                if (!acc[id]) { acc[id] = []; }
-                                acc[id].push(img.imagem_url);
-                                return acc;
-                            }, {});
-
-                            for (const record of response.records) {
-                                const id = record.params.id;
-                                if (imagensMap[id]) {
-                                    record.params.imagem_url = imagensMap[id];
-                                }
-                            }
-                            return response;
-                        }
-                    },
-
-                    delete: {
-                        after: async (response, request, context) => {
-                            const { record } = context;
-                            await models.OrganizacaoImagem.destroy({ where: { organizacao_id: record.id() } });
-                            return response;
-                        }
-                    },
-                }
-            },
-        },
+        { resource: models.Email, options: { navigation: 'Configurações', id: 'Email' } },
         {
             resource: models.Inidicador,
             options: {
-                navigation: 'Informativos',
+                navigation: 'Inicio',
+                id: 'Inidicador',
                 editProperties: [
                     'descricao',
                     'quantidade',
@@ -961,7 +970,7 @@ export const adminJs = new AdminJS({
             ],
             options: {
                 navigation: 'Configurações',
-
+                id: 'Capa',
                 properties: {
                     uploadImagem: {
                         type: 'file',
@@ -975,7 +984,7 @@ export const adminJs = new AdminJS({
                         }
                     },
                     titulo: {
-                        components:{
+                        components: {
                             edit: Components.CapaTituloEditor,
                             list: Components.NoticiaPreview,
                         }
@@ -999,8 +1008,14 @@ export const adminJs = new AdminJS({
 
             }
         },
-        { resource: models.ConteudoSecao, options: { navigation: 'Configurações' } },
-        { resource: models.Rodape, options: { navigation: 'Configurações' } },
+        {
+            resource: models.ConteudoSecao,
+            options: {
+                id: 'ConteudoSecao', // 👈 define o ID esperado para tradução
+                navigation: 'Configurações',
+            },
+        },
+        { resource: models.Rodape, options: { navigation: 'Inicio', id: 'Rodape' } },
 
 
 
@@ -1008,6 +1023,9 @@ export const adminJs = new AdminJS({
 
     ],
     rootPath: '/admin',
+
+
+
     branding: {
         companyName: 'CDC',
         logo: '/assets/logo_cdc.svg',
@@ -1035,61 +1053,88 @@ export const adminJs = new AdminJS({
     },
     locale: {
         language: 'pt-BR',
-        availableLanguages: ['pt-BR'],
+        withBackend: false,
+        availableLanguages: ['en', 'pt-BR'],
+        localeDetection: true,
         translations: {
-            labels: {
-                loginWelcome: 'Bem-vindo ao Painel',
-                Colaborador: 'Colaboradores',
-            },
-            messages: {
-                loginWelcome: 'Seja bem-vindo! Por favor, entre para continuar.',
-                successfullyBulkDeleted: 'Registros excluídos com sucesso',
-                successfullyDeleted: 'Registro excluído com sucesso',
-                successfullyUpdated: 'Registro atualizado com sucesso',
-                successfullyCreated: 'Registro criado com sucesso',
-                thereWereValidationErrors: 'Existem erros de validação - por favor, verifique!',
-                forbiddenError: 'Você não tem permissão para executar esta ação',
-                anyForbiddenError: 'Você não tem permissão para realizar esta ação',
-                errorFetchingRecords: 'Erro ao buscar registros',
-                errorFetchingRecord: 'Erro ao buscar o registro',
-                noRecordsSelected: 'Nenhum registro selecionado',
-                theseRecordsWillBeRemoved: 'Os seguintes registros serão removidos:',
-                theseRecordsWillBeUpdated: 'Os seguintes registros serão atualizados:',
-                uploadDrop: 'Solte o arquivo aqui ou clique para escolher',
-                uploadMaxSize: 'Tamanho máximo: 5MB',
-                uploadAcceptedFormats: 'Formatos aceitos: PNG, JPG, JPEG, WEBP',
-            },
-            buttons: {
-                save: 'Salvar',
-                addNewItem: 'Adicionar novo item',
-                filter: 'Filtrar',
-                applyChanges: 'Aplicar alterações',
-                resetFilter: 'Limpar filtros',
-                confirmRemovalMany: 'Confirmar exclusão de vários',
-                confirmRemovalOne: 'Confirmar exclusão',
-                logout: 'Sair',
-                login: 'Entrar',
-                submit: 'Enviar',
-                addNewProperty: 'Adicionar nova propriedade',
-                Dashboard: "Inicio",
+            'pt-BR': {
+                labels: {
+                    loginWelcome: 'Bem-vindo ao Painel',
+                    Colaborador: 'Colaboradores',
+                    ConteudoSecao: 'Títulos e resumos',
+                    DadosBancario: 'Doe agora (dados)',
+                    Email: 'E-mails (vagas/contato)',
+                    Area: 'Áreas',
+                    Organizacao: 'Apresentação',
+                    Rodape: 'Rodapé',
+                    Noticia: 'Notícias',
+                    Publicacao: 'Publicação',
+                    Lideranca: 'Lideranças',
+                    Transparencia: 'Transparência',
+                    Capa: 'Banners',
+                    Inidicador: 'Indicadores',
+                    Oportunidade: 'Trabalhe conosco',
 
-            },
-            properties: {
-                areaDeAtuacao: 'Área de Atuação',
-                url_imagem: 'URL da Imagem',
-                cargo: 'Cargo',
-                nome: 'Nome',
-                email: 'E-mail',
-            },
-            actions: {
-                new: 'Criar Novo',
-                edit: 'Editar',
-                show: 'Exibir',
-                delete: 'Excluir',
-                bulkDelete: 'Excluir selecionados',
-                list: 'Lista',
-                Dashboard: "Inicio",
-            },
+
+                },
+                messages: {
+                    loginWelcome: 'Seja bem-vindo! Por favor, entre para continuar.',
+                    successfullyBulkDeleted: 'Registros excluídos com sucesso',
+                    successfullyDeleted: 'Registro excluído com sucesso',
+                    successfullyUpdated: 'Registro atualizado com sucesso',
+                    successfullyCreated: 'Registro criado com sucesso',
+                    thereWereValidationErrors: 'Existem erros de validação - por favor, verifique!',
+                    forbiddenError: 'Você não tem permissão para executar esta ação',
+                    anyForbiddenError: 'Você não tem permissão para realizar esta ação',
+                    errorFetchingRecords: 'Erro ao buscar registros',
+                    errorFetchingRecord: 'Erro ao buscar o registro',
+                    noRecordsSelected: 'Nenhum registro selecionado',
+                    theseRecordsWillBeRemoved: 'Os seguintes registros serão removidos:',
+                    theseRecordsWillBeUpdated: 'Os seguintes registros serão atualizados:',
+                    uploadDrop: 'Solte o arquivo aqui ou clique para escolher',
+                    uploadMaxSize: 'Tamanho máximo: 5MB',
+                    uploadAcceptedFormats: 'Formatos aceitos: PNG, JPG, JPEG, WEBP',
+                },
+                buttons: {
+                    save: 'Salvar',
+                    addNewItem: 'Adicionar novo item',
+                    filter: 'Filtrar',
+                    applyChanges: 'Aplicar alterações',
+                    resetFilter: 'Limpar filtros',
+                    confirmRemovalMany: 'Confirmar exclusão de vários',
+                    confirmRemovalOne: 'Confirmar exclusão',
+                    logout: 'Sair',
+                    login: 'Entrar',
+                    submit: 'Enviar',
+                    addNewProperty: 'Adicionar nova propriedade',
+                    Dashboard: "Inicio",
+
+                },
+                properties: {
+                    areaDeAtuacao: 'Área de Atuação',
+                    url_imagem: 'URL da Imagem',
+                    cargo: 'Cargo',
+                    nome: 'Nome',
+                    email: 'E-mail',
+                },
+                actions: {
+                    new: 'Criar Novo',
+                    edit: 'Editar',
+                    show: 'Exibir',
+                    delete: 'Excluir',
+                    bulkDelete: 'Excluir selecionados',
+                    list: 'Lista',
+                    Dashboard: "Inicio",
+                },
+                resources: {
+                    ConteudoSecao: {
+                        properties: {
+                            // this will override the name only for Comment resource.
+                            name: 'Tytuł',
+                        },
+                    }
+                },
+            }
         },
     },
     componentLoader,

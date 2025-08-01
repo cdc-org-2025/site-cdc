@@ -41,7 +41,7 @@ function convertStylesToInline(html) {
     el.style.height = '400px';
     el.style.display = 'block';
     el.style.margin = '20px auto';
-    el.setAttribute('width', '800');   // redundante, mas pode ajudar
+    el.setAttribute('width', '800');
     el.setAttribute('height', '400');
   });
 
@@ -56,9 +56,18 @@ function convertStylesToInline(html) {
     el.style.quotes = '"\\201C""\\201D""\\2018""\\2019"';
   });
 
+  const uls = tempDiv.querySelectorAll('ul');
+  uls.forEach((ul) => {
+    ul.style.paddingLeft = '40px';
+    ul.style.paddingRight = '20px';
+    ul.style.paddingTop = '20px';
+    ul.style.boxSizing = 'border-box';
+  });
 
   return tempDiv.innerHTML;
 }
+
+
 
 const ConteudoEditor = (props) => {
   const { onChange, property, record } = props;
@@ -207,7 +216,7 @@ const ConteudoEditor = (props) => {
             paragraphTags: false,
             defaultTag: "",
             formats
-            
+
           }}
         />
       </Box>
