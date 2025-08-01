@@ -5,6 +5,7 @@ import HeaderBannerUnique from '@/components/templates/HeaderBannerUnique'
 import { useBannerQuery } from '@/clients/api/banners'
 import { storageUrl } from '@/constants/storageDomain'
 import { TypeBannerUnique } from '@/components/atoms/Banner/unique'
+import GoogleAnalytics from '@/components/GoogleAnalytics'
 
 export default function Contato() {
   const { data } = useBannerQuery("contato")
@@ -17,6 +18,7 @@ export default function Contato() {
 
   return (
     <>
+      <GoogleAnalytics />
       <HeaderBannerUnique Banner={Banner} />
       <ContatoPage />
       <Footer />

@@ -4,6 +4,7 @@ import { useBannerQuery } from '@/clients/api/banners'
 import { getPesquisasList, IPesquisa, usePesquisaQuery } from '@/clients/api/pesquisa'
 import ZoomOutOnView from '@/components/animations/zoomOutOnView'
 import { TypeBannerUnique } from '@/components/atoms/Banner/unique'
+import GoogleAnalytics from '@/components/GoogleAnalytics'
 import Footer from '@/components/molecules/Footer'
 import ListCards from '@/components/molecules/ListCards'
 import MenuAreasWithSearchInput from '@/components/molecules/MenuAreaWithSearchInput'
@@ -59,6 +60,7 @@ export default function ResultadosPage() {
 
   return (
     <>
+      <GoogleAnalytics />
       <HeaderBannerUnique noneMobile Banner={Banner} />
       <Box
         p={{ xs: '32px 16px 32px 16px', md: '40px 32px 160px 32px' }}

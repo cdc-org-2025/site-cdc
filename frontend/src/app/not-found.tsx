@@ -6,6 +6,7 @@ import Header from '@/components/molecules/Header'
 import Footer from '@/components/molecules/Footer'
 import { useRouter } from 'next/navigation'
 import { useTheme } from '@mui/material'
+import GoogleAnalytics from '@/components/GoogleAnalytics'
 
 export default function NotFound() {
   const { push } = useRouter()
@@ -13,6 +14,7 @@ export default function NotFound() {
 
   return (
     <Box display="flex" flexDirection="column" height="100vh">
+      <GoogleAnalytics />
       <Header />
       <Box
         flex="1"

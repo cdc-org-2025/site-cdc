@@ -10,6 +10,7 @@ import CardTagDesc from '@/components/atoms/CardTagDesc'
 import AnimetedSlide from '@/components/animations/slide'
 import { storageUrl } from '@/constants/storageDomain'
 import SanitizedHtmlBox from '@/utils/stripHtmlTags'
+import GoogleAnalytics from '@/components/GoogleAnalytics'
 
 dayjs.locale('pt-br')
 
@@ -31,6 +32,7 @@ export default function NoticiasUniquePage() {
 
   return (
     <>
+      <GoogleAnalytics />
       <HeaderBannerUnique noneMobile Banner={Banner} />
       {data?.html_original && (
         <Box width={'100%'} display='flex' justifyContent={'center'} maxWidth={"100vw"}>

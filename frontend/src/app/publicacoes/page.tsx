@@ -5,6 +5,7 @@ import Publicacoes from '@/features/publicacoes'
 import { useBannerQuery } from '@/clients/api/banners'
 import { TypeBannerUnique } from '@/components/atoms/Banner/unique'
 import { storageUrl } from '@/constants/storageDomain'
+import GoogleAnalytics from '@/components/GoogleAnalytics'
 
 export default function PublicacoesPage() {
   const { data } = useBannerQuery("publicacoes")
@@ -17,6 +18,7 @@ export default function PublicacoesPage() {
 
   return (
     <>
+      <GoogleAnalytics />
       <HeaderBannerUnique noneMobile Banner={Banner} />
       <Publicacoes />
       <Footer />

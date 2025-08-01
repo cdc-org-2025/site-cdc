@@ -5,6 +5,7 @@ import HeaderBannerUnique from '@/components/templates/HeaderBannerUnique'
 import { TypeBannerUnique } from '@/components/atoms/Banner/unique'
 import { useBannerQuery } from '@/clients/api/banners'
 import { storageUrl } from '@/constants/storageDomain'
+import GoogleAnalytics from '@/components/GoogleAnalytics'
 
 export default function Institucional() {
   const { data } = useBannerQuery("institucional")
@@ -17,6 +18,7 @@ export default function Institucional() {
 
   return (
     <>
+      <GoogleAnalytics />
       <HeaderBannerUnique Banner={Banner} />
       <InstitucionalPage />
       <Footer />

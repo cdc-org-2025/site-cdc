@@ -14,6 +14,7 @@ import Grid from '@mui/material/Grid'
 import VectorRoundedLines from '@/components/atoms/VectorRoundedLines'
 import SanitizedHtmlBox from '@/utils/stripHtmlTags'
 import { useConteudoSecaoQuery } from '@/clients/api/conteudo-secao'
+import GoogleAnalytics from '@/components/GoogleAnalytics'
 
 export default function ProgramaUniquePage() {
   const { id } = useParams()
@@ -33,6 +34,7 @@ export default function ProgramaUniquePage() {
 
   return (
     <>
+      <GoogleAnalytics />
       <HeaderBannerUnique noneMobile Banner={Banner} />
       {data?.descricao ? (
         <Box width={'100%'} maxWidth={'100vw'} display='flex' justifyContent={'center'}>
