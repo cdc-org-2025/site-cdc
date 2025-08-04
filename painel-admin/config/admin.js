@@ -222,93 +222,7 @@ export const adminJs = new AdminJS({
                 },
             }
         },
-        {
-            resource: models.Noticia,
-            features: [
-                createUploadFeature({
-                    folder: 'noticias',
-                    file: 'uploadCapa',
-                    key: 'imagem_capa',
-                    filePath: 'capa_filePath',
-                    filesToDelete: 'capa_filesToDelete',
-                    multiple: false,
-                }),
-            ],
-            options: {
-                navigation: 'Informe-se',
-                id: 'Noticia',
-                actions: {
-                    new: {
-                        before: async (request) => {
-                            if (request.payload?.html_original) {
-                                const rawHtml = request.payload.html_original;
 
-                                // Remove tags HTML e extrai só o texto
-                                const plainText = rawHtml.replace(/<[^>]*>/g, ' ');
-                                const tempoLeituraMin = Math.ceil(readingTime(plainText).minutes);
-
-                                request.payload.tempo_leitura = tempoLeituraMin;
-                            }
-                            return request;
-                        }
-                    },
-                    edit: {
-                        before: async (request) => {
-                            if (request.payload?.html_original) {
-                                const rawHtml = request.payload.html_original;
-
-                                const plainText = rawHtml.replace(/<[^>]*>/g, ' ');
-                                const tempoLeituraMin = Math.ceil(readingTime(plainText).minutes);
-
-                                request.payload.tempo_leitura = tempoLeituraMin;
-                            }
-                            return request;
-                        }
-                    }
-                },
-                properties: {
-                    html_original: {
-                        components: {
-                            edit: Components.ConteudoEditor,
-                            list: Components.NoticiaPreview,
-                        },
-                        isVisible: { list: true, edit: true, filter: false, show: true },
-                    },
-                    areaDeAtuacao: areaDeAtuacaoProperty,
-                    conteudo: {
-                        isVisible: false
-                    },
-                    area_ids: {
-                        isVisible: false
-                    },
-
-                    uploadCapa: {
-                        type: 'file',
-                        isVisible: { edit: true, list: false, show: false, filter: false },
-                        isArray: false, // 👈 isso força o AdminJS a usar `uploadImagem` ao invés de `uploadImagem.0`
-                    },
-
-                    imagem_capa: {
-                        isVisible: { list: true, show: true, edit: false },
-                        components: {
-                            list: Components.ImageListPreview,
-                            show: Components.ImageListPreview,
-                        },
-                    },
-                    titulo: {
-                        isVisible: false
-                    },
-                    tipo: {
-                        isVisible: false
-                    }
-
-                },
-                editProperties: ['html_original', 'areaDeAtuacao', 'autor', 'uploadCapa'],
-                showProperties: ['areaDeAtuacao', 'tempo_leitura', 'uploadCapa', 'autor', 'html_original']
-
-
-            }
-        },
         {
             resource: models.LinhaDoTempo,
             features: [
@@ -831,47 +745,7 @@ export const adminJs = new AdminJS({
                 }
             },
         },
-        {
-            resource: models.Publicacao,
-            features: [
-                createUploadFeature({
-                    folder: 'parceiros',
-                    file: 'uploadImagem',
-                    key: 'url_imagem',
-                }),
-            ],
-            options: {
-                navigation: 'Informe-se',
-                properties: {
-                    areaDeAtuacao: areaDeAtuacaoProperty,
-                    area_ids: {
-                        isVisible: false
-                    },
-                    ...createImageUploadProperties()
 
-                },
-
-                editProperties: [
-                    'titulo',
-                    'documento_url',
-                    'areaDeAtuacao',
-                    'uploadImagem' // usado para enviar imagem
-                ],
-                showProperties: [
-                    'titulo',
-                    'documento_url',
-                    'areaDeAtuacao',
-                    'url_imagem'
-                ],
-                listProperties: [
-                    'titulo',
-                    'documento_url',
-                    'areaDeAtuacao',
-                    'url_imagem'
-                ]
-
-            },
-        },
         {
             resource: models.DadosBancario,
             options: {
@@ -915,6 +789,7 @@ export const adminJs = new AdminJS({
             ],
             options: {
                 navigation: 'Inicio',
+                id: 'CardInformativo',
                 properties: {
                     ...createImageUploadProperties()
 
@@ -1016,11 +891,134 @@ export const adminJs = new AdminJS({
             },
         },
         { resource: models.Rodape, options: { navigation: 'Inicio', id: 'Rodape' } },
+        {
+            resource: models.Publicacao,
+            features: [
+                createUploadFeature({
+                    folder: 'parceiros',
+                    file: 'uploadImagem',
+                    key: 'url_imagem',
+                }),
+            ],
+            options: {
+                navigation: 'Informe-se',
+                properties: {
+                    areaDeAtuacao: areaDeAtuacaoProperty,
+                    area_ids: {
+                        isVisible: false
+                    },
+                    ...createImageUploadProperties()
+
+                },
+
+                editProperties: [
+                    'titulo',
+                    'documento_url',
+                    'areaDeAtuacao',
+                    'uploadImagem' // usado para enviar imagem
+                ],
+                showProperties: [
+                    'titulo',
+                    'documento_url',
+                    'areaDeAtuacao',
+                    'url_imagem'
+                ],
+                listProperties: [
+                    'titulo',
+                    'documento_url',
+                    'areaDeAtuacao',
+                    'url_imagem'
+                ]
+
+            },
+        },
+        {
+            resource: models.Noticia,
+            features: [
+                createUploadFeature({
+                    folder: 'noticias',
+                    file: 'uploadCapa',
+                    key: 'imagem_capa',
+                    filePath: 'capa_filePath',
+                    filesToDelete: 'capa_filesToDelete',
+                    multiple: false,
+                }),
+            ],
+            options: {
+                navigation: 'Informe-se',
+                id: 'Noticia',
+                actions: {
+                    new: {
+                        before: async (request) => {
+                            if (request.payload?.html_original) {
+                                const rawHtml = request.payload.html_original;
+
+                                // Remove tags HTML e extrai só o texto
+                                const plainText = rawHtml.replace(/<[^>]*>/g, ' ');
+                                const tempoLeituraMin = Math.ceil(readingTime(plainText).minutes);
+
+                                request.payload.tempo_leitura = tempoLeituraMin;
+                            }
+                            return request;
+                        }
+                    },
+                    edit: {
+                        before: async (request) => {
+                            if (request.payload?.html_original) {
+                                const rawHtml = request.payload.html_original;
+
+                                const plainText = rawHtml.replace(/<[^>]*>/g, ' ');
+                                const tempoLeituraMin = Math.ceil(readingTime(plainText).minutes);
+
+                                request.payload.tempo_leitura = tempoLeituraMin;
+                            }
+                            return request;
+                        }
+                    }
+                },
+                properties: {
+                    html_original: {
+                        components: {
+                            edit: Components.ConteudoEditor,
+                            list: Components.NoticiaPreview,
+                        },
+                        isVisible: { list: true, edit: true, filter: false, show: true },
+                    },
+                    areaDeAtuacao: areaDeAtuacaoProperty,
+                    conteudo: {
+                        isVisible: false
+                    },
+                    area_ids: {
+                        isVisible: false
+                    },
+
+                    uploadCapa: {
+                        type: 'file',
+                        isVisible: { edit: true, list: false, show: false, filter: false },
+                        isArray: false, // 👈 isso força o AdminJS a usar `uploadImagem` ao invés de `uploadImagem.0`
+                    },
+
+                    imagem_capa: {
+                        isVisible: { list: true, show: true, edit: false },
+                        components: {
+                            list: Components.ImageListPreview,
+                            show: Components.ImageListPreview,
+                        },
+                    },
+                    titulo: {
+                        isVisible: false
+                    },
+                    tipo: {
+                        isVisible: false
+                    }
+
+                },
+                editProperties: ['html_original', 'areaDeAtuacao', 'autor', 'uploadCapa'],
+                showProperties: ['areaDeAtuacao', 'tempo_leitura', 'uploadCapa', 'autor', 'html_original']
 
 
-
-
-
+            }
+        },
     ],
     rootPath: '/admin',
 
@@ -1074,8 +1072,7 @@ export const adminJs = new AdminJS({
                     Capa: 'Banners',
                     Inidicador: 'Indicadores',
                     Oportunidade: 'Trabalhe conosco',
-
-
+                    CardInformativo: 'Estrutura Organizacional'
                 },
                 messages: {
                     loginWelcome: 'Seja bem-vindo! Por favor, entre para continuar.',
