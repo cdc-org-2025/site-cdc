@@ -411,6 +411,42 @@ export const adminJs = new AdminJS({
             }
         },
         {
+            resource: models.CardInformativo,
+            features: [
+                createUploadFeature({
+                    folder: 'cards',
+                    file: 'uploadImagem',
+                    key: 'url_imagem',
+                }),
+            ],
+            options: {
+                navigation: 'Institucional',
+                id: 'CardInformativo',
+                properties: {
+                    ...createImageUploadProperties()
+
+                },
+                editProperties: [
+                    'titulo',
+                    'descricao',
+                    'tipo',
+                    'uploadImagem' // usado para enviar imagem
+                ],
+                showProperties: [
+                    'titulo',
+                    'descricao',
+                    'tipo',
+                    'url_imagem'
+                ],
+                listProperties: [
+                    'titulo',
+                    'descricao',
+                    'tipo',
+                    'url_imagem'
+                ]
+            }
+        },
+        {
             resource: models.Lideranca,
             features: [
                 // Seu helper continua INTACTO, como solicitado.
@@ -777,42 +813,6 @@ export const adminJs = new AdminJS({
                 }),
             ],
 
-        },
-        {
-            resource: models.CardInformativo,
-            features: [
-                createUploadFeature({
-                    folder: 'cards',
-                    file: 'uploadImagem',
-                    key: 'url_imagem',
-                }),
-            ],
-            options: {
-                navigation: 'Inicio',
-                id: 'CardInformativo',
-                properties: {
-                    ...createImageUploadProperties()
-
-                },
-                editProperties: [
-                    'titulo',
-                    'descricao',
-                    'tipo',
-                    'uploadImagem' // usado para enviar imagem
-                ],
-                showProperties: [
-                    'titulo',
-                    'descricao',
-                    'tipo',
-                    'url_imagem'
-                ],
-                listProperties: [
-                    'titulo',
-                    'descricao',
-                    'tipo',
-                    'url_imagem'
-                ]
-            }
         },
         { resource: models.Email, options: { navigation: 'Configurações', id: 'Email' } },
         {
