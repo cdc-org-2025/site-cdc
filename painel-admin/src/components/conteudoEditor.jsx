@@ -31,7 +31,7 @@ function convertStylesToInline(html) {
   });
 
   tempDiv.querySelectorAll('p').forEach(el => {
-    el.style.fontSize = '18px';
+    el.style.fontSize = '22px';
     el.style.color = '#000000';
     el.style.lineHeight = '1.6';
   });
@@ -60,8 +60,20 @@ function convertStylesToInline(html) {
   uls.forEach((ul) => {
     ul.style.paddingLeft = '40px';
     ul.style.paddingRight = '20px';
-    ul.style.paddingTop = '20px';
+    ul.style.paddingTop = '10px';
+    ul.style.paddingBottom = '10px';
     ul.style.boxSizing = 'border-box';
+    ul.style.fontSize = '18px'
+  });
+
+  const ols = tempDiv.querySelectorAll('ol');
+  ols.forEach((ol) => {
+    ol.style.paddingLeft = '40px';
+    ol.style.paddingRight = '20px';
+    ol.style.paddingTop = '10px';
+    ol.style.paddingBottom = '10px';
+    ol.style.boxSizing = 'border-box';
+    ol.style.fontSize = '18px'
   });
 
   return tempDiv.innerHTML;

@@ -40,7 +40,6 @@ export const adminJs = new AdminJS({
                         isTitle: true
                     }
                 },
-                // id: 'Area', // 👈 define o ID esperado para tradução
             }
         },
         {
