@@ -34,6 +34,7 @@ function convertStylesToInline(html) {
     el.style.fontSize = '22px';
     el.style.color = '#000000';
     el.style.lineHeight = '1.6';
+    el.style.fontWeight= '400'
   });
 
   tempDiv.querySelectorAll('iframe').forEach(el => {
@@ -60,20 +61,24 @@ function convertStylesToInline(html) {
   uls.forEach((ul) => {
     ul.style.paddingLeft = '40px';
     ul.style.paddingRight = '20px';
-    ul.style.paddingTop = '10px';
-    ul.style.paddingBottom = '10px';
+    // ul.style.paddingTop = '10px';
+    // ul.style.paddingBottom = '10px';
     ul.style.boxSizing = 'border-box';
     ul.style.fontSize = '18px'
+    ul.style.marginTop = '16px'; // espaço acima da lista
+    ul.style.marginBottom = '16px'; // espaço acima da lista
   });
 
   const ols = tempDiv.querySelectorAll('ol');
   ols.forEach((ol) => {
     ol.style.paddingLeft = '40px';
     ol.style.paddingRight = '20px';
-    ol.style.paddingTop = '10px';
-    ol.style.paddingBottom = '10px';
+    // ol.style.paddingTop = '10px';
+    // ol.style.paddingBottom = '10px';
     ol.style.boxSizing = 'border-box';
     ol.style.fontSize = '18px'
+    ol.style.marginTop = '16px'; // espaço acima da lista
+    ol.style.marginBottom = '16px'; // espaço acima da lista
   });
 
   return tempDiv.innerHTML;
