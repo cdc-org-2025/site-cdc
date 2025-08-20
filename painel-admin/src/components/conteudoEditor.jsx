@@ -69,19 +69,19 @@ function convertStylesToInline(html) {
     list.style.boxSizing = 'border-box';
     list.style.marginTop = '16px';
     list.style.marginBottom = '16px';
-    list.style.fontSize = '16px';
+    list.style.fontSize = '18px';
 
   });
 
   tempDiv.querySelectorAll('li').forEach((li) => {
-    li.style.fontSize = '16px';
+    li.style.fontSize = '18px';
     li.style.lineHeight = '1.6';
     li.style.marginBottom = '8px';
     li.style.color = '#000000';
     // Alguns editores embutem <p> dentro de <li>; normaliza também
     const p = li.querySelector('p');
     if (p) {
-      p.style.fontSize = '16px';
+      p.style.fontSize = '18px';
       p.style.lineHeight = '1.6';
       p.style.margin = '0';
       p.style.color = '#000000';
