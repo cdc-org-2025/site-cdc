@@ -209,6 +209,23 @@ function convertStylesToInline(html) {
     }
   });
 
+  // 8) Links
+  tempDiv.querySelectorAll('a').forEach((a) => {
+    // se não tiver href, remove
+    if (!a.getAttribute('href')) {
+      a.remove();
+      return;
+    }
+    // boas práticas
+    a.setAttribute('target', '_blank');
+    a.setAttribute('rel', 'noopener noreferrer');
+
+    // estilo padrão de link
+    a.style.color = '#0645AD';
+    a.style.textDecoration = 'underline';
+  });
+
+
   return tempDiv.innerHTML;
 }
 
