@@ -103,6 +103,19 @@ function convertStylesToInline(html) {
     }
   });
 
+  tempDiv.querySelectorAll('b, strong').forEach((el) => {
+    el.style.fontWeight = '700';
+  });
+
+  // Caso o SunEditor use <span style="font-weight: ...">
+  tempDiv.querySelectorAll('span[style*="font-weight"]').forEach((el) => {
+    // se for bold/bolder/>=600, fixa em 700 para consistência
+    const st = el.getAttribute('style') || '';
+    if (/font-weight\s*:\s*(bold|bolder|[6-9]00)/i.test(st)) {
+      el.style.fontWeight = '700';
+    }
+  });
+
   // 1) Título principal (h1) — vermelho
   tempDiv.querySelectorAll('h1').forEach((el) => {
     el.style.fontSize = '32px';
