@@ -3,6 +3,74 @@ import { Box, TextArea } from '@adminjs/design-system';
 import SunEditor from 'suneditor-react';
 import axios from 'axios';
 
+const EDITOR_CSS = `
+  /* limita o escopo ao editor */
+  .sun-editor .se-wrapper-wysiwyg .sun-editor-editable {
+    color: #000;
+  }
+
+  /* Parágrafos e listas */
+  .sun-editor .se-wrapper-wysiwyg p,
+  .sun-editor .se-wrapper-wysiwyg li {
+    font-size: 18px !important;
+    line-height: 1.6 !important;
+    font-weight: 400 !important;
+    color: #000 !important;
+  }
+  .sun-editor .se-wrapper-wysiwyg p { margin: 0 0 16px !important; }
+  .sun-editor .se-wrapper-wysiwyg ul,
+  .sun-editor .se-wrapper-wysiwyg ol {
+    padding-left: 40px !important;
+    padding-right: 20px !important;
+    box-sizing: border-box !important;
+    margin-top: 16px !important;
+    margin-bottom: 16px !important;
+  }
+  .sun-editor .se-wrapper-wysiwyg li { margin-bottom: 8px !important; }
+  .sun-editor .se-wrapper-wysiwyg li > p { margin: 0 !important; }
+
+  /* Títulos */
+  .sun-editor .se-wrapper-wysiwyg h1 {
+    font-size: 32px !important;
+    line-height: 1.3 !important;
+    font-weight: 700 !important;
+    color: #A7181D !important;
+    margin: 24px 0 12px !important;
+  }
+  .sun-editor .se-wrapper-wysiwyg h2 {
+    font-size: 24px !important;
+    line-height: 1.4 !important;
+    font-weight: 600 !important;
+    color: #333333 !important;
+    margin: 24px 0 12px !important;
+  }
+
+  /* Citação */
+  .sun-editor .se-wrapper-wysiwyg blockquote {
+    border-left: 3px solid #A7181D !important;
+    padding-left: 12px !important;
+    margin: 16px 0 !important;
+    font-style: italic !important;
+    font-size: 24px !important;
+    line-height: 1.6 !important;
+    color: #000 !important;
+  }
+  .sun-editor .se-wrapper-wysiwyg blockquote p {
+    font-size: 24px !important;
+    line-height: 1.6 !important;
+    margin: 0 !important;
+    color: #000 !important;
+    font-weight: 400 !important;
+  }
+
+  /* Vídeo */
+  .sun-editor .se-wrapper-wysiwyg iframe {
+    width: 800px !important;
+    height: 400px !important;
+    display: block !important;
+    margin: 20px auto !important;
+  }
+`;
 
 // Se necessário, defina os formatos
 const formats = [
@@ -228,6 +296,7 @@ const ConteudoEditor = (props) => {
 
   return (
     <Box>
+      <style>{EDITOR_CSS}</style>
       <TextArea
         placeholder="Digite o título da notícia"
         value={titulo}
