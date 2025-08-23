@@ -246,6 +246,31 @@ const ConteudoEditor = (props) => {
 
   const handleSetInstance = (instance) => {
     editorRef.current = instance;
+
+    // pega o elemento editável do SunEditor
+    const editable = instance?.core?.context?.element?.wysiwyg;
+    if (!editable) return;
+
+    // evita múltiplos binds em hot-reload
+    if (editable.__spanCleanerBound) return;
+    editable.__spanCleanerBound = true;
+
+    editable.addEventListener('paste', (e) => {
+      e.preventDefault();
+      const cd = e.clipboardData || window.clipboardData;
+
+      // tenta HTML, cai pra texto puro
+      const rawHtml = cd.getData('text/html') || cd.getData('text/plain') || '';
+
+      // 1) remove spans/fonts do que veio da Área de Transferência
+      const noSpans = stripSpansAndFonts(rawHtml);
+
+      // 2) aplica sua normalização (font-size, line-height etc.)
+      const styled = convertStylesToInline(noSpans);
+
+      // 3) insere no cursor sem deixar o editor colar o HTML original
+      instance.pasteHTML(styled);
+    });
   };
 
   const uploadImageToGCP = async (file) => {
@@ -316,12 +341,34 @@ const ConteudoEditor = (props) => {
     onChange('titulo', newTitulo);
   };
 
+    function stripSpansAndFonts(html) {
+    const temp = document.createElement('div');
+    temp.innerHTML = html;
+
+    // Remove todos os <span> completamente (unwrap)
+    temp.querySelectorAll('span').forEach((el) => {
+      const parent = el.parentNode;
+      while (el.firstChild) parent.insertBefore(el.firstChild, el);
+      el.remove();
+    });
+
+    // Remove todos os <font> também (unwrap)
+    temp.querySelectorAll('font').forEach((el) => {
+      const parent = el.parentNode;
+      while (el.firstChild) parent.insertBefore(el.firstChild, el);
+      el.remove();
+    });
+
+    return temp.innerHTML;
+  }
 
   const handleEditorChange = (newHtml) => {
-    const styledHtml = convertStylesToInline(newHtml);
-
-    onChange('html_original', styledHtml); // Isso envia para o AdminJS ou backend
+    const noSpans = stripSpansAndFonts(newHtml);
+    const styledHtml = convertStylesToInline(noSpans);
+    onChange('html_original', styledHtml);
   };
+
+
 
 
   return (
@@ -367,7 +414,7 @@ const ConteudoEditor = (props) => {
             imageHeight: "400px",
             videoHeight: "400px",
             videoWidth: "771px",
-            addTagsWhitelist: "div,img,span",
+            addTagsWhitelist: "div,img,sup,sub",
             mediaAutoSelect: false,
             imageMultipleFile: true,
             imageFileInput: true,

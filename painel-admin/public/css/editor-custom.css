@@ -82,3 +82,13 @@
 .meu-editor-escuro .sun-editor-editable {
   background-color: #afa7a7 !important;
 }
+
+.sun-editor .se-wrapper-wysiwyg sup,
+.sun-editor .se-wrapper-wysiwyg sub {
+  font-size: 75% !important;
+  line-height: 0 !important;
+  position: relative !important;
+  vertical-align: baseline !important;
+}
+.sun-editor .se-wrapper-wysiwyg sup { top: -0.5em !important; }
+.sun-editor .se-wrapper-wysiwyg sub { bottom: -0.25em !important; }
