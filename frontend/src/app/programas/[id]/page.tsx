@@ -36,7 +36,7 @@ export default function ProgramaUniquePage() {
     <>
       <GoogleAnalytics />
       <HeaderBannerUnique noneMobile Banner={Banner} />
-      {data?.descricao ? (
+      {data?.descricao && (
         <Box width={'100%'} maxWidth={'100vw'} display='flex' justifyContent={'center'}>
           <VectorRoundedLines left={0} margin="300px 0px 0px 0px" />
           <Grid
@@ -95,8 +95,6 @@ export default function ProgramaUniquePage() {
             ))}
           </Grid>
         </Box >
-      ) : (
-        <Typography variant='h1' color={"primary"} textAlign={"center"}>Sem descrição disponivel</Typography>
       )}
       <LatestNews listNoticia={listNoticias?.data} programa />
       {data?.areas.length && listTransparencia?.data?.length ? (

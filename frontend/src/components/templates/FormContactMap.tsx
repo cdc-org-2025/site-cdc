@@ -124,7 +124,7 @@ export default function FormContactMap() {
       </AnimationSplitText>
 
       <Box width="100%" maxWidth={"605px"} pb="16px">
-        <AnimationSplitText>
+        <AnimationSplitText initialFontWeight={500}>
           <Typography
             width="100%"
             variant="overline"

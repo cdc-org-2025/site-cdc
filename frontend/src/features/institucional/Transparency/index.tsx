@@ -23,7 +23,7 @@ export default function Transparency({ listTransparencia, sectionInfo }: { listT
               {sectionInfo?.titulo ?? "Transparência"}
             </Typography>
           </AnimationSplitText>
-          <AnimationSplitText>
+          <AnimationSplitText initialFontWeight={500}>
             <Typography
               variant="overline"
               textTransform="none"

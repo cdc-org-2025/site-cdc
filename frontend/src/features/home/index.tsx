@@ -174,7 +174,7 @@ export default function HomePage() {
             {programsSectionInfo?.[0].titulo ?? "Na luta para o fortalecimento democrático e cidadão pela redução das desigualdades."}
           </Typography>
         </AnimationSplitText>
-        <AnimationSplitText>
+        <AnimationSplitText initialFontWeight={500}>
           <Typography
             variant="overline"
             color="text.primary"
