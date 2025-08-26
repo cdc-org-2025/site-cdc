@@ -143,6 +143,14 @@ const SanitizedHtmlBox: FC<Props> = ({
               md: `${indicadoresFinalFontSize}rem !important`,
             }
           },
+          '& span': {
+            fontFamily: `${lato.style.fontFamily}, "Source Sans Pro", sans-serif`,
+            fontSize: {
+              xs: `${indicadoresFinalFontSize * 0.7}rem !important`,
+              sm: `${indicadoresFinalFontSize * 0.8}rem !important`,
+              md: `${indicadoresFinalFontSize}rem !important`,
+            }
+          },
         }),
       }}
       dangerouslySetInnerHTML={{ __html: sanitizeHtml(html) }}
