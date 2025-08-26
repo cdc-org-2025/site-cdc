@@ -36,7 +36,7 @@ export default function BannerFixedBackground() {
           pt: "88px"
         }}
       >
-        <SanitizedHtmlBox indicadores html={bannerData?.[0]?.titulo} />
+        <SanitizedHtmlBox indicadores={true} html={bannerData?.[0]?.titulo} />
       </Box>
 
       <Box
