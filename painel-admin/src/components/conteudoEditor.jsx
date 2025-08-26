@@ -225,6 +225,39 @@ function convertStylesToInline(html) {
     a.style.textDecoration = 'underline';
   });
 
+tempDiv.querySelectorAll('span[style*="vertical-align"]').forEach((sp) => {
+  const st = sp.getAttribute('style') || '';
+  const isSup = /vertical-align\s*:\s*super/i.test(st);
+  const isSub = /vertical-align\s*:\s*sub/i.test(st);
+
+  if (isSup || isSub) {
+    const tag = isSup ? 'sup' : 'sub';
+    const el = document.createElement(tag);
+    el.innerHTML = sp.innerHTML;
+
+    // preserva cor se veio no span
+    const colorMatch = st.match(/color\s*:\s*([^;]+);?/i);
+    if (colorMatch) el.style.color = colorMatch[1].trim();
+
+    sp.parentNode.replaceChild(el, sp);
+  }
+});
+
+// 10) Normaliza estilo inline de <sup>/<sub> (mesmo do editor)
+tempDiv.querySelectorAll('sup, sub').forEach((el) => {
+  el.style.fontSize = '75%';
+  el.style.lineHeight = '0';
+  el.style.position = 'relative';
+  el.style.verticalAlign = 'baseline';
+  if (el.tagName === 'SUP') {
+    el.style.top = '-0.5em';
+    el.style.removeProperty?.('bottom');
+  } else {
+    el.style.bottom = '-0.25em';
+    el.style.removeProperty?.('top');
+  }
+});
+
 
   return tempDiv.innerHTML;
 }
