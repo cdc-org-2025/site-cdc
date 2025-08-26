@@ -1025,7 +1025,7 @@ export const adminJs = new AdminJS({
 
     branding: {
         companyName: 'CDC',
-        logo: '/assets/logo_cdc.svg',
+        logo: '/assets/logo_cdc_atualizada.svg',
         theme: {
             colors: {
                 // Light Mode (default)
