@@ -3,6 +3,74 @@ import { Box, TextArea } from '@adminjs/design-system';
 import SunEditor from 'suneditor-react';
 import axios from 'axios';
 
+const EDITOR_CSS = `
+  /* limita o escopo ao editor */
+  .sun-editor .se-wrapper-wysiwyg .sun-editor-editable {
+    color: #000;
+  }
+
+  /* Parágrafos e listas */
+  .sun-editor .se-wrapper-wysiwyg p,
+  .sun-editor .se-wrapper-wysiwyg li {
+    font-size: 18px !important;
+    line-height: 1.6 !important;
+    font-weight: 400 !important;
+    color: #000 !important;
+  }
+  .sun-editor .se-wrapper-wysiwyg p { margin: 0 0 16px !important; }
+  .sun-editor .se-wrapper-wysiwyg ul,
+  .sun-editor .se-wrapper-wysiwyg ol {
+    padding-left: 40px !important;
+    padding-right: 20px !important;
+    box-sizing: border-box !important;
+    margin-top: 16px !important;
+    margin-bottom: 16px !important;
+  }
+  .sun-editor .se-wrapper-wysiwyg li { margin-bottom: 8px !important; }
+  .sun-editor .se-wrapper-wysiwyg li > p { margin: 0 !important; }
+
+  /* Títulos */
+  .sun-editor .se-wrapper-wysiwyg h1 {
+    font-size: 32px !important;
+    line-height: 1.3 !important;
+    font-weight: 700 !important;
+    color: #A7181D !important;
+    margin: 24px 0 12px !important;
+  }
+  .sun-editor .se-wrapper-wysiwyg h2 {
+    font-size: 24px !important;
+    line-height: 1.4 !important;
+    font-weight: 600 !important;
+    color: #333333 !important;
+    margin: 24px 0 12px !important;
+  }
+
+  /* Citação */
+  .sun-editor .se-wrapper-wysiwyg blockquote {
+    border-left: 3px solid #A7181D !important;
+    padding-left: 12px !important;
+    margin: 16px 0 !important;
+    font-style: italic !important;
+    font-size: 24px !important;
+    line-height: 1.6 !important;
+    color: #000 !important;
+  }
+  .sun-editor .se-wrapper-wysiwyg blockquote p {
+    font-size: 24px !important;
+    line-height: 1.6 !important;
+    margin: 0 !important;
+    color: #000 !important;
+    font-weight: 400 !important;
+  }
+
+  /* Vídeo */
+  .sun-editor .se-wrapper-wysiwyg iframe {
+    width: 800px !important;
+    height: 400px !important;
+    display: block !important;
+    margin: 20px auto !important;
+  }
+`;
 
 // Se necessário, defina os formatos
 const formats = [
@@ -16,49 +84,153 @@ function convertStylesToInline(html) {
   const tempDiv = document.createElement('div');
   tempDiv.innerHTML = html;
 
-  tempDiv.querySelectorAll('h1').forEach(el => {
-    el.style.fontSize = '32px';
-    el.style.color = '#A7181D';
-    el.style.fontWeight = 'bold';
-    el.style.lineHeight = '1.3';
+  // 0) Remove font-size/line-height de tudo (spans, lis, etc.)
+  Array.from(tempDiv.querySelectorAll('*')).forEach((el) => {
+    if (el.style) {
+      el.style.removeProperty?.('font-size');
+      el.style.removeProperty?.('line-height');
+      // Se veio no atributo style em texto
+      if (el.getAttribute('style')) {
+        el.setAttribute(
+          'style',
+          el
+            .getAttribute('style')
+            .replace(/font-size\s*:\s*[^;]+;?/gi, '')
+            .replace(/line-height\s*:\s*[^;]+;?/gi, '')
+            .trim()
+        );
+      }
+    }
   });
 
-  tempDiv.querySelectorAll('h2').forEach(el => {
+  tempDiv.querySelectorAll('b, strong').forEach((el) => {
+    el.style.fontWeight = '700';
+  });
+
+  // Caso o SunEditor use <span style="font-weight: ...">
+  tempDiv.querySelectorAll('span[style*="font-weight"]').forEach((el) => {
+    // se for bold/bolder/>=600, fixa em 700 para consistência
+    const st = el.getAttribute('style') || '';
+    if (/font-weight\s*:\s*(bold|bolder|[6-9]00)/i.test(st)) {
+      el.style.fontWeight = '700';
+    }
+  });
+
+  // 1) Título principal (h1) — vermelho
+  tempDiv.querySelectorAll('h1').forEach((el) => {
+    el.style.fontSize = '32px';
+    el.style.color = '#A7181D';
+    el.style.fontWeight = '700';
+    el.style.lineHeight = '1.3';
+    el.style.margin = '24px 0 12px';
+  });
+
+  // 2) Subtítulo (h2)
+  tempDiv.querySelectorAll('h2').forEach((el) => {
     el.style.fontSize = '24px';
     el.style.color = '#333333';
     el.style.fontWeight = '600';
     el.style.lineHeight = '1.4';
+    el.style.margin = '24px 0 12px';
   });
 
-  tempDiv.querySelectorAll('p').forEach(el => {
+  // 3) Parágrafos
+  tempDiv.querySelectorAll('p').forEach((el) => {
     el.style.fontSize = '18px';
     el.style.color = '#000000';
     el.style.lineHeight = '1.6';
+    el.style.fontWeight = '400';
+    el.style.margin = '0 0 16px';
   });
 
-  tempDiv.querySelectorAll('iframe').forEach(el => {
-    el.style.width = '800px';
-    el.style.height = '400px';
-    el.style.display = 'block';
-    el.style.margin = '20px auto';
-    el.setAttribute('width', '800');   // redundante, mas pode ajudar
-    el.setAttribute('height', '400');
+  // 4) Listas (aplique no LI para vencer inline vindo do editor)
+  tempDiv.querySelectorAll('ul, ol').forEach((list) => {
+    list.style.paddingLeft = '40px';
+    list.style.paddingRight = '20px';
+    list.style.boxSizing = 'border-box';
+    list.style.marginTop = '16px';
+    list.style.marginBottom = '16px';
+    list.style.fontSize = '18px';
+
   });
 
-  tempDiv.querySelectorAll('blockquote').forEach(el => {
+  tempDiv.querySelectorAll('li').forEach((li) => {
+    li.style.fontSize = '18px';
+    li.style.lineHeight = '1.6';
+    li.style.marginBottom = '8px';
+    li.style.color = '#000000';
+    // Alguns editores embutem <p> dentro de <li>; normaliza também
+    const p = li.querySelector('p');
+    if (p) {
+      p.style.fontSize = '18px';
+      p.style.lineHeight = '1.6';
+      p.style.margin = '0';
+      p.style.color = '#000000';
+      p.style.fontWeight = '400';
+    }
+  });
+
+  // 5) Blockquote
+  tempDiv.querySelectorAll('blockquote').forEach((el) => {
     el.style.borderLeft = '3px solid #A7181D';
     el.style.paddingLeft = '12px';
     el.style.margin = '16px 0';
     el.style.fontStyle = 'italic';
-    el.style.fontSize = '18px';
+    el.style.fontSize = '24px';
     el.style.color = '#000000';
     el.style.lineHeight = '1.6';
-    el.style.quotes = '"\\201C""\\201D""\\2018""\\2019"';
+  });
+  // Caso o editor gere blockquote > p
+  tempDiv.querySelectorAll('blockquote p').forEach((p) => {
+    p.style.fontSize = '24px';
+    p.style.lineHeight = '1.6';
+    p.style.margin = '0';
+    p.style.color = '#000000';
+    p.style.fontWeight = '400';
+  });
+
+  // 6) Iframe (vídeo)
+  tempDiv.querySelectorAll('iframe').forEach((el) => {
+    el.style.width = '800px';
+    el.style.height = '400px';
+    el.style.display = 'block';
+    el.style.margin = '20px auto';
+    el.setAttribute('width', '800');
+    el.setAttribute('height', '400');
+  });
+
+  // 7) Remove spans <font> e spans vazios que só serviam para tamanho
+  tempDiv.querySelectorAll('span, font').forEach((el) => {
+    const onlyStyle = el.getAttribute('style');
+    if (!el.textContent.trim() && !el.querySelector('*')) {
+      el.remove();
+    } else if (onlyStyle && !onlyStyle.trim()) {
+      el.removeAttribute('style');
+    }
+  });
+
+  // 8) Links
+  tempDiv.querySelectorAll('a').forEach((a) => {
+    // se não tiver href, remove
+    if (!a.getAttribute('href')) {
+      a.remove();
+      return;
+    }
+    // boas práticas
+    a.setAttribute('target', '_blank');
+    a.setAttribute('rel', 'noopener noreferrer');
+
+    // estilo padrão de link
+    a.style.color = '#0645AD';
+    a.style.textDecoration = 'underline';
   });
 
 
   return tempDiv.innerHTML;
 }
+
+
+
 
 const ConteudoEditor = (props) => {
   const { onChange, property, record } = props;
@@ -74,6 +246,31 @@ const ConteudoEditor = (props) => {
 
   const handleSetInstance = (instance) => {
     editorRef.current = instance;
+
+    // pega o elemento editável do SunEditor
+    const editable = instance?.core?.context?.element?.wysiwyg;
+    if (!editable) return;
+
+    // evita múltiplos binds em hot-reload
+    if (editable.__spanCleanerBound) return;
+    editable.__spanCleanerBound = true;
+
+    editable.addEventListener('paste', (e) => {
+      e.preventDefault();
+      const cd = e.clipboardData || window.clipboardData;
+
+      // tenta HTML, cai pra texto puro
+      const rawHtml = cd.getData('text/html') || cd.getData('text/plain') || '';
+
+      // 1) remove spans/fonts do que veio da Área de Transferência
+      const noSpans = stripSpansAndFonts(rawHtml);
+
+      // 2) aplica sua normalização (font-size, line-height etc.)
+      const styled = convertStylesToInline(noSpans);
+
+      // 3) insere no cursor sem deixar o editor colar o HTML original
+      instance.pasteHTML(styled);
+    });
   };
 
   const uploadImageToGCP = async (file) => {
@@ -144,16 +341,39 @@ const ConteudoEditor = (props) => {
     onChange('titulo', newTitulo);
   };
 
+    function stripSpansAndFonts(html) {
+    const temp = document.createElement('div');
+    temp.innerHTML = html;
+
+    // Remove todos os <span> completamente (unwrap)
+    temp.querySelectorAll('span').forEach((el) => {
+      const parent = el.parentNode;
+      while (el.firstChild) parent.insertBefore(el.firstChild, el);
+      el.remove();
+    });
+
+    // Remove todos os <font> também (unwrap)
+    temp.querySelectorAll('font').forEach((el) => {
+      const parent = el.parentNode;
+      while (el.firstChild) parent.insertBefore(el.firstChild, el);
+      el.remove();
+    });
+
+    return temp.innerHTML;
+  }
 
   const handleEditorChange = (newHtml) => {
-    const styledHtml = convertStylesToInline(newHtml);
-
-    onChange('html_original', styledHtml); // Isso envia para o AdminJS ou backend
+    const noSpans = stripSpansAndFonts(newHtml);
+    const styledHtml = convertStylesToInline(noSpans);
+    onChange('html_original', styledHtml);
   };
+
+
 
 
   return (
     <Box>
+      <style>{EDITOR_CSS}</style>
       <TextArea
         placeholder="Digite o título da notícia"
         value={titulo}
@@ -194,7 +414,7 @@ const ConteudoEditor = (props) => {
             imageHeight: "400px",
             videoHeight: "400px",
             videoWidth: "771px",
-            addTagsWhitelist: "div,img,span",
+            addTagsWhitelist: "div,img,sup,sub",
             mediaAutoSelect: false,
             imageMultipleFile: true,
             imageFileInput: true,
@@ -207,7 +427,7 @@ const ConteudoEditor = (props) => {
             paragraphTags: false,
             defaultTag: "",
             formats
-            
+
           }}
         />
       </Box>

@@ -1,16 +1,23 @@
-import React, { useState, useRef } from 'react';
-import { Box, TextArea } from '@adminjs/design-system';
+import React, { useRef } from 'react';
+import { Box } from '@adminjs/design-system';
 import SunEditor from 'suneditor-react';
 
+function convertStylesToInline(html) {
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = html;
+
+  tempDiv.querySelectorAll('p').forEach(el => {
+    el.style.fontSize = '1rem';
+    el.style.color = 'rgb(0, 0, 0)';
+    el.style.lineHeight = '1.6';
+  });
+
+  return tempDiv.innerHTML;
+}
 
 const ConteudoRichTextLimitado = (props) => {
-  const { onChange, property, record } = props;
-
-  const initialData = record.params['conteudo'] || {
-    titulo: '',
-    conteudo: '<p><br></p>',
-  };
-
+  const { onChange, record } = props;
+  const initialData = record.params['conteudo'] || '<p><br></p>';
   const editorRef = useRef(null);
 
   const handleSetInstance = (instance) => {
@@ -18,9 +25,9 @@ const ConteudoRichTextLimitado = (props) => {
   };
 
   const handleEditorChange = (newHtml) => {
-    onChange('conteudo', newHtml);
+    const styledHtml = convertStylesToInline(newHtml);
+    onChange('conteudo', styledHtml);
   };
-
 
   return (
     <Box>
@@ -35,6 +42,8 @@ const ConteudoRichTextLimitado = (props) => {
             buttonList: [
               ['bold', 'underline', 'italic', 'list', 'align', 'fontSize'],
             ],
+            paragraphTags: false,
+            defaultTag: '',
           }}
         />
       </Box>

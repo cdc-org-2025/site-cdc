@@ -8,25 +8,31 @@ function convertStylesToInline(html) {
   const tempDiv = document.createElement('div');
   tempDiv.innerHTML = html;
 
+  // Aplica estilo aos h1, mas sem sobrescrever cor
   tempDiv.querySelectorAll('h1').forEach(el => {
     el.style.fontSize = '48px';
     el.style.fontWeight = '700';
     el.style.lineHeight = '1.2';
     el.style.letterSpacing = '0';
     el.style.verticalAlign = 'middle';
-    if (!el.style.color || el.style.color === '') {
-      el.style.color = '#ffffff';
-    }
+    // ❌ REMOVIDO o forçamento de cor branca
   });
 
-  
-  tempDiv.querySelectorAll('span[style*="#FE9A03"]').forEach(el => {
-    el.style.color = '#FE9A03';
-    el.style.fontWeight = '700';
+  // Mantém as cores já aplicadas por spans
+  tempDiv.querySelectorAll('span[style]').forEach(span => {
+    const style = span.getAttribute('style');
+    // Se já tem color e font-weight, não faz nada
+    if (!style.includes('color')) return;
+
+    // Opcional: reforça visual com peso para cores específicas
+    if (style.includes('#FE9A03')) {
+      span.style.fontWeight = '700';
+    }
   });
 
   return tempDiv.innerHTML;
 }
+
 
 const CapaTituloEditor = (props) => {
   const { onChange, property, record } = props;

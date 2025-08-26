@@ -9,14 +9,9 @@ import readingTime from 'reading-time';
 import { Op } from 'sequelize'
 import { createImageUploadProperties } from '../helpers/admin.helper.js'
 
-
-
 AdminJS.registerAdapter({ Database, Resource })
 
 const models = initializeModels(sequelize)
-
-
-// No topo do seu arquivo admin.js
 
 const areaDeAtuacaoProperty = {
     reference: 'areas',
@@ -44,95 +39,189 @@ export const adminJs = new AdminJS({
                     nome: {
                         isTitle: true
                     }
-                }
+                },
             }
         },
         {
-            resource: models.Noticia,
+            resource: models.Organizacao,
             features: [
+                // Sua configuração do feature continua a mesma, está correta
                 createUploadFeature({
-                    folder: 'noticias',
-                    file: 'uploadCapa',
-                    key: 'imagem_capa',
-                    filePath: 'capa_filePath',
-                    filesToDelete: 'capa_filesToDelete',
-                    multiple: false,
+                    folder: 'organizacao',
+                    file: 'uploadImagens',
+                    key: 'imagem_url', // <- Note que a key aqui é 'imagem_url'
+                    multiple: true,
                 }),
             ],
             options: {
-                navigation: 'Informe-se',
-                actions: {
-                    new: {
-                        before: async (request) => {
-                            if (request.payload?.html_original) {
-                                const rawHtml = request.payload.html_original;
+                navigation: 'Inicio',
+                id: 'Organizacao',
+                listProperties: ['id', 'titulo', 'descricao', 'imagem_url'],
+                newProperties: ['titulo', 'descricao', 'uploadImagens'],
+                editProperties: ['titulo', 'descricao', 'uploadImagens'],
+                showProperties: ['id', 'titulo', 'descricao', 'imagem_url'],
 
-                                // Remove tags HTML e extrai só o texto
-                                const plainText = rawHtml.replace(/<[^>]*>/g, ' ');
-                                const tempoLeituraMin = Math.ceil(readingTime(plainText).minutes);
-
-                                request.payload.tempo_leitura = tempoLeituraMin;
-                            }
-                            return request;
-                        }
-                    },
-                    edit: {
-                        before: async (request) => {
-                            if (request.payload?.html_original) {
-                                const rawHtml = request.payload.html_original;
-
-                                const plainText = rawHtml.replace(/<[^>]*>/g, ' ');
-                                const tempoLeituraMin = Math.ceil(readingTime(plainText).minutes);
-
-                                request.payload.tempo_leitura = tempoLeituraMin;
-                            }
-                            return request;
-                        }
-                    }
-                },
                 properties: {
-                    html_original: {
+                    id: { isVisible: { list: true, edit: false, show: true, filter: true } },
+
+                    // A propriedade 'nome' foi renomeada para 'titulo' para corresponder ao seu Model
+                    titulo: {
+                        isTitle: true,
+                        isRequired: true,
+                    },
+                    descricao: {
+                        type: 'richtext',
+                        // components: {
+                        //     list: Components.TextoPreview,
+                        // }
+                    },
+
+                    // Suas propriedades de imagem, sem alterações
+                    uploadImagens: {
+                        label: 'Imagens',
                         components: {
-                            edit: Components.ConteudoEditor,
-                            list: Components.NoticiaPreview,
+                            edit: Components.ImageEditor,
                         },
-                        isVisible: { list: true, edit: true, filter: false, show: true },
+                        isVisible: { list: false, show: false, filter: false, edit: true },
                     },
-                    areaDeAtuacao: areaDeAtuacaoProperty,
-                    conteudo: {
-                        isVisible: false
-                    },
-                    area_ids: {
-                        isVisible: false
-                    },
-
-                    uploadCapa: {
-                        type: 'file',
-                        isVisible: { edit: true, list: false, show: false, filter: false },
-                        isArray: false, // 👈 isso força o AdminJS a usar `uploadImagem` ao invés de `uploadImagem.0`
-                    },
-
-                    imagem_capa: {
-                        isVisible: { list: true, show: true, edit: false },
+                    imagesToDelete: { isVisible: false },
+                    imagem_url: {
+                        label: "Imagens",
+                        isVisible: { list: true, show: true, edit: false, filter: false },
                         components: {
                             list: Components.ImageListPreview,
                             show: Components.ImageListPreview,
-                        },
-                    },
-                    titulo: {
-                        isVisible: false
-                    },
-                    tipo: {
-                        isVisible: false
+                        }
                     }
-
                 },
-                editProperties: ['html_original', 'areaDeAtuacao', 'autor', 'uploadCapa'],
-                showProperties: ['areaDeAtuacao', 'tempo_leitura', 'uploadCapa', 'autor', 'html_original']
 
 
+                // Substituímos suas actions antigas por esta lógica completa
+                actions: {
+                    new: {
+                        after: async (response, request, context) => {
+                            const { record } = context;
+                            if (!record || !record.isValid()) { return response; }
+
+                            const novasImagens = Object.entries(request.files || {})
+                                .filter(([key]) => key.startsWith('uploadImagens'))
+                                .map(([, file]) => file);
+
+                            if (novasImagens && novasImagens.length > 0) {
+                                for (const imagem of novasImagens) {
+                                    const filename = imagem.name.replace(/\s/g, '_');
+                                    const gcsPath = `organizacao/${record.id()}-${filename}`;
+
+                                    await models.OrganizacaoImagem.create({
+                                        organizacao_id: record.id(), // Chave estrangeira correta
+                                        imagem_url: gcsPath,         // Nome do campo de imagem correto
+                                    });
+                                }
+                            }
+                            return response;
+                        }
+                    },
+
+                    edit: {
+                        before: async (request, context) => {
+                            const { record } = context;
+                            if (record && record.id()) {
+                                const imagens = await models.OrganizacaoImagem.findAll({
+                                    where: { organizacao_id: record.id() }, // Chave estrangeira correta
+                                    raw: true,
+                                });
+                                // Renomeamos a propriedade para o componente ImageEditor funcionar
+                                // Ele espera 'url_imagem', mas seu model tem 'imagem_url'
+                                record.params.imagens = imagens.map(img => ({
+                                    id: img.id,
+                                    url_imagem: img.imagem_url, // Mapeamento de nome
+                                }));
+                            }
+                            return request;
+                        },
+                        after: async (response, request, context) => {
+                            const { record } = context;
+                            const { payload } = request;
+
+                            // 1. Lógica de exclusão
+                            const idsParaDeletar = Object.keys(payload)
+                                .filter(key => key.startsWith('imagesToDelete.'))
+                                .map(key => payload[key]);
+                            if (idsParaDeletar && idsParaDeletar.length > 0) {
+                                await models.OrganizacaoImagem.destroy({ where: { id: { [Op.in]: idsParaDeletar } } });
+                            }
+
+                            // 2. Lógica de upload
+                            const novasImagens = Object.entries(request.files || {})
+                                .filter(([key]) => key.startsWith('uploadImagens'))
+                                .map(([, file]) => file);
+                            if (novasImagens && novasImagens.length > 0) {
+                                for (const imagem of novasImagens) {
+                                    const filename = imagem.name.replace(/\s/g, '_');
+                                    const gcsPath = `organizacao/${record.id()}-${filename}`;
+                                    await models.OrganizacaoImagem.create({
+                                        organizacao_id: record.id(),
+                                        imagem_url: gcsPath,
+                                    });
+                                }
+                            }
+                            return response;
+                        }
+                    },
+
+                    list: {
+                        after: async (response) => {
+                            const recordIds = response.records.map(r => r.params.id);
+                            if (recordIds.length === 0) return response;
+
+                            const imagens = await models.OrganizacaoImagem.findAll({
+                                where: { organizacao_id: { [Op.in]: recordIds } }
+                            });
+
+                            const imagensMap = imagens.reduce((acc, img) => {
+                                const id = img.organizacao_id;
+                                if (!acc[id]) { acc[id] = []; }
+                                acc[id].push(img.imagem_url);
+                                return acc;
+                            }, {});
+
+                            for (const record of response.records) {
+                                const id = record.params.id;
+                                if (imagensMap[id]) {
+                                    record.params.imagem_url = imagensMap[id];
+                                }
+                            }
+                            return response;
+                        }
+                    },
+
+                    delete: {
+                        after: async (response, request, context) => {
+                            const { record } = context;
+                            await models.OrganizacaoImagem.destroy({ where: { organizacao_id: record.id() } });
+                            return response;
+                        }
+                    },
+                }
+            },
+        },
+        {
+            resource: models.Parceiro,
+            features: [
+                createUploadFeature({
+                    folder: 'parceiros',
+                    file: 'uploadImagem',
+                    key: 'url_imagem',
+                }),
+            ],
+            options: {
+                navigation: 'Inicio',
+                properties: {
+                    ...createImageUploadProperties()
+                },
             }
         },
+
         {
             resource: models.LinhaDoTempo,
             features: [
@@ -156,7 +245,13 @@ export const adminJs = new AdminJS({
 
                 properties: {
                     titulo: { isTitle: true },
-                    conteudo: { type: 'richtext' },
+                    // conteudo: { type: 'richtext' },
+                    conteudo: {
+                        // type: 'richtext',
+                        components: {
+                            edit: Components.EditorLinhaTempo, // 👈 apontando para seu componente
+                        }
+                    },
                     ano: { type: 'number' },
 
                     // Propriedade de upload, agora com configuração de componente por ação
@@ -165,6 +260,7 @@ export const adminJs = new AdminJS({
                         components: {
                             // Ao EDITAR, usamos nosso componente customizado.
                             edit: Components.ImageEditor,
+                            list: Components.NoticiaPreview,
                             // Para a ação de NEW (criar), não especificamos nada.
                             // Isso faz com que o AdminJS use o componente PADRÃO 
                             // fornecido pelo createUploadFeature, que é exatamente o que queremos.
@@ -314,6 +410,42 @@ export const adminJs = new AdminJS({
             }
         },
         {
+            resource: models.CardInformativo,
+            features: [
+                createUploadFeature({
+                    folder: 'cards',
+                    file: 'uploadImagem',
+                    key: 'url_imagem',
+                }),
+            ],
+            options: {
+                navigation: 'Institucional',
+                id: 'CardInformativo',
+                properties: {
+                    ...createImageUploadProperties()
+
+                },
+                editProperties: [
+                    'titulo',
+                    'descricao',
+                    'tipo',
+                    'uploadImagem' // usado para enviar imagem
+                ],
+                showProperties: [
+                    'titulo',
+                    'descricao',
+                    'tipo',
+                    'url_imagem'
+                ],
+                listProperties: [
+                    'titulo',
+                    'descricao',
+                    'tipo',
+                    'url_imagem'
+                ]
+            }
+        },
+        {
             resource: models.Lideranca,
             features: [
                 // Seu helper continua INTACTO, como solicitado.
@@ -325,6 +457,7 @@ export const adminJs = new AdminJS({
             ],
             options: {
                 navigation: 'Institucional',
+                id: 'Lideranca',
 
                 properties: {
                     // Mantemos suas propriedades como estavam na última tentativa
@@ -401,48 +534,10 @@ export const adminJs = new AdminJS({
             }
         },
         {
-            resource: models.Oportunidade,
-            options: {
-                navigation: 'Institucional',
-                properties: {
-                    titulo: {
-                        isVisible: { list: true, edit: false, show: true }, // para esconder o campo padrão
-                    },
-                    descricao: {
-                        components: {
-                            edit: Components.OportunidadeEditor,
-                            list: Components.NoticiaPreview, // novo componente para a listagem
-
-                        }
-                    },
-                },
-                listProperties: [
-                    'titulo',
-                    'descricao'
-                ]
-            }
-
-        },
-        {
-            resource: models.Parceiro,
-            features: [
-                createUploadFeature({
-                    folder: 'parceiros',
-                    file: 'uploadImagem',
-                    key: 'url_imagem',
-                }),
-            ],
-            options: {
-                navigation: 'Parceiros',
-                properties: {
-                    ...createImageUploadProperties()
-                },
-            }
-        },
-        {
             resource: models.Transparencia,
             options: {
                 navigation: 'Institucional',
+                id: 'Transparencia',
                 properties: {
                     areaDeAtuacao: areaDeAtuacaoProperty,
                     area_ids: {
@@ -477,6 +572,48 @@ export const adminJs = new AdminJS({
                     key: 'url_imagem',
                 }),
             ],
+        },
+        {
+            resource: models.PerguntaFrequente,
+            options: {
+                navigation: 'Institucional',
+                listProperties: [
+                    'pergunta',
+                    'resposta'
+                ],
+                showProperties: [
+                    'pergunta',
+                    'resposta'
+                ],
+                editProperties: [
+                    'pergunta',
+                    'resposta'
+                ]
+            }
+        },
+        {
+            resource: models.Oportunidade,
+            options: {
+                navigation: 'Institucional',
+                id: 'Oportunidade',
+                properties: {
+                    titulo: {
+                        isVisible: { list: true, edit: false, show: true }, // para esconder o campo padrão
+                    },
+                    descricao: {
+                        components: {
+                            edit: Components.OportunidadeEditor,
+                            list: Components.NoticiaPreview, // novo componente para a listagem
+
+                        }
+                    },
+                },
+                listProperties: [
+                    'titulo',
+                    'descricao'
+                ]
+            }
+
         },
         {
             resource: models.Programa,
@@ -643,6 +780,116 @@ export const adminJs = new AdminJS({
                 }
             },
         },
+
+        {
+            resource: models.DadosBancario,
+            options: {
+                navigation: 'Configurações',
+                id: 'DadosBancario',
+                properties: {
+                    ...createImageUploadProperties()
+                },
+                editProperties: [
+                    'titular_conta',
+                    'agencia',
+                    'banco',
+                    'chave_pix',
+                    'uploadImagem' // usado para enviar imagem
+                ],
+                showProperties: [
+                    'titular_conta',
+                    'agencia',
+                    'banco',
+                    'chave_pix',
+                    'url_imagem'
+                ]
+            },
+            features: [
+                createUploadFeature({
+                    folder: 'dados_bancarios',
+                    file: 'uploadImagem',
+                    key: 'url_imagem',
+                }),
+            ],
+
+        },
+        { resource: models.Email, options: { navigation: 'Configurações', id: 'Email' } },
+        {
+            resource: models.Inidicador,
+            options: {
+                navigation: 'Inicio',
+                id: 'Inidicador',
+                editProperties: [
+                    'descricao',
+                    'quantidade',
+                ],
+                showProperties: [
+                    'descricao',
+                    'quantidade',
+                ],
+                listProperties: [
+                    'descricao',
+                    'quantidade',
+                ]
+            }
+        },
+        {
+            resource: models.Capa,
+            features: [
+                createUploadFeature({
+                    folder: 'banners',
+                    file: 'uploadImagens',
+                    key: 'url_img',
+                }),
+            ],
+            options: {
+                navigation: 'Configurações',
+                id: 'Capa',
+                properties: {
+                    uploadImagem: {
+                        type: 'file',
+                        isVisible: { edit: true, list: false, show: false, filter: false },
+                        isArray: false, // 👈 isso força o AdminJS a usar `uploadImagem` ao invés de `uploadImagem.0`
+                    },
+                    url_img: {
+                        isVisible: { list: true, show: false, edit: false },
+                        components: {
+                            list: Components.ImageListPreview
+                        }
+                    },
+                    titulo: {
+                        components: {
+                            edit: Components.CapaTituloEditor,
+                            list: Components.NoticiaPreview,
+                        }
+                    }
+                },
+                editProperties: [
+                    'titulo',
+                    'pagina',
+                    'uploadImagens' // usado para enviar imagem
+                ],
+                showProperties: [
+                    'titulo',
+                    'pagina',
+                    'url_img'
+                ],
+                listProperties: [
+                    'titulo',
+                    'pagina',
+                    'url_img'
+                ],
+
+            }
+        },
+        {
+            resource: models.ConteudoSecao,
+            options: {
+                id: 'ConteudoSecao', // 👈 define o ID esperado para tradução
+                navigation: 'Configurações',
+            },
+        },
+        { resource: models.Rodape, options: { navigation: 'Inicio', id: 'Rodape' } },
         {
             resource: models.Publicacao,
             features: [
@@ -685,332 +932,100 @@ export const adminJs = new AdminJS({
             },
         },
         {
-            resource: models.DadosBancario,
-            options: {
-                navigation: 'Configurações',
-                properties: {
-                    ...createImageUploadProperties()
-                },
-                editProperties: [
-                    'titular_conta',
-                    'agencia',
-                    'banco',
-                    'chave_pix',
-                    'uploadImagem' // usado para enviar imagem
-                ],
-                showProperties: [
-                    'titular_conta',
-                    'agencia',
-                    'banco',
-                    'chave_pix',
-                    'url_imagem'
-                ]
-            },
+            resource: models.Noticia,
             features: [
                 createUploadFeature({
-                    folder: 'dados_bancarios',
-                    file: 'uploadImagem',
-                    key: 'url_imagem',
-                }),
-            ],
-
-        },
-        {
-            resource: models.PerguntaFrequente,
-            options: {
-                navigation: 'Institucional',
-                listProperties: [
-                    'pergunta',
-                    'resposta'
-                ],
-                showProperties: [
-                    'pergunta',
-                    'resposta'
-                ],
-                editProperties: [
-                    'pergunta',
-                    'resposta'
-                ]
-            }
-        },
-        {
-            resource: models.CardInformativo,
-            features: [
-                createUploadFeature({
-                    folder: 'cards',
-                    file: 'uploadImagem',
-                    key: 'url_imagem',
+                    folder: 'noticias',
+                    file: 'uploadCapa',
+                    key: 'imagem_capa',
+                    filePath: 'capa_filePath',
+                    filesToDelete: 'capa_filesToDelete',
+                    multiple: false,
                 }),
             ],
             options: {
-                navigation: 'Informativos',
-                properties: {
-                    ...createImageUploadProperties()
+                navigation: 'Informe-se',
+                id: 'Noticia',
+                actions: {
+                    new: {
+                        before: async (request) => {
+                            if (request.payload?.html_original) {
+                                const rawHtml = request.payload.html_original;
 
-                },
-                editProperties: [
-                    'titulo',
-                    'descricao',
-                    'tipo',
-                    'uploadImagem' // usado para enviar imagem
-                ],
-                showProperties: [
-                    'titulo',
-                    'descricao',
-                    'tipo',
-                    'url_imagem'
-                ],
-                listProperties: [
-                    'titulo',
-                    'descricao',
-                    'tipo',
-                    'url_imagem'
-                ]
-            }
-        },
-        { resource: models.Email, options: { navigation: 'Configurações' } },
-        {
-            resource: models.Organizacao,
-            features: [
-                // Sua configuração do feature continua a mesma, está correta
-                createUploadFeature({
-                    folder: 'organizacao',
-                    file: 'uploadImagens',
-                    key: 'imagem_url', // <- Note que a key aqui é 'imagem_url'
-                    multiple: true,
-                }),
-            ],
-            options: {
-                navigation: 'Configurações',
+                                // Remove tags HTML e extrai só o texto
+                                const plainText = rawHtml.replace(/<[^>]*>/g, ' ');
+                                const tempoLeituraMin = Math.ceil(readingTime(plainText).minutes);
 
-                listProperties: ['id', 'titulo', 'descricao', 'imagem_url'],
-                newProperties: ['titulo', 'descricao', 'uploadImagens'],
-                editProperties: ['titulo', 'descricao', 'uploadImagens'],
-                showProperties: ['id', 'titulo', 'descricao', 'imagem_url'],
-
-                properties: {
-                    id: { isVisible: { list: true, edit: false, show: true, filter: true } },
-
-                    // A propriedade 'nome' foi renomeada para 'titulo' para corresponder ao seu Model
-                    titulo: {
-                        isTitle: true,
-                        isRequired: true,
+                                request.payload.tempo_leitura = tempoLeituraMin;
+                            }
+                            return request;
+                        }
                     },
-                    descricao: {
-                        type: 'richtext',
-                        // components: {
-                        //     list: Components.TextoPreview,
-                        // }
-                    },
+                    edit: {
+                        before: async (request) => {
+                            if (request.payload?.html_original) {
+                                const rawHtml = request.payload.html_original;
 
-                    // Suas propriedades de imagem, sem alterações
-                    uploadImagens: {
-                        label: 'Imagens',
-                        components: {
-                            edit: Components.ImageEditor,
-                        },
-                        isVisible: { list: false, show: false, filter: false, edit: true },
-                    },
-                    imagesToDelete: { isVisible: false },
-                    imagem_url: {
-                        label: "Imagens",
-                        isVisible: { list: true, show: true, edit: false, filter: false },
-                        components: {
-                            list: Components.ImageListPreview,
-                            show: Components.ImageListPreview,
+                                const plainText = rawHtml.replace(/<[^>]*>/g, ' ');
+                                const tempoLeituraMin = Math.ceil(readingTime(plainText).minutes);
+
+                                request.payload.tempo_leitura = tempoLeituraMin;
+                            }
+                            return request;
                         }
                     }
                 },
-
-
-                // Substituímos suas actions antigas por esta lógica completa
-                actions: {
-                    new: {
-                        after: async (response, request, context) => {
-                            const { record } = context;
-                            if (!record || !record.isValid()) { return response; }
-
-                            const novasImagens = Object.entries(request.files || {})
-                                .filter(([key]) => key.startsWith('uploadImagens'))
-                                .map(([, file]) => file);
-
-                            if (novasImagens && novasImagens.length > 0) {
-                                for (const imagem of novasImagens) {
-                                    const filename = imagem.name.replace(/\s/g, '_');
-                                    const gcsPath = `organizacao/${record.id()}-${filename}`;
-
-                                    await models.OrganizacaoImagem.create({
-                                        organizacao_id: record.id(), // Chave estrangeira correta
-                                        imagem_url: gcsPath,         // Nome do campo de imagem correto
-                                    });
-                                }
-                            }
-                            return response;
-                        }
-                    },
-
-                    edit: {
-                        before: async (request, context) => {
-                            const { record } = context;
-                            if (record && record.id()) {
-                                const imagens = await models.OrganizacaoImagem.findAll({
-                                    where: { organizacao_id: record.id() }, // Chave estrangeira correta
-                                    raw: true,
-                                });
-                                // Renomeamos a propriedade para o componente ImageEditor funcionar
-                                // Ele espera 'url_imagem', mas seu model tem 'imagem_url'
-                                record.params.imagens = imagens.map(img => ({
-                                    id: img.id,
-                                    url_imagem: img.imagem_url, // Mapeamento de nome
-                                }));
-                            }
-                            return request;
-                        },
-                        after: async (response, request, context) => {
-                            const { record } = context;
-                            const { payload } = request;
-
-                            // 1. Lógica de exclusão
-                            const idsParaDeletar = Object.keys(payload)
-                                .filter(key => key.startsWith('imagesToDelete.'))
-                                .map(key => payload[key]);
-                            if (idsParaDeletar && idsParaDeletar.length > 0) {
-                                await models.OrganizacaoImagem.destroy({ where: { id: { [Op.in]: idsParaDeletar } } });
-                            }
-
-                            // 2. Lógica de upload
-                            const novasImagens = Object.entries(request.files || {})
-                                .filter(([key]) => key.startsWith('uploadImagens'))
-                                .map(([, file]) => file);
-                            if (novasImagens && novasImagens.length > 0) {
-                                for (const imagem of novasImagens) {
-                                    const filename = imagem.name.replace(/\s/g, '_');
-                                    const gcsPath = `organizacao/${record.id()}-${filename}`;
-                                    await models.OrganizacaoImagem.create({
-                                        organizacao_id: record.id(),
-                                        imagem_url: gcsPath,
-                                    });
-                                }
-                            }
-                            return response;
-                        }
-                    },
-
-                    list: {
-                        after: async (response) => {
-                            const recordIds = response.records.map(r => r.params.id);
-                            if (recordIds.length === 0) return response;
-
-                            const imagens = await models.OrganizacaoImagem.findAll({
-                                where: { organizacao_id: { [Op.in]: recordIds } }
-                            });
-
-                            const imagensMap = imagens.reduce((acc, img) => {
-                                const id = img.organizacao_id;
-                                if (!acc[id]) { acc[id] = []; }
-                                acc[id].push(img.imagem_url);
-                                return acc;
-                            }, {});
-
-                            for (const record of response.records) {
-                                const id = record.params.id;
-                                if (imagensMap[id]) {
-                                    record.params.imagem_url = imagensMap[id];
-                                }
-                            }
-                            return response;
-                        }
-                    },
-
-                    delete: {
-                        after: async (response, request, context) => {
-                            const { record } = context;
-                            await models.OrganizacaoImagem.destroy({ where: { organizacao_id: record.id() } });
-                            return response;
-                        }
-                    },
-                }
-            },
-        },
-        {
-            resource: models.Inidicador,
-            options: {
-                navigation: 'Informativos',
-                editProperties: [
-                    'descricao',
-                    'quantidade',
-                ],
-                showProperties: [
-                    'descricao',
-                    'quantidade',
-                ],
-                listProperties: [
-                    'descricao',
-                    'quantidade',
-                ]
-            }
-        },
-        {
-            resource: models.Capa,
-            features: [
-                createUploadFeature({
-                    folder: 'banners',
-                    file: 'uploadImagens',
-                    key: 'url_img',
-                }),
-            ],
-            options: {
-                navigation: 'Configurações',
-
                 properties: {
-                    uploadImagem: {
+                    html_original: {
+                        components: {
+                            edit: Components.ConteudoEditor,
+                            list: Components.NoticiaPreview,
+                        },
+                        isVisible: { list: true, edit: true, filter: false, show: true },
+                    },
+                    areaDeAtuacao: areaDeAtuacaoProperty,
+                    conteudo: {
+                        isVisible: false
+                    },
+                    area_ids: {
+                        isVisible: false
+                    },
+
+                    uploadCapa: {
                         type: 'file',
                         isVisible: { edit: true, list: false, show: false, filter: false },
                         isArray: false, // 👈 isso força o AdminJS a usar `uploadImagem` ao invés de `uploadImagem.0`
                     },
-                    url_img: {
-                        isVisible: { list: true, show: false, edit: false },
+
+                    imagem_capa: {
+                        isVisible: { list: true, show: true, edit: false },
                         components: {
-                            list: Components.ImageListPreview
-                        }
+                            list: Components.ImageListPreview,
+                            show: Components.ImageListPreview,
+                        },
                     },
                     titulo: {
-                        components:{
-                            edit: Components.CapaTituloEditor,
-                            list: Components.NoticiaPreview,
-                        }
+                        isVisible: false
+                    },
+                    tipo: {
+                        isVisible: false
                     }
+
                 },
-                editProperties: [
-                    'titulo',
-                    'pagina',
-                    'uploadImagens' // usado para enviar imagem
-                ],
-                showProperties: [
-                    'titulo',
-                    'pagina',
-                    'url_img'
-                ],
-                listProperties: [
-                    'titulo',
-                    'pagina',
-                    'url_img'
-                ],
+                editProperties: ['html_original', 'areaDeAtuacao', 'autor', 'uploadCapa'],
+                showProperties: ['areaDeAtuacao', 'tempo_leitura', 'uploadCapa', 'autor', 'html_original']
+
 
             }
         },
-        { resource: models.ConteudoSecao, options: { navigation: 'Configurações' } },
-        { resource: models.Rodape, options: { navigation: 'Configurações' } },
-
-
-
-
-
     ],
     rootPath: '/admin',
+
+
+
     branding: {
         companyName: 'CDC',
-        logo: '/assets/logo_cdc.svg',
+        logo: '/assets/logo_cdc_atualizada.svg',
         theme: {
             colors: {
                 // Light Mode (default)
@@ -1035,61 +1050,87 @@ export const adminJs = new AdminJS({
     },
     locale: {
         language: 'pt-BR',
-        availableLanguages: ['pt-BR'],
+        withBackend: false,
+        availableLanguages: ['en', 'pt-BR'],
+        localeDetection: true,
         translations: {
-            labels: {
-                loginWelcome: 'Bem-vindo ao Painel',
-                Colaborador: 'Colaboradores',
-            },
-            messages: {
-                loginWelcome: 'Seja bem-vindo! Por favor, entre para continuar.',
-                successfullyBulkDeleted: 'Registros excluídos com sucesso',
-                successfullyDeleted: 'Registro excluído com sucesso',
-                successfullyUpdated: 'Registro atualizado com sucesso',
-                successfullyCreated: 'Registro criado com sucesso',
-                thereWereValidationErrors: 'Existem erros de validação - por favor, verifique!',
-                forbiddenError: 'Você não tem permissão para executar esta ação',
-                anyForbiddenError: 'Você não tem permissão para realizar esta ação',
-                errorFetchingRecords: 'Erro ao buscar registros',
-                errorFetchingRecord: 'Erro ao buscar o registro',
-                noRecordsSelected: 'Nenhum registro selecionado',
-                theseRecordsWillBeRemoved: 'Os seguintes registros serão removidos:',
-                theseRecordsWillBeUpdated: 'Os seguintes registros serão atualizados:',
-                uploadDrop: 'Solte o arquivo aqui ou clique para escolher',
-                uploadMaxSize: 'Tamanho máximo: 5MB',
-                uploadAcceptedFormats: 'Formatos aceitos: PNG, JPG, JPEG, WEBP',
-            },
-            buttons: {
-                save: 'Salvar',
-                addNewItem: 'Adicionar novo item',
-                filter: 'Filtrar',
-                applyChanges: 'Aplicar alterações',
-                resetFilter: 'Limpar filtros',
-                confirmRemovalMany: 'Confirmar exclusão de vários',
-                confirmRemovalOne: 'Confirmar exclusão',
-                logout: 'Sair',
-                login: 'Entrar',
-                submit: 'Enviar',
-                addNewProperty: 'Adicionar nova propriedade',
-                Dashboard: "Inicio",
+            'pt-BR': {
+                labels: {
+                    loginWelcome: 'Bem-vindo ao Painel',
+                    Colaborador: 'Colaboradores',
+                    ConteudoSecao: 'Títulos e resumos',
+                    DadosBancario: 'Doe agora (dados)',
+                    Email: 'E-mails (vagas/contato)',
+                    Area: 'Áreas',
+                    Organizacao: 'Apresentação',
+                    Rodape: 'Rodapé',
+                    Noticia: 'Notícias',
+                    Publicacao: 'Publicação',
+                    Lideranca: 'Lideranças',
+                    Transparencia: 'Transparência',
+                    Capa: 'Banners',
+                    Inidicador: 'Indicadores',
+                    Oportunidade: 'Trabalhe conosco',
+                    CardInformativo: 'Estrutura Organizacional'
+                },
+                messages: {
+                    loginWelcome: 'Seja bem-vindo! Por favor, entre para continuar.',
+                    successfullyBulkDeleted: 'Registros excluídos com sucesso',
+                    successfullyDeleted: 'Registro excluído com sucesso',
+                    successfullyUpdated: 'Registro atualizado com sucesso',
+                    successfullyCreated: 'Registro criado com sucesso',
+                    thereWereValidationErrors: 'Existem erros de validação - por favor, verifique!',
+                    forbiddenError: 'Você não tem permissão para executar esta ação',
+                    anyForbiddenError: 'Você não tem permissão para realizar esta ação',
+                    errorFetchingRecords: 'Erro ao buscar registros',
+                    errorFetchingRecord: 'Erro ao buscar o registro',
+                    noRecordsSelected: 'Nenhum registro selecionado',
+                    theseRecordsWillBeRemoved: 'Os seguintes registros serão removidos:',
+                    theseRecordsWillBeUpdated: 'Os seguintes registros serão atualizados:',
+                    uploadDrop: 'Solte o arquivo aqui ou clique para escolher',
+                    uploadMaxSize: 'Tamanho máximo: 5MB',
+                    uploadAcceptedFormats: 'Formatos aceitos: PNG, JPG, JPEG, WEBP',
+                },
+                buttons: {
+                    save: 'Salvar',
+                    addNewItem: 'Adicionar novo item',
+                    filter: 'Filtrar',
+                    applyChanges: 'Aplicar alterações',
+                    resetFilter: 'Limpar filtros',
+                    confirmRemovalMany: 'Confirmar exclusão de vários',
+                    confirmRemovalOne: 'Confirmar exclusão',
+                    logout: 'Sair',
+                    login: 'Entrar',
+                    submit: 'Enviar',
+                    addNewProperty: 'Adicionar nova propriedade',
+                    Dashboard: "Inicio",
 
-            },
-            properties: {
-                areaDeAtuacao: 'Área de Atuação',
-                url_imagem: 'URL da Imagem',
-                cargo: 'Cargo',
-                nome: 'Nome',
-                email: 'E-mail',
-            },
-            actions: {
-                new: 'Criar Novo',
-                edit: 'Editar',
-                show: 'Exibir',
-                delete: 'Excluir',
-                bulkDelete: 'Excluir selecionados',
-                list: 'Lista',
-                Dashboard: "Inicio",
-            },
+                },
+                properties: {
+                    areaDeAtuacao: 'Área de Atuação',
+                    url_imagem: 'URL da Imagem',
+                    cargo: 'Cargo',
+                    nome: 'Nome',
+                    email: 'E-mail',
+                },
+                actions: {
+                    new: 'Criar Novo',
+                    edit: 'Editar',
+                    show: 'Exibir',
+                    delete: 'Excluir',
+                    bulkDelete: 'Excluir selecionados',
+                    list: 'Lista',
+                    Dashboard: "Inicio",
+                },
+                resources: {
+                    ConteudoSecao: {
+                        properties: {
+                            // this will override the name only for Comment resource.
+                            name: 'Tytuł',
+                        },
+                    }
+                },
+            }
         },
     },
     componentLoader,
