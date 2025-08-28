@@ -887,6 +887,10 @@ export const adminJs = new AdminJS({
             options: {
                 id: 'ConteudoSecao', // 👈 define o ID esperado para tradução
                 navigation: 'Configurações',
+                editProperties: [
+                    'titulo',
+                    'resumo'
+                ]
             },
         },
         { resource: models.Rodape, options: { navigation: 'Inicio', id: 'Rodape' } },
