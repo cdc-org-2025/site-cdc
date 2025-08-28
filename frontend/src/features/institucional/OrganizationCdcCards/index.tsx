@@ -83,7 +83,7 @@ export default function OrganizationCdcCards({ listCards, sectionInfo }: { listC
             {sectionInfo?.titulo}
           </Typography>
         </AnimationSplitText>
-        <AnimationSplitText>
+        <AnimationSplitText initialFontWeight={500}>
           <Typography
             variant="overline"
             textAlign="center"

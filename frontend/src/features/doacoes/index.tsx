@@ -23,7 +23,7 @@ export default function Doacoes() {
       alignItems={'center'}
       gap="16px"
     >
-      <AnimationSplitText>
+      <AnimationSplitText >
         <Typography
           variant="h3"
           color={'primary'}
@@ -33,7 +33,7 @@ export default function Doacoes() {
           {dataConteudoSecao?.[0]?.titulo}
         </Typography>
       </AnimationSplitText>
-      <AnimationSplitText>
+      <AnimationSplitText initialFontWeight={500}>
         <Typography
           variant="overline"
           textTransform="none"
