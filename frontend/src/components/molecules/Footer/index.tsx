@@ -45,34 +45,41 @@ export default function Footer() {
         >
           Centro de Desenvolvimento e Cidadania - CDC
         </Typography>
-        <Typography
-          variant="body2"
-          color="secondary.dark"
-        >
-          {rodape?.endereco}, CEP: {rodape?.cep}
-        </Typography>
-        <Typography
-          variant="body2"
-          color="secondary.dark"
-        >
-          Telefone: {rodape?.telefone}
-        </Typography>
-        <Typography
-          variant="body2"
-          color="secondary.dark"
-          pb="6px"
-        >
-          Horário de Funcionamento: {rodape?.horario_funcionamento}
-        </Typography>
-        <Typography
-          variant="body2"
-          color="secondary.dark"
-          style={{ opacity: "0.5" }}
-          pb="30px"
-        >
-          CNPJ {rodape?.cnpj}
-        </Typography>
-
+        {rodape?.endereco && rodape?.cep && (
+          <Typography
+            variant="body2"
+            color="secondary.dark"
+          >
+            {rodape?.endereco}, CEP: {rodape?.cep}
+          </Typography>
+        )}
+        {rodape?.telefone && (
+          <Typography
+            variant="body2"
+            color="secondary.dark"
+          >
+            Telefone: {rodape?.telefone}
+          </Typography>
+        )}
+        {rodape?.horario_funcionamento && (
+          <Typography
+            variant="body2"
+            color="secondary.dark"
+            pb="6px"
+          >
+            Horário de Funcionamento: {rodape?.horario_funcionamento}
+          </Typography>
+        )}
+        {rodape?.cnpj && (
+          <Typography
+            variant="body2"
+            color="secondary.dark"
+            style={{ opacity: "0.5" }}
+            pb="30px"
+          >
+            CNPJ {rodape?.cnpj}
+          </Typography>
+        )}
         <Box
           height="100%"
           display="flex"
