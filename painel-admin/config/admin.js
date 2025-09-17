@@ -577,6 +577,10 @@ export const adminJs = new AdminJS({
             resource: models.PerguntaFrequente,
             options: {
                 navigation: 'Institucional',
+                properties: {
+                    pergunta:  { type: 'textarea' },
+                    resposta: { type: 'textarea' },
+                },
                 listProperties: [
                     'pergunta',
                     'resposta'
@@ -820,16 +824,16 @@ export const adminJs = new AdminJS({
                 navigation: 'Inicio',
                 id: 'Inidicador',
                 editProperties: [
-                    'descricao',
                     'quantidade',
+                    'descricao',
                 ],
                 showProperties: [
-                    'descricao',
                     'quantidade',
+                    'descricao',
                 ],
                 listProperties: [
-                    'descricao',
                     'quantidade',
+                    'descricao',
                 ]
             }
         },
