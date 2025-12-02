@@ -62,7 +62,7 @@ class SearchController {
 
           const [rows] = await db.sequelize.query(
             `
-              SELECT id, titulo, url_imagem, area_ids
+              SELECT *
               FROM public.transparencia
               ${whereSQL}
             `,
@@ -95,6 +95,7 @@ class SearchController {
           ...item, // já vem como objeto simples da query raw
           tipo: 'transparencia',
           imagem_capa: item.url_imagem,
+          documento_url: item.documento_url
         })),
         ...programas.map((item) => ({
           ...item.toJSON(),
@@ -125,6 +126,7 @@ class SearchController {
           tipo: item.tipo,
           imagem_capa: item.imagem_capa,
           areas: areasCompletas,
+          documento_url: item?.documento_url
         };
       });
 
