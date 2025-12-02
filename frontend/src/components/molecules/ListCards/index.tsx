@@ -10,7 +10,11 @@ export default function ListCards({ list, page }: { list: any[], page: string })
 
   const handlePushPage = (id: number, documento_url: string, type: string) => {
     if (page === "/resultados") {
-      return push(`${type}s/${id}`)
+      if (type === "transparencia") {
+        return window.open(documento_url, '_blank', 'noopener,noreferrer');
+      } else {
+        return push(`${type}s/${id}`)
+      }
     }
 
     if (page === "/noticias" || page === "/programas") {
