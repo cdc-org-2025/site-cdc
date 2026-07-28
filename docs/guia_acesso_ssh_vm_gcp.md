@@ -1,32 +1,44 @@
-# 🛡️ Guia de Conexão na VM `prod1` via Cloud Shell
+# 🛡️ Guia de Diagnóstico de Erros de Conexão no Cloud Shell
 
-No Google Cloud, os nomes de instâncias na CLI `gcloud` são obrigatoriamente grafados em letras minúsculas (`prod1` em vez de `Prod1`).
-
----
-
-## 📋 Opções de Conexão no Cloud Shell (`@cloudshell`)
-
-### Opção A (Direta pelo IP):
-```bash
-ssh 136.113.22.112
-```
-
-### Opção B (Via gcloud CLI com nome em minúsculas):
-```bash
-gcloud compute ssh prod1 --zone=southamerica-east1-a
-```
+Este documento explica os motivos dos erros de conexão SSH ocorridos no Cloud Shell e como resolvê-los de forma definitiva.
 
 ---
 
-## 🚀 Execução do Backup dentro da VM `prod1`
+## 🔍 Explicação Técnica dos Motivos
 
-Assim que o prompt do terminal alterar para `prod1` (`@prod1`), execute o backup do banco de dados:
+### Motivo do Erro 1 (`Permission denied (publickey)` no `ssh 136.113.22.112`):
+- Ao rodar `ssh 136.113.22.112` direto no Cloud Shell, o SSH tenta logar como `gt_transformadigital` (o usuário do Cloud Shell).
+- A VM de produção não possui a chave SSH pública do Cloud Shell cadastrada para o usuário `gt_transformadigital`.
+
+### Motivo do Erro 2 (`resource ... was not found` no `gcloud compute ssh`):
+- A VM `Prod1` está alocada na zona **`us-east1-c`** (Estados Unidos), e não em `southamerica-east1-a`.
+
+---
+
+## 📋 Solução Definitiva (Em 2 Passos no Cloud Shell)
+
+### Passo 1: Listar as instâncias para obter a zona exata
+```bash
+gcloud compute instances list
+```
+
+### Passo 2: Conectar na VM informando a zona correta (`us-east1-c`)
+```bash
+gcloud compute ssh prod1 --zone=us-east1-c
+```
+*(O `gcloud` irá gerar e injetar temporariamente uma chave válida e conectar automaticamente).*
+
+---
+
+## 🚀 Executando o Backup dentro da VM `prod1`
+
+Após se conectar (quando o prompt exibir `gt_transformadigital@prod1:`):
 
 ```bash
 sudo docker exec frappe_docker-db-1 mariadb-dump -u root -p$(sudo docker exec frappe_docker-db-1 printenv MYSQL_ROOT_PASSWORD) --all-databases > ~/backup_mariadb_estoque_$(date +%Y%m%d).sql
 ```
 
-E confirme a criação do arquivo `.sql`:
+Confirmar a geração do arquivo:
 ```bash
 ls -lh ~/backup_mariadb_estoque_*.sql
 ```
