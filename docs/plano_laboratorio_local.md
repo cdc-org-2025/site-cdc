@@ -1,44 +1,62 @@
-# 🧪 Plano de Backup & Montagem do Laboratório Local (Lab CDC)
+# 🎯 Plano de Backup & Laboratório Local: Site Institucional (`cdc.org.br`)
 
-Este documento estabelece o roteiro para transformar os backups extraídos do servidor de produção `prod1` em um **Laboratório Local Dockerizado** para testes, auditoria e desenvolvimento sem depender da GCP.
-
----
-
-## 📊 1. Status dos Backups do Sistema
-
-| Componente | Origem / Servidor | Arquivo de Backup Gerado | Tamanho | Status |
-| :--- | :--- | :--- | :--- | :--- |
-| **Banco MariaDB (Estoque / ERPNext)** | `prod1` (`frappe_docker-db-1`) | `/home/kleberdev97/backup_estoque.sql` | **124 MB** | ✅ **Gerado com Sucesso** |
-| **Banco PostgreSQL (Site CDC / AdminJS)** | GCP Cloud SQL / Container | `backup_site_cdc.sql` | ~10 MB | ⏳ Em Andamento |
-| **Mídias & Imagens de Upload** | `prod1` (`sites/frontend/public/files`) | `uploads_estoque.tar.gz` | ~50 MB | ⏳ Em Andamento |
+> **Foco Principal:** Backup do banco de dados PostgreSQL e mídias da aplicação **`cdc.org.br`** (Site CDC + Backend Express + Painel AdminJS).
 
 ---
 
-## 🧠 2. Mapeamento das Regras de Negócio do Sistema (`estoque.cdc.org.br`)
+## 📊 1. Arquitetura Atual do Site (`cdc.org.br`) na GCP
 
-O sistema de estoque utiliza a arquitetura padrão do **ERPNext v15 (Frappe Framework)**. As regras de negócio e estruturas de dados centrais estão concentradas nas seguintes entidades:
-
-1. **Catálogo de Produtos (`tabItem`)**:
-   - Contém os itens, insumos e patrimônios da ONG CDC, divididos por grupos (`item_group`) e unidades de medida (`stock_uom`).
-2. **Locais de Armazenamento (`tabWarehouse`)**:
-   - Define a estrutura hierárquica dos almoxarifados e pontos de distribuição do CDC.
-3. **Movimentações de Estoque (`tabStock Entry`)**:
-   - Registra saídas, doações, entradas e transferências entre almoxarifados.
-4. **Livro de Razão de Estoque (`tabStock Ledger Entry`)**:
-   - Tabela de auditoria imutável que registra cada movimento físico com data, hora, saldo anterior e saldo resultante.
-
----
-
-## 🛠️ 3. Como Restaurar o Backup no Laboratório Local (Docker)
-
-Com o arquivo `backup_estoque.sql` de 124 MB gerado na VM:
-
-### Passo A: Baixar o backup da VM para a máquina local (PowerShell)
-```powershell
-scp -i C:\Users\kleber.fanini\.ssh\id_ed25519 kleberdev97@136.113.22.112:/home/kleberdev97/backup_estoque.sql C:\Códigos\site-cdc\backup_estoque.sql
+```mermaid
+graph TD
+    User([Usuários / Navegador]) -->|HTTPS| Frontend[Frontend Next.js]
+    Admin([Administradores]) -->|AdminJS| CloudRunAdmin[Cloud Run: admin-panel]
+    Frontend -->|REST API| CloudRunBE[Cloud Run: backend-cdc]
+    
+    CloudRunBE -->|Cloud SQL Proxy| CloudSQL[(GCP Cloud SQL: PostgreSQL)]
+    CloudRunAdmin -->|Cloud SQL Proxy| CloudSQL
 ```
 
-### Passo B: Restaurar no container MariaDB local
+---
+
+## 📋 2. Como Fazer o Backup do Banco PostgreSQL (`cdc.org.br`) na GCP
+
+Como a API e o Painel Admin do site `cdc.org.br` rodam no **GCP Cloud Run** e o banco fica no **GCP Cloud SQL (PostgreSQL)**, temos 2 métodos para extrair o backup:
+
+### 🔹 Método A: Via Terminal do Google Cloud (Cloud Shell)
+
+No seu Cloud Shell (`@cloudshell`), execute os comandos:
+
+#### 1. Listar o nome exato da instância Cloud SQL:
 ```bash
-docker exec -i site_cdc_postgres mariadb -u root -p<SENHA> < backup_estoque.sql
+gcloud sql instances list
 ```
+
+#### 2. Conectar diretamente ao banco PostgreSQL do site:
+```bash
+gcloud sql connect NOME_DA_INSTANCIA --user=postgres
+```
+
+#### 3. Gerar o dump completo do banco PostgreSQL (`site_cdc_db`):
+```bash
+gcloud sql export sql NOME_DA_INSTANCIA gs://<SEU_BUCKET>/backup_site_cdc.sql --database=ong-cdc
+```
+
+---
+
+### 🔹 Método B: Via Console Web da GCP (Navegador)
+
+1. Acesse o **Google Cloud Console ➔ SQL**.
+2. Clique na instância do PostgreSQL do site (ex: `site-cdc-db` ou `ong-cdc-db`).
+3. No menu superior, clique em **Exportar** (Export).
+4. Selecione a opção **SQL**, escolha o banco `ong-cdc` (ou `site_cdc`) e salve no Cloud Storage para download.
+
+---
+
+## 🧠 3. Regras de Negócio do Site (`cdc.org.br`)
+
+A aplicação do site `cdc.org.br` utiliza **Sequelize ORM** em Node.js com o banco PostgreSQL. As principais entidades de regras de negócio são:
+
+1. **Notícias & Conteúdos**: Artigos, categorias, imagens de capa e banners institucionais.
+2. **Projetos & Ações Sociais**: Páginas institucionais, metas e relatórios de impacto da ONG.
+3. **Doações & Formulários**: Registros de apoiadores, formulários de contato e newsletters.
+4. **Usuários Gestores (Painel AdminJS)**: Permissões de administradores e autenticação via Google OAuth 2.0.
