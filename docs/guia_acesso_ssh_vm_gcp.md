@@ -1,46 +1,33 @@
-# 🛡️ Guia de Execução via Terminal Web da GCP (Instância `Prod1`)
+# 🛡️ Guia de Diferenciação: Cloud Shell vs VM `Prod1`
 
-Como o acesso ao terminal web do navegador (Cloud SSH) já está ativo na VM `Prod1` (`136.113.22.112`), podemos realizar todas as operações de auditoria, backup e extração de dados diretamente por ele com privilégios `sudo`.
+Ao utilizar o terminal do Google Cloud, é importante entender a diferença entre o **Google Cloud Shell** e a **VM de Produção `Prod1`**:
+
+- **`cloudshell`** (`gt_transformadigital@cloudshell`): É o terminal temporário de gerenciamento do Google Cloud. Os containers Docker do site **não** ficam aqui.
+- **`Prod1`** (`gt_transformadigital@prod1` ou `kleberdev97@prod1`): É a máquina virtual real (`136.113.22.112`) onde o ERPNext, MariaDB e Caddy estão rodando em containers Docker.
 
 ---
 
-## 📋 Roteiro de Comandos para Executar no Terminal Web da GCP
+## 📋 Como Conectar na VM `Prod1` a partir do Cloud Shell
 
-### 1. Backup Completo do Banco MariaDB (`estoque.cdc.org.br`)
+Se você está na tela do **Cloud Shell** (`@cloudshell`), execute este comando para saltar direto para a VM `Prod1`:
 
-Gera um dump completo em arquivo `.sql` de todos os dados do ERPNext direto do container MariaDB:
+```bash
+gcloud compute ssh Prod1
+```
+
+*(Se o GCP perguntar a zona, pressione Enter ou confirme a zona padronizada, ex: `southamerica-east1-a`).*
+
+---
+
+## 🚀 Comandos para Executar Dentro da VM `Prod1` (`@prod1`)
+
+Assim que o prompt mudar para `@prod1`, execute o comando de backup:
 
 ```bash
 sudo docker exec frappe_docker-db-1 mariadb-dump -u root -p$(sudo docker exec frappe_docker-db-1 printenv MYSQL_ROOT_PASSWORD) --all-databases > ~/backup_mariadb_estoque_$(date +%Y%m%d).sql
 ```
 
-Verificar se o arquivo de backup foi gerado com sucesso:
+E confirme a criação do arquivo de backup:
 ```bash
 ls -lh ~/backup_mariadb_estoque_*.sql
-```
-
----
-
-### 2. Localizar Arquivos de Configuração e Segredos (`.env`)
-
-Busca todos os arquivos de ambiente e chaves ocultas no servidor:
-
-```bash
-sudo find /home /opt /var/www -maxdepth 3 \( -name ".env*" -o -name "*chave*.json" \) 2>/dev/null
-```
-
----
-
-### 3. Verificar Configurações do Proxy Caddy & Domínios
-
-```bash
-sudo cat /etc/caddy/Caddyfile
-```
-
----
-
-### 4. Verificar Espaço em Disco e Memória Livre
-
-```bash
-df -h && free -h
 ```
