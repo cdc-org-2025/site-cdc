@@ -12,51 +12,41 @@ Este guia orienta a adição da chave SSH no console da GCP e o primeiro acesso 
 
 ---
 
-## 2. Passo a Passo no Console GCP (Instância `Prod1`)
+## 2. Método Recomendado: Adição via Terminal Web do GCP Console (Cloud SSH)
 
-1. No console do Google Cloud, acesse: **Compute Engine ➔ Instâncias de VM**.
-2. Clique no nome da VM: **`Prod1`**.
-3. No menu superior, clique em **Editar** (ícone de lápis ✏️).
-4. Role a página até a seção **Chaves SSH** (SSH Keys).
-5. Clique no botão **Adicionar Item** (+ Add Item).
-6. Cole a **chave pública SSH** gerada previamente:
+Se ao editar a VM no console o acesso direto via SSH local falhar, você pode adicionar a chave diretamente pelo terminal web do GCP:
 
-```text
-ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGJ2oNi2SmsGSqewI5f1hFf9g9nVLb1jhe3br9nhyctR kleberdev97@gmail.com
+1. Na lista de VMs no console da GCP, ao lado da VM `Prod1`, clique no botão **SSH** (Abrir na janela do navegador).
+2. Assim que o terminal abrir no navegador, cole o seguinte comando completo de uma linha:
+
+```bash
+mkdir -p ~/.ssh && chmod 700 ~/.ssh && echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGJ2oNi2SmsGSqewI5f1hFf9g9nVLb1jhe3br9nhyctR kleberdev97@gmail.com" >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys
 ```
 
-7. Observe que o GCP identificará o usuário Linux (ex: `kleberdev97` ou `kleberdev97_gmail_com`).
-8. Role até o final da página e clique em **Salvar** (Save).
-9. Aguarde alguns segundos até o aviso de alteração concluída.
+3. Pressione **Enter**.
+4. Pronto! A chave estará registrada em `~/.ssh/authorized_keys` com as permissões corretas (`chmod 600`).
 
 ---
 
-## 3. Conectando via Terminal Local
+## 3. Conectando via Terminal Local (PowerShell)
 
-Após salvar no GCP Console, execute o comando no terminal (substituindo `<IP_DA_VM>` pelo IP público que você copiou):
+Após executar o comando acima no terminal web do GCP, abra o PowerShell da sua máquina local e conecte-se:
 
 ```bash
-ssh -i C:\Users\kleber.fanini\.ssh\id_ed25519 kleberdev97@<IP_DA_VM>
+ssh -i C:\Users\kleber.fanini\.ssh\id_ed25519 kleberdev97@136.113.22.112
 ```
-
-*(Se o usuário criado na VM pelo GCP for `kleberdev97_gmail_com` ou outro nome indicado na tela de edição do GCP, use o nome exato exibido ao lado da chave).*
 
 ---
 
 ## 4. Primeiros Comandos de Inquérito ao Entrar na VM `Prod1`
 
-Assim que se conectar à máquina, execute estes 4 comandos seguros de diagnóstico:
-
 ```bash
 # 1. Verificar os containers em execução (se usar Docker)
 docker ps
 
-# 2. Verificar processos Node.js / PM2 (se usar PM2)
-pm2 list || ps aux | grep node
-
-# 3. Verificar o uso de memória e disco
+# 2. Verificar o uso de memória e disco
 free -h && df -h
 
-# 4. Localizar arquivos de configuração/variáveis
+# 3. Localizar arquivos de configuração/variáveis
 ls -la /opt /var/www /home/$USER
 ```
