@@ -1,6 +1,7 @@
 const storageDomain = process.env.NEXT_PUBLIC_STORAGE?.replace(/^https?:\/\//, '') || '';
 
 module.exports = {
+  output: 'standalone',
   reactStrictMode: true,
   env: {
     baseUrlDomain: process.env.NEXT_PUBLIC_API_URL,
