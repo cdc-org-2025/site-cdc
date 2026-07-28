@@ -1,0 +1,44 @@
+name: 🤖 Automação Idempotente de Issues GitHub
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  create-issues:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout do Repositório
+        uses: actions/checkout@v4
+
+      - name: Função Auxiliar de Criação Idempotente de Issues
+        run: |
+          create_issue_if_not_exists() {
+            local title="$1"
+            local body="$2"
+            local labels="$3"
+
+            echo "Buscando issue existente: '$title'..."
+            EXISTING=$(gh issue list --search "\"$title\" in:title" --json number --jq '.[0].number')
+
+            if [ -n "$EXISTING" ]; then
+              echo "✅ Issue já existe (#$EXISTING). Ignorando criação."
+            else
+              echo "🚀 Criando nova issue: '$title'..."
+              gh issue create --title "$title" --body "$body" --label "$labels"
+            fi
+          }
+
+          # Issue 1: Migração GCP -> Hostinger
+          create_issue_if_not_exists \
+            "[MIGRACAO] Execução da Migração do Banco de Dados e Serviços da GCP para Hostinger VPS" \
+            "### Critérios de Aceite\n- [ ] Dump completo do Cloud SQL PostgreSQL e restauração na VPS\n- [ ] Validação de uploads de mídia\n- [ ] Teste de login Google OAuth no AdminJS\n\nConsulte o arquivo [docs/inquerito_migracao_gcp_hostinger.md](docs/inquerito_migracao_gcp_hostinger.md) para detalhes." \
+            "enhancement,documentation"
