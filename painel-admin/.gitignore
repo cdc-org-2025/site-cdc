@@ -57,8 +57,11 @@ playwright-report/
 .env.development.local
 .env.test.local
 .env.production.local
-# Ignorar arquivos de ambiente
+# Ignorar arquivos de ambiente e chaves
 .env
 .env.production
 .env.develop
+config/chave.json
+*.pem
+
 

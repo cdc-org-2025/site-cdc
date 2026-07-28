@@ -1,0 +1,36 @@
+# Dependências
+node_modules/
+.pnpm-store/
+
+# Arquivos de Build
+.next/
+dist/
+build/
+
+# Variáveis de Ambiente e Segredos (NUNCA COMMITAR)
+.env
+.env.local
+.env.production
+.env.development
+
+# Chaves de Serviço GCP e Certificados RSA/PEM
+painel-admin/config/chave.json
+*.pem
+*.ppk
+*.key
+*service*account*.json
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs/
+*.log
+
+# Docker Volumes Locais
+uploads/
+postgres_data/
+
+# Sistema Operacional
+.DS_Store
+Thumbs.db
