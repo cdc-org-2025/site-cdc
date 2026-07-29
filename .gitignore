@@ -13,11 +13,13 @@ build/
 .env.production
 .env.development
 
-# Chaves de Serviço GCP e Certificados RSA/PEM
+# Chaves de Serviço GCP, Certificados RSA/PEM e Backups SQL
 painel-admin/config/chave.json
 *.pem
 *.ppk
 *.key
+*.sql
+*.dump
 *service*account*.json
 
 # Logs
