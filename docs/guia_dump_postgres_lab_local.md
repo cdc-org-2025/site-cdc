@@ -1,28 +1,40 @@
-# ❓ FAQ & Dúvidas Frequentes: Reinício do Cloud SQL (`postgres-cdc`)
+# 🚀 Guia de Exportação Nativa do PostgreSQL (`postgres-cdc`) via GCS
+
+Este documento detalha o procedimento escolhido para a **Exportação Nativa Direta do Banco de Dados PostgreSQL** do site `cdc.org.br` sem alterar senhas nem causar qualquer downtime na aplicação.
 
 ---
 
-## 1. Qual o impacto de reiniciar o banco de dados Cloud SQL?
+## 📋 Passo a Passo de Execução no Cloud Shell (`@cloudshell`)
 
-### Impactos de um Reinício (Restart):
-- **Indisponibilidade Temporária (Downtime)**: O site (`cdc.org.br`), a API Backend e o Painel Admin ficarão indisponíveis por cerca de **1 a 3 minutos** enquanto o PostgreSQL é reinicializado.
-- **Conexões Encerradas**: Todas as conexões ativas do Cloud Run serão encerradas e reestabelecidas automaticamente assim que o banco voltar a ficar `RUNNABLE`.
-- **Integridade dos Dados**: **Nenhum dado é perdido.** O PostgreSQL realiza o flush do Write-Ahead Log (WAL) com segurança durante a reinicialização graciosa.
+### 1. Criar o Bucket Temporário no Cloud Storage (São Paulo):
+```bash
+gcloud storage buckets create gs://cdc-temp-backup-$(date +%s) --location=southamerica-east1
+```
 
-> [!IMPORTANT]
-> **Definir a senha do usuário `postgres` NÃO requer reinício do banco!**  
-> O comando `gcloud sql users set-password` aplica a alteração de senha na memória em menos de 2 segundos, **sem qualquer queda de serviço ou downtime no site**.
+### 2. Conceder Permissão de Escrita para o Cloud SQL:
+```bash
+gcloud storage buckets add-iam-policy-binding gs://cdc-temp-backup-* --member="serviceAccount:$(gcloud sql instances describe postgres-cdc --format='value(serviceAccountEmailAddress)')" --role="roles/storage.objectAdmin"
+```
+
+### 3. Executar a Exportação Nativa do Banco `postgres`:
+```bash
+gcloud sql export sql postgres-cdc gs://cdc-temp-backup-*/backup_site_cdc_20260729.sql --database=postgres
+```
+
+### 4. Copiar o Backup do Bucket para o Cloud Shell:
+```bash
+gcloud storage cp gs://cdc-temp-backup-*/backup_site_cdc_20260729.sql ~/backup_site_cdc_20260729.sql
+```
+
+### 5. Verificar o Tamanho do Backup Gerado:
+```bash
+ls -lh ~/backup_site_cdc_20260729.sql
+```
 
 ---
 
-## 2. O IP público (`35.198.13.35`) é resetado ao reiniciar?
+## 📥 Como Baixar o Arquivo para o Computador Local
 
-### Resposta: **NÃO. O IP NÃO muda!**
-
-No GCP Cloud SQL, o IP público atribuído à instância (`35.198.13.35`) é um **IP Estático Reservado** associado ao recurso. Ele permanece o mesmo durante:
-- Reinicializações manuais (`restart`).
-- Janelas de manutenção automática da GCP.
-- Alterações de senhas, memória ou CPU.
-- Paradas e inicializações.
-
- O IP público só deixaria de existir caso a instância inteira fosse deletada permanentemente no console da GCP.
+1. No menu superior direito do **Cloud Shell** (navegador), clique em **⋮ (Mais)** ➔ **Fazer Download de Arquivo**.
+2. Digite o nome do arquivo: `backup_site_cdc_20260729.sql`.
+3. Clique em **Download**.
