@@ -1,63 +1,47 @@
-# 🛡️ Guia de Dump do Banco de Dados PostgreSQL & Montagem do Lab Local
+# 🛡️ Guia de Dump do Banco PostgreSQL `postgres-cdc` sem Pedir Senha
 
-Este guia orienta o procedimento passo a passo para extrair o backup em formato `.sql` do banco de dados do **Site (`cdc.org.br`)** direto do Cloud Shell e importá-lo no seu ambiente de laboratório local com máxima segurança.
+Este guia descreve como contornar o pedido de senha do `pg_dumpall` no Cloud SQL utilizando o comando nativo `gcloud sql export` ou definindo uma nova senha para o usuário `postgres` sem interromper a aplicação.
 
 ---
 
-## 📋 PASSO 1: No Cloud Shell do Google Cloud (`@cloudshell`)
+## 📋 Método 1: Exportação Nativa via GCP (Sem Pedir Senha)
 
-### 1. Listar a instância de banco de dados do Cloud SQL:
-Execute o comando abaixo para identificar o nome exato da instância PostgreSQL do site:
+Como o `gcloud sql export` roda com as credenciais do próprio Google Cloud Shell, ele não exige a senha do usuário do banco:
 
+### 1. Criar um bucket temporário no Cloud Storage (São Paulo):
 ```bash
-gcloud sql instances list
+gcloud storage buckets create gs://cdc-backup-temp-$(date +%s) --location=southamerica-east1
+```
+
+### 2. Conceder permissão de escrita para a Service Account do Cloud SQL:
+```bash
+# Obter o e-mail da Service Account do Cloud SQL:
+SA_EMAIL=$(gcloud sql instances describe postgres-cdc --format="value(serviceAccountEmailAddress)")
+
+# Dar permissão no bucket:
+gcloud storage buckets add-iam-policy-binding gs://cdc-backup-temp-* --member="serviceAccount:$SA_EMAIL" --role="roles/storage.objectAdmin"
+```
+
+### 3. Exportar a base `postgres`:
+```bash
+gcloud sql export sql postgres-cdc gs://cdc-backup-temp-*/backup_site_cdc_20260729.sql --database=postgres
+```
+
+### 4. Copiar o arquivo `.sql` do bucket para o Cloud Shell:
+```bash
+gcloud storage cp gs://cdc-backup-temp-*/backup_site_cdc_20260729.sql ~/backup_site_cdc_20260729.sql
 ```
 
 ---
 
-### 2. Exportar o Dump do Banco PostgreSQL
+## 📋 Método 2: Definir Senha do Usuário `postgres` (Não reinicia o banco!)
 
-#### Opção A (Via Comando `gcloud sql export`):
-```bash
-# Substitua INSTANCIA pelo nome exibido no Passo 1 e BANCO pelo nome do banco (ex: site_cdc ou ong-cdc)
-gcloud sql export sql INSTANCIA gs://backup_temp_cdc/backup_site_cdc_$(date +%Y%m%d).sql --database=BANCO
-```
-
-#### Opção B (Via Cloud SQL Auth Proxy + `pg_dump` no Cloud Shell):
-O Cloud Shell já possui o `cloud-sql-proxy` nativo. Execute:
+Você pode definir uma senha para o usuário `postgres` via CLI sem afetar a produção:
 
 ```bash
-# 1. Obter a Connection Name da instância:
-CONNECTION_NAME=$(gcloud sql instances describe INSTANCIA --format="value(connectionName)")
+# 1. Definir a senha nova:
+gcloud sql users set-password postgres --instance=postgres-cdc --password=MinhaSenhaCDC2026!
 
-# 2. Iniciar o proxy em segundo plano:
-cloud-sql-proxy $CONNECTION_NAME --port 5433 &
-
-# 3. Gerar o dump PostgreSQL:
-pg_dump -h 127.0.0.1 -p 5433 -U cdc_user -d site_cdc_db > ~/backup_site_cdc_$(date +%Y%m%d).sql
-```
-
----
-
-## 📥 PASSO 2: Baixar o Arquivo `.sql` para a Sua Máquina Local
-
-O Google Cloud Shell possui uma função nativa de download sem necessidade de comandos complexos:
-
-1. No canto superior direito da janela do **Cloud Shell**, clique no ícone de **Três Pontos (⋮)** ou no botão **Mais**.
-2. Clique na opção **Fazer Download de Arquivo** (Download file).
-3. No campo do caminho, digite: `backup_site_cdc_20260729.sql` (ou o nome do arquivo gerado no Passo 1).
-4. Clique em **Download**. O arquivo será salvo diretamente na pasta de Downloads do seu computador!
-
----
-
-## 🐳 PASSO 3: Importar o Backup no Laboratório Local (Docker)
-
-Após o download ser concluído na sua máquina Windows:
-
-1. Mova o arquivo `.sql` baixado para a pasta do repositório: `C:\Códigos\site-cdc\backup_site_cdc.sql`.
-2. Garanta que o container PostgreSQL local esteja em execução (`docker compose up -d postgres`).
-3. Execute o comando de restauração no terminal local (PowerShell):
-
-```powershell
-docker exec -i site_cdc_postgres psql -U cdc_user -d site_cdc_db < C:\Códigos\site-cdc\backup_site_cdc.sql
+# 2. Executar o pg_dumpall (informando a senha definida):
+pg_dumpall -h 127.0.0.1 -p 5433 -U postgres > ~/backup_site_cdc_20260729.sql
 ```
