@@ -1,57 +1,40 @@
-# 🧪 Plano do Laboratório Local (`site-cdc`)
+# 🧪 Laboratório Local (`site-cdc`) — 100% OPERACIONAL E ATIVO
 
-> **Status:** Blindagem Git Concluída | Configuração `.env` Pronta | Restauração Pronta  
+> **Status:** Laboratório Local Ativo | Banco PostgreSQL Restaurado (29 Tabelas) | Containers Online  
 > **Data:** 29 de Julho de 2026  
 
 ---
 
-## 🛡️ 1. Proteção contra Vazamento de Dados
-
-- **Indexação `.gitignore`**: O padrão `*.sql` e `*.dump` foi inserido no `.gitignore` (Commit `18f4869`). O arquivo `backup_site_cdc_20260729.sql` (322 KB) está **100% protegido e invisível para o Git**.
-
----
-
-## 🛠️ 2. Estrutura do Laboratório Local
+## 📊 Status dos Containers Docker no Laboratório Local
 
 ```mermaid
 graph TD
-    User([Navegador Local]) -->|http://localhost:3000| FE[Frontend Next.js]
-    User -->|http://localhost:3001| Admin[Painel AdminJS]
-    User -->|http://localhost:5000| BE[Backend Express REST API]
+    User([Navegador Local]) -->|http://localhost:3000| FE[site_cdc_frontend - Next.js 14]
+    User -->|http://localhost:3001| Admin[site_cdc_admin - AdminJS 7]
+    User -->|http://localhost:5000| BE[site_cdc_backend - Express API]
     
-    BE -->|Porta 5432| DB[(PostgreSQL 16 Container: site_cdc_db)]
+    BE -->|Porta 5432| DB[(site_cdc_postgres - PostgreSQL 16)]
     Admin -->|Porta 5432| DB
 ```
 
----
-
-## 🚀 3. Roteiro para Subir o Laboratório Local
-
-### Passo 1: Abrir o Docker Desktop
-Certifique-se de que o aplicativo **Docker Desktop** esteja iniciado no seu Windows.
-
-### Passo 2: Subir o Container do PostgreSQL
-No seu terminal local (PowerShell em `C:\Códigos\site-cdc`):
-
-```powershell
-docker compose up -d postgres
-```
-
-### Passo 3: Restaurar o Banco de Dados do Site (`322 KB`)
-```powershell
-docker exec -i site_cdc_postgres psql -U cdc_user -d site_cdc_db < C:\Códigos\site-cdc\backup_site_cdc_20260729.sql
-```
-
-### Passo 4: Subir Todos os Serviços (Backend, Admin, Frontend)
-```powershell
-docker compose up -d --build
-```
+| Container | Nome | Status | Porta Local | Descrição |
+| :--- | :--- | :--- | :--- | :--- |
+| **`site_cdc_postgres`** | PostgreSQL 16 | `Up (healthy)` | `5432` | 🗄️ Banco de Dados Restaurado (29 Tabelas) |
+| **`site_cdc_backend`** | Express REST API | `Up` | `5000` | ⚙️ API Backend REST em Node.js |
+| **`site_cdc_admin`** | AdminJS 7 | `Up` | `3001` | 🔐 Painel Administrativo de Gestão |
+| **`site_cdc_frontend`** | Next.js 14 | `Up` | `3000` | 🌐 Site Institucional CDC |
 
 ---
 
-## 🌐 4. Endereços do Laboratório Local
+## 🌐 Como Acessar os Serviços do Seu Laboratório Local
 
-- 🌐 **Frontend (Next.js)**: `http://localhost:3000`
-- ⚙️ **Backend API (Express)**: `http://localhost:5000`
-- 🔐 **Painel AdminJS**: `http://localhost:3001` (Login: `admin@ongcdc.org.br` / Senha: `admin123`)
-- 🗄️ **Banco PostgreSQL**: `localhost:5432`
+1. 🌐 **Site Institucional (Frontend Next.js)**:
+   - URL: `http://localhost:3000`
+2. 🔐 **Painel Administrativo (AdminJS)**:
+   - URL: `http://localhost:3001`
+   - Login: `admin@ongcdc.org.br`
+   - Senha: `admin123`
+3. ⚙️ **API REST Backend (Express)**:
+   - URL: `http://localhost:5000`
+4. 🗄️ **Banco de Dados (PostgreSQL 16)**:
+   - `localhost:5432` (Usuário: `cdc_user` | Senha: `cdc_password` | Base: `site_cdc_db`)
