@@ -1,62 +1,35 @@
 # 🎯 Plano de Backup & Laboratório Local: Site Institucional (`cdc.org.br`)
 
-> **Foco Principal:** Backup do banco de dados PostgreSQL e mídias da aplicação **`cdc.org.br`** (Site CDC + Backend Express + Painel AdminJS).
+> **Status:** Backup do Banco PostgreSQL Concluído com Sucesso!  
+> **Data:** 29 de Julho de 2026  
+> **Arquivo Gerado:** `backup_site_cdc_20260729.sql` (**322 KB**)  
 
 ---
 
-## 📊 1. Arquitetura Atual do Site (`cdc.org.br`) na GCP
+## 📊 1. Status dos Backups do Sistema
 
-```mermaid
-graph TD
-    User([Usuários / Navegador]) -->|HTTPS| Frontend[Frontend Next.js]
-    Admin([Administradores]) -->|AdminJS| CloudRunAdmin[Cloud Run: admin-panel]
-    Frontend -->|REST API| CloudRunBE[Cloud Run: backend-cdc]
-    
-    CloudRunBE -->|Cloud SQL Proxy| CloudSQL[(GCP Cloud SQL: PostgreSQL)]
-    CloudRunAdmin -->|Cloud SQL Proxy| CloudSQL
-```
+| Componente | Origem / Servidor | Arquivo de Backup Gerado | Tamanho | Status |
+| :--- | :--- | :--- | :--- | :--- |
+| **Banco PostgreSQL (Site CDC / AdminJS)** | GCP Cloud SQL (`postgres-cdc`) | `backup_site_cdc_20260729.sql` | **322 KB** | ✅ **Gerado com Sucesso** |
+| **Banco MariaDB (Estoque / ERPNext)** | VM GCP (`prod1`) | `backup_estoque.sql` | **124 MB** | ✅ Gerado com Sucesso |
 
 ---
 
-## 📋 2. Como Fazer o Backup do Banco PostgreSQL (`cdc.org.br`) na GCP
+## 📥 2. Roteiro de Importação no Laboratório Local (Docker)
 
-Como a API e o Painel Admin do site `cdc.org.br` rodam no **GCP Cloud Run** e o banco fica no **GCP Cloud SQL (PostgreSQL)**, temos 2 métodos para extrair o backup:
+### Passo A: Baixar o arquivo do Cloud Shell
+No menu superior do Cloud Shell (navegador):
+1. Clique em **⋮ (Mais)** ➔ **Fazer Download de Arquivo**.
+2. Digite: `backup_site_cdc_20260729.sql`.
 
-### 🔹 Método A: Via Terminal do Google Cloud (Cloud Shell)
-
-No seu Cloud Shell (`@cloudshell`), execute os comandos:
-
-#### 1. Listar o nome exato da instância Cloud SQL:
-```bash
-gcloud sql instances list
+### Passo B: Subir o PostgreSQL Local
+No PowerShell da sua máquina local:
+```powershell
+cd C:\Códigos\site-cdc
+docker compose up -d postgres
 ```
 
-#### 2. Conectar diretamente ao banco PostgreSQL do site:
-```bash
-gcloud sql connect NOME_DA_INSTANCIA --user=postgres
+### Passo C: Importar os Dados no Container Local
+```powershell
+docker exec -i site_cdc_postgres psql -U cdc_user -d site_cdc_db < $env:USERPROFILE\Downloads\backup_site_cdc_20260729.sql
 ```
-
-#### 3. Gerar o dump completo do banco PostgreSQL (`site_cdc_db`):
-```bash
-gcloud sql export sql NOME_DA_INSTANCIA gs://<SEU_BUCKET>/backup_site_cdc.sql --database=ong-cdc
-```
-
----
-
-### 🔹 Método B: Via Console Web da GCP (Navegador)
-
-1. Acesse o **Google Cloud Console ➔ SQL**.
-2. Clique na instância do PostgreSQL do site (ex: `site-cdc-db` ou `ong-cdc-db`).
-3. No menu superior, clique em **Exportar** (Export).
-4. Selecione a opção **SQL**, escolha o banco `ong-cdc` (ou `site_cdc`) e salve no Cloud Storage para download.
-
----
-
-## 🧠 3. Regras de Negócio do Site (`cdc.org.br`)
-
-A aplicação do site `cdc.org.br` utiliza **Sequelize ORM** em Node.js com o banco PostgreSQL. As principais entidades de regras de negócio são:
-
-1. **Notícias & Conteúdos**: Artigos, categorias, imagens de capa e banners institucionais.
-2. **Projetos & Ações Sociais**: Páginas institucionais, metas e relatórios de impacto da ONG.
-3. **Doações & Formulários**: Registros de apoiadores, formulários de contato e newsletters.
-4. **Usuários Gestores (Painel AdminJS)**: Permissões de administradores e autenticação via Google OAuth 2.0.
