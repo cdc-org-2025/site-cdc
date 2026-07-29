@@ -1,47 +1,28 @@
-# 🛡️ Guia de Dump do Banco PostgreSQL `postgres-cdc` sem Pedir Senha
-
-Este guia descreve como contornar o pedido de senha do `pg_dumpall` no Cloud SQL utilizando o comando nativo `gcloud sql export` ou definindo uma nova senha para o usuário `postgres` sem interromper a aplicação.
+# ❓ FAQ & Dúvidas Frequentes: Reinício do Cloud SQL (`postgres-cdc`)
 
 ---
 
-## 📋 Método 1: Exportação Nativa via GCP (Sem Pedir Senha)
+## 1. Qual o impacto de reiniciar o banco de dados Cloud SQL?
 
-Como o `gcloud sql export` roda com as credenciais do próprio Google Cloud Shell, ele não exige a senha do usuário do banco:
+### Impactos de um Reinício (Restart):
+- **Indisponibilidade Temporária (Downtime)**: O site (`cdc.org.br`), a API Backend e o Painel Admin ficarão indisponíveis por cerca de **1 a 3 minutos** enquanto o PostgreSQL é reinicializado.
+- **Conexões Encerradas**: Todas as conexões ativas do Cloud Run serão encerradas e reestabelecidas automaticamente assim que o banco voltar a ficar `RUNNABLE`.
+- **Integridade dos Dados**: **Nenhum dado é perdido.** O PostgreSQL realiza o flush do Write-Ahead Log (WAL) com segurança durante a reinicialização graciosa.
 
-### 1. Criar um bucket temporário no Cloud Storage (São Paulo):
-```bash
-gcloud storage buckets create gs://cdc-backup-temp-$(date +%s) --location=southamerica-east1
-```
-
-### 2. Conceder permissão de escrita para a Service Account do Cloud SQL:
-```bash
-# Obter o e-mail da Service Account do Cloud SQL:
-SA_EMAIL=$(gcloud sql instances describe postgres-cdc --format="value(serviceAccountEmailAddress)")
-
-# Dar permissão no bucket:
-gcloud storage buckets add-iam-policy-binding gs://cdc-backup-temp-* --member="serviceAccount:$SA_EMAIL" --role="roles/storage.objectAdmin"
-```
-
-### 3. Exportar a base `postgres`:
-```bash
-gcloud sql export sql postgres-cdc gs://cdc-backup-temp-*/backup_site_cdc_20260729.sql --database=postgres
-```
-
-### 4. Copiar o arquivo `.sql` do bucket para o Cloud Shell:
-```bash
-gcloud storage cp gs://cdc-backup-temp-*/backup_site_cdc_20260729.sql ~/backup_site_cdc_20260729.sql
-```
+> [!IMPORTANT]
+> **Definir a senha do usuário `postgres` NÃO requer reinício do banco!**  
+> O comando `gcloud sql users set-password` aplica a alteração de senha na memória em menos de 2 segundos, **sem qualquer queda de serviço ou downtime no site**.
 
 ---
 
-## 📋 Método 2: Definir Senha do Usuário `postgres` (Não reinicia o banco!)
+## 2. O IP público (`35.198.13.35`) é resetado ao reiniciar?
 
-Você pode definir uma senha para o usuário `postgres` via CLI sem afetar a produção:
+### Resposta: **NÃO. O IP NÃO muda!**
 
-```bash
-# 1. Definir a senha nova:
-gcloud sql users set-password postgres --instance=postgres-cdc --password=MinhaSenhaCDC2026!
+No GCP Cloud SQL, o IP público atribuído à instância (`35.198.13.35`) é um **IP Estático Reservado** associado ao recurso. Ele permanece o mesmo durante:
+- Reinicializações manuais (`restart`).
+- Janelas de manutenção automática da GCP.
+- Alterações de senhas, memória ou CPU.
+- Paradas e inicializações.
 
-# 2. Executar o pg_dumpall (informando a senha definida):
-pg_dumpall -h 127.0.0.1 -p 5433 -U postgres > ~/backup_site_cdc_20260729.sql
-```
+ O IP público só deixaria de existir caso a instância inteira fosse deletada permanentemente no console da GCP.
