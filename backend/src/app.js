@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import path from "path";
 import routes from "./routes/index.js";
 import db from "./models/index.js";
 
@@ -10,8 +11,24 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use("/api", routes);
 
+// Servir arquivos estáticos de upload local
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
+
+// Rota de Diagnóstico & Healthcheck
+app.get("/", (req, res) => {
+  res.json({
+    status: "online",
+    service: "CDC Backend Express API",
+    environment: process.env.NODE_ENV || "development",
+    endpoints: {
+      health: "/api/health",
+      api: "/api"
+    }
+  });
+});
+
+app.use("/api", routes);
 
 // Testa a conexão com o banco
 (async () => {

@@ -9,7 +9,6 @@ import AdminJSExpress from '@adminjs/express'
 import path from 'path';
 import { fileURLToPath } from 'url'; // Necessário para ESM
 
-
 // Obter __dirname em módulos ESM
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -17,9 +16,10 @@ const __dirname = path.dirname(__filename);
 const app = express()
 
 app.use(express.static('public'))
+app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')))
 
 app.use(session({
-    secret: process.env.COOKIE_SECRET,
+    secret: process.env.COOKIE_SECRET || 'secret_key',
     resave: false,
     saveUninitialized: true,
 }))
@@ -28,6 +28,11 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 const adminRouter = AdminJSExpress.buildRouter(adminJs)
+
+// Redirecionamento da raiz / para /admin
+app.get('/', (req, res) => {
+    res.redirect('/admin');
+});
 
 app.use(adminJs.options.rootPath, (req, res, next) => {
     if (req.path.startsWith('/auth/google') || req.path.startsWith('/auth/google/callback')) {
@@ -44,7 +49,7 @@ app.use(authRoutes)
 app.use(uploadEditorImageRoute);
 app.use(adminJs.options.rootPath, adminRouter)
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
     console.log(`🛠️ Painel AdminJS rodando em http://localhost:${PORT}/admin`)
 })
