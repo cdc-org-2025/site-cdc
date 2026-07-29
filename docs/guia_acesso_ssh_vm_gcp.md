@@ -1,47 +1,32 @@
-# 🛡️ Guia de Conexão: Local (PowerShell) vs Cloud Shell (GCP Browser)
+# 🛡️ Guia de Conexão na VM GCP (`34.151.249.199`)
 
-Este guia esclarece por que a chave `id_ed25519` está armazenada no seu computador local e como utilizar cada terminal corretamente.
-
----
-
-## 🔍 Onde está a sua Chave SSH `id_ed25519`?
-
-- A sua chave privada `id_ed25519` foi criada na sua **máquina local (Windows)** em `C:\Users\kleber.fanini\.ssh\id_ed25519`.
-- O **Cloud Shell** (navegador do GCP) é uma máquina virtual à parte no Google e não possui o arquivo `id_ed25519` da sua máquina local.
+Este guia orienta a localização e o acesso à VM oficial do projeto com o IP atualizado **`34.151.249.199`**.
 
 ---
 
-## 📋 Como Conectar em Cada Ambiente
+## 📋 Como Conectar na VM Oficial (`34.151.249.199`)
 
-### 1. Na sua máquina local (PowerShell):
-Como a chave `id_ed25519` está nesta máquina, rode:
+### 🔹 Passo 1: No Cloud Shell (`@cloudshell`), identifique a VM correspondente ao IP
+```bash
+gcloud compute instances list --format="table(name,zone,status,EXTERNAL_IP)"
+```
+
+Este comando listará a tabela com o nome exato da VM e sua zona (ex: `site-vm`, `prod-site` ou `site-cdc`).
+
+---
+
+### 🔹 Passo 2: Conectar via gcloud SSH
+Após obter o nome e a zona da VM na tabela:
+
+```bash
+gcloud compute ssh NOME_DA_VM --zone=ZONA_DA_VM
+```
+
+---
+
+### 🔹 Passo 3: Conexão Direta por IP (No PowerShell Local)
+Garantindo que a porta 22 esteja aberta e a chave esteja salva na VM:
 
 ```powershell
-ssh -i C:\Users\kleber.fanini\.ssh\id_ed25519 kleberdev97@136.113.22.112
-```
-
----
-
-### 2. No Cloud Shell (Navegador GCP):
-Como o Cloud Shell utiliza o gerenciador automático de chaves do `gcloud`, rode:
-
-```bash
-gcloud compute ssh kleberdev97@prod1 --zone=us-east1-c
-```
-
-*(Ao executar este comando, o `gcloud` criará automaticamente o par de chaves do Cloud Shell para o usuário `kleberdev97` e realizará a conexão direta).*
-
----
-
-## 🚀 Executando o Backup do Banco MariaDB
-
-Após se conectar (prompt `@prod1`):
-
-```bash
-sudo docker exec frappe_docker-db-1 mariadb-dump -u root -p$(sudo docker exec frappe_docker-db-1 printenv MYSQL_ROOT_PASSWORD) --all-databases > ~/backup_mariadb_estoque_$(date +%Y%m%d).sql
-```
-
-E verifique o backup criado:
-```bash
-ls -lh ~/backup_mariadb_estoque_*.sql
+ssh -i C:\Users\kleber.fanini\.ssh\id_ed25519 kleberdev97@34.151.249.199
 ```
