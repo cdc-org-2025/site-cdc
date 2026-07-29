@@ -1,13 +1,13 @@
 # 📋 Inquérito de Viabilidade & Plano de Migração (GCP ➔ Hostinger)
 ## Repositório: `site-cdc` (`cdc-org-2025/site-cdc`)
 
-> **Status:** IP do Servidor GCP Atualizado  
+> **Status:** Instância de Banco PostgreSQL Auditada (`postgres-cdc`)  
 > **Data:** 29 de Julho de 2026  
-> **IP Oficial GCP:** `34.151.249.199` (Região `southamerica-east1`)  
+> **Banco Cloud SQL:** `postgres-cdc` (PostgreSQL 16 | IP: `35.198.13.35` | Região: `southamerica-east1-c`)  
 
 ---
 
-## 1. Arquitetura da Infraestrutura Atual (`34.151.249.199`)
+## 1. Mapeamento dos Recursos GCP do Site (`cdc.org.br`)
 
 ```mermaid
 graph TD
@@ -15,13 +15,16 @@ graph TD
     Admin([Administradores]) -->|AdminJS| CloudRunAdmin[Painel AdminJS]
     Frontend -->|REST API| CloudRunBE[Backend Express REST API]
     
-    CloudRunBE -->|Cloud SQL Proxy / Connection| CloudSQL[(GCP Cloud SQL: PostgreSQL)]
-    CloudRunAdmin -->|Cloud SQL Proxy / Connection| CloudSQL
+    CloudRunBE -->|PostgreSQL 16| CloudSQL[(GCP Cloud SQL: postgres-cdc - 35.198.13.35)]
+    CloudRunAdmin -->|PostgreSQL 16| CloudSQL
 ```
 
-### Registros Atualizados:
-- **IP do Servidor de Produção GCP**: `34.151.249.199`
-- **IP Antigo Desconsiderado**: `136.113.22.112`
+### Inventário de Banco de Dados GCP:
+- **Instância Cloud SQL**: `postgres-cdc`
+- **Versão**: PostgreSQL 16
+- **IP Público**: `35.198.13.35`
+- **Localização**: `southamerica-east1-c` (São Paulo)
+- **Status**: `RUNNABLE` (Ativo)
 
 ---
 
@@ -36,7 +39,7 @@ graph TD
         Nginx -->|api.cdc.org.br| BEContainer[Backend Express API]
         Nginx -->|admin.cdc.org.br| AdminContainer[Painel AdminJS]
         
-        BEContainer --> PostgresDB[(PostgreSQL 16)]
+        BEContainer --> PostgresDB[(Docker Container: PostgreSQL 16)]
         AdminContainer --> PostgresDB
     end
 ```
@@ -45,7 +48,7 @@ graph TD
 
 ## 3. Roteiro Atualizado de Execução
 
-- [x] **IP Oficial GCP Registrado**: `34.151.249.199` (Atualizado).
-- [ ] **Mapeamento da VM no Cloud Shell**: Rodar `gcloud compute instances list` no Cloud Shell para identificar o nome e zona da VM com IP `34.151.249.199`.
-- [ ] **Backup do Banco PostgreSQL (`cdc.org.br`)**: Exportar tabelas da API e Painel Admin.
-- [ ] **Transferência e Deploy na Hostinger VPS**: Subir os serviços via `docker-compose.yml`.
+- [x] **Instância Cloud SQL Localizada**: `postgres-cdc` (PostgreSQL 16 - `35.198.13.35`).
+- [ ] **Dump do Banco PostgreSQL (`postgres-cdc`)**: Gerar backup `.sql` e baixar para o laboratório local.
+- [ ] **Importação no Lab Local**: Subir o container `site_cdc_postgres` e restaurar o dump.
+- [ ] **Deploy na Hostinger VPS**: Subir os serviços em produção na nova hospedagem.
